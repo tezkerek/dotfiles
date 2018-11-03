@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function headphones_plugged() {
+    grep -A 3 'Pin Default 0x01014010' '/proc/asound/card1/codec#0' | grep -qo 'Pin-ctls: 0x00:'
+}
+
+MUTED=$( pamixer --get-mute )
+
+if headphones_plugged; then ICON=""; else ICON=""; fi
+COLOR="#668800"
+
+if [ $MUTED == "true" ]; then
+	ICON=""
+	COLOR="#FF0000"
+fi
+
+VOL=$( pamixer --get-volume )
+
+#echo "%{F$COLOR}$ICON $VOL%{F-}"
+echo "$ICON $VOL"

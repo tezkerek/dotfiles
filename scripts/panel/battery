@@ -1,0 +1,25 @@
+#!/bin/bash
+
+CHARGING=$(cat /sys/class/power_supply/ACAD/online)
+BATTERY=$(cat /sys/class/power_supply/BAT1/capacity)
+
+if [ $CHARGING -eq 1 ]; then
+	ICON=""
+	COLOR="668800"
+elif [ $BATTERY -lt 10 ]; then
+	ICON=""
+	COLOR="FF0000"
+elif [ $BATTERY -lt 30 ]; then
+	ICON=""
+	COLOR="FF8800"
+elif [ $BATTERY -lt 70 ]; then
+	ICON=""
+	COLOR="ddaa00"
+elif [ $BATTERY -lt 90 ]; then
+	ICON=""
+	COLOR="668800"
+else
+	ICON=""
+	COLOR="668800"
+fi
+echo "%{+u U#$COLOR}$ICON $BATTERY%%{O10 -u U-}"

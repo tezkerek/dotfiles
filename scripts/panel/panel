@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+< $PANEL_FIFO $PANEL_DIR/panel_print | lemonbar \
+	-g         "x30" \
+	-n         "top_panel" \
+	-B         "#282828" \
+	-F         "#979daa" \
+	-u         0 \
+	-f         "Droid Sans Mono:size=10" \
+    -f         "Font Awesome 5 Free Solid Custom"
+    # -f         "FontAwesome:pixelsize=15" \
+	# -f         "DroidSansMono Nerd Font Mono:size=10" \
+	#-f         "ypn envypn:pixelsize=16" \
+wait

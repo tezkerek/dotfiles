@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "%{c} $(~/.config/lemonbar/volume | tr ' ' ' \n')" | lemonbar -pd \
+	-g 400x400+1080+600 \
+	-f "Inconsolata:size=30" \
+	-f "FontAwesome:size=200" \
+	-B "#000000" &
+sleep 1
+kill $!

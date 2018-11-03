@@ -1,0 +1,148 @@
+# special keys
+# audio
+XF86Audio{Play,Prev,Next}
+    mpc {toggle,prev,next}; $PANEL_DIR/update_mpd_status
+super + {F1,F2,F3}
+    mpc {toggle,prev,next}; $PANEL_DIR/update_mpd_status
+
+# volume
+XF86Audio{RaiseVolume,LowerVolume,Mute}
+    amixer set Master {2%+,2%-,toggle}; $PANEL_DIR/update_volume
+super + {F4,F5,F6}
+    amixer set Master {2%+,2%-,toggle}; $PANEL_DIR/update_volume
+
+# brightness
+XF86MonBrightness{Up,Down}
+    xbacklight {-inc,-dec} 1
+
+# save screenshot
+super + {_,shift} + Print
+    scrot --delay 0.1 {_, --focused} --exec 'mv $f ~/img/scrots/%Y-%m-%d_%H:%M:%S.png'
+# copy screenshot to clipboard
+{_,shift,ctrl} + Print
+    scrot --delay 0.1 {_, --focused , --select} --exec 'xclip -selection clipboard -t image/png < $f; rm $f'
+
+# terminal
+super + shift + Return
+    alacritty
+
+# scratchpad
+super + Return
+    xdotool search --onlyvisible --classname "scratchpad" windowunmap || \
+    xdotool search --classname "scratchpad" windowmap || \
+    alacritty --class "scratchpad" --config-file $HOME/.config/alacritty/scratchpad.yml
+
+# rofi
+super + o
+#rofi -show run -run-list-command ". $HOME/.scripts/list_alias" -run-command "zsh -i -c '\{cmd\}'"
+    rofi -show run -run-command "zsh -i -c '\{cmd\}'"
+#dmenu -p '::' -nb '#282828' -nf '#ebdbb2' -sb '#282828' -sf '#d79921' -b < $HOME/.scripts/dmenu_list | zsh -s
+
+# quick open
+# firefox
+super + i; f
+    firefox-nightly
+
+# rofi window switcher
+super + w
+    rofi -show window
+
+# toggle panel
+super + b
+	if [[ $(xdotool search --all --onlyvisible --classname "lemonbar") != "" ]]; then \
+		xdotool search --all --onlyvisible --classname "lemonbar" | while read -r id; do xdotool windowunmap $id; done; \
+		bspc config top_padding 0; \
+	else \
+		xdotool search --all --classname "lemonbar" | while read -r id; do xdotool windowmap $id; done; \
+		bspc config top_padding 30; \
+	fi; \
+	xdo lower $(xdotool search --classname "lemonbar")
+
+# restart panel
+super + shift + b
+    $PANEL_DIR/restart
+
+# quit bspwm
+super + shift + q
+    bspc quit; pkill panel_info; pkill panel_print;
+
+# reload sxhkd
+super + shift + Escape
+    pkill -USR1 -x sxhkd
+
+# close / kill window
+super + {_,shift} + x
+    bspc node {--close,--kill}
+
+# navigation
+super + {_,shift} + {h,j,k,l}
+    bspc node {--focus,--swap} {west,next,prev,east}.local
+
+# preselect
+super + ctrl + {h,j,k,l}
+    bspc node --presel-dir \~{west,south,north,east}
+
+# move to preselection
+super + ctrl + Return
+    bspc node --to-node 'last.!automatic'
+
+# move to largest node
+super + g
+    bspc node --swap biggest.local
+
+# focus monitor
+super + {p,n}
+    bspc monitor --focus {prev,next}
+# move node to monitor
+super + shift + {p,n}
+    bspc node --to-monitor {prev,next} --focus
+
+# prev/next desktop
+super + {_,shift} + {Left,Right}
+    bspc {desktop --focus , node --to-desktop} {prev,next}
+
+# switch desktop on current monitor if desktop is different
+# switch desktop on last monitor if desktop is the same
+super + {_,shift} + {1-9}
+    bspc {desktop --focus , node --to-desktop} focused:^{1-9}
+#	ACTION={'desktop --focus','node --to-desktop'}; \
+#	DESKTOP={1-9}; \
+#	MONITOR=$( [[ $(bspc query --names -D -d focused) == $DESKTOP ]] && echo 'last' || echo 'focused' ); \
+#	eval bspc $ACTION $MONITOR':^'$DESKTOP
+
+# desktop layouts
+super + {m,t}
+    bspc desktop --layout {monocle,tiled};bspc node --state tiled
+
+# rotate windows
+super + {_,shift} + r
+    bspc node @/ --rotate {90,270}
+
+# float window
+super + space
+    bspc node --state '~floating'
+
+# fullscreen window
+super + f
+    bspc node --state '~fullscreen'
+
+# private window
+super + s
+    bspc node --flag private
+
+# adjust window gaps
+super + {minus,equal}
+    bspc config window_gap $(( $(bspc config window_gap) {-,+} 5 ))
+super + plus
+    bspc config window_gap 0
+
+# float, size and move window to 1920x1080+320+30
+super + z
+    bspc node --state '~floating'; \
+    if $HOME/.scripts/hdmi_connected; then; \
+	xdotool getactivewindow windowmove $(( 1920 + (2560-1920)/2 )) 30; \
+	xdotool getactivewindow windowsize 1920 $(( 1080 - 40 )); \
+    else; \
+	xdotool getactivewindow windowmove $(( (1920-1280)/2 )) $(( (1080-30-720)/2 )); \
+	xdotool getactivewindow windowsize 1280 720; \
+    fi

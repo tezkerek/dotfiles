@@ -1,0 +1,17 @@
+#!/bin/bash
+
+ICON=""
+
+# Device states
+# Ethernet
+if [ $(cat "/sys/class/net/enp31s0/operstate") == "up" ]; then
+    IS_UP="true"
+    INFO=$(ip addr show enp31s0 | grep -Po "inet (\d+\.*){4}" | grep -Po "[\d+.]{4}" | tr -d '\n')
+fi
+
+# Format
+if [ -z $IS_UP ]; then
+    echo "$ICON %{F#ff0000} down %{F-}"
+else
+    echo "$ICON $INFO"
+fi

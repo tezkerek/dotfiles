@@ -1,0 +1,2 @@
+#!/bin/zsh
+echo V"$($PANEL_DIR/volume)" > $PANEL_FIFO

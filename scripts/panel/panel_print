@@ -1,0 +1,66 @@
+#!/bin/zsh
+
+UF="#668800"
+Uf=""
+PAD="%{O10}"
+COL="#d79921"
+desktop_icons=(        )
+while read -r line; do
+	case $line in
+		T*)
+			# Time
+			datetime="$PAD${line#?}$PAD"
+			;;
+		N*)
+			# Network
+			network="$PAD${line#?}$PAD"
+			;;
+		W*)
+			# Window title
+			windowname="%{O10}$(xdotool getwindowfocus getwindowname | head -c50)%{O10}" 
+			# Desktops
+			desktops=""
+			items=( "${(@s/:/)line#?}" )
+			for item in $items; do
+				name=${item:1}
+				case $item in
+					[Mm]*)
+						MON_INDEX=$(( $(bspc query --names -M | grep -n $name | cut -d ':' -f 1) - 1 ))
+						desktops="$desktops%{S$MON_INDEX}"
+
+						case $item in
+							M*)
+								desktops="$desktops%{F-}"
+								;;
+							m*)
+								desktops="$desktops%{F#555}"
+								;;
+						esac
+						;;
+					O*)
+						# focused desktop
+						desktops="$desktops%{F$COL} ${desktop_icons[$name]} %{F-}"
+						;;
+					o*)
+						# occupied unfocused desktop
+						desktops="$desktops ${desktop_icons[$name]} "
+						;;
+				esac
+			done
+
+			;;
+		V*)
+			# Volume
+			volume="$PAD${line#?}$PAD"
+			;;
+		"jack/headphone HEADPHONE "*)
+			# Headphones
+			$PANEL_DIR/update_volume
+			;;
+		player*)
+			# MPD
+			mpd="$($PANEL_DIR/mpd_status)"
+			;;
+	esac
+	printf "%s\n" "%{Sl}%{l}${desktops}%{F-}${windowname}${mpd}%{c}${datetime}%{r}%{Sl} ${volume} ${network}"
+done

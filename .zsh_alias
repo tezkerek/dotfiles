@@ -1,0 +1,40 @@
+#!/usr/bin/sh
+
+# Reload zshrc
+alias zreload=". $HOME/.zshrc"
+
+# nvim-qt
+alias nvim-qt="nvim-qt --no-ext-tabline"
+
+# nvim with fzf
+alias fvim='nvim $(fzf)'
+
+# Quit
+alias q="exit"
+
+# Lock screen
+alias lock="$HOME/.config/bspwm/lock.sh"
+
+# Minecraft
+alias minecraft="optirun java -jar $HOME/.games/minecraft.jar"
+
+# Deezer Downloader
+alias deezer-dl="$HOME/deezloader/Deezloader"
+
+# Deezer Web
+alias deezer="firefox-nightly --new-window 'https://deezer.com'"
+
+# Alice3
+alias alice3="$HOME/opt/Alice3/alice3"
+
+# Wine 32-bit
+alias wine32="WINEPREFIX=$WINEPREFIX32 WINEARCH=$WINEARCH32 wine "
+
+# Photoshop CS6 (wine)
+alias photoshop="wine32 'C:\\Program Files\\Adobe\\Adobe Photoshop CS6\\Photoshop.exe'"
+
+# School
+alias orar="feh $HOME/school/orar.png"
+alias labs='wget -O - http://liis.ro/hosted/activitati/2013/laboratoare/labs.pdf | \
+    convert -density 100 - -quality 30 -flatten png:- | \
+    feh -x -'

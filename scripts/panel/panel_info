@@ -1,0 +1,34 @@
+#!/bin/sh
+
+[ -e $PANEL_FIFO ] && rm $PANEL_FIFO
+mkfifo "$PANEL_FIFO"
+
+# Time
+while true; do
+	echo T"$(date +'%_H:%M')" > $PANEL_FIFO
+	sleep 60
+done &
+
+# Network
+while true; do
+	echo N"$($PANEL_DIR/network)" > $PANEL_FIFO
+	sleep 60
+done &
+
+# Volume
+echo V"$($PANEL_DIR/volume)" > $PANEL_FIFO
+
+# Headset
+acpi_listen > $PANEL_FIFO &
+
+# MPD
+#while true; do
+#	echo M"%{O10} $("$(dirname $0)"/mpd_status) %{O10}"
+#	sleep 5
+#done > $PANEL_FIFO &
+mpc idleloop > $PANEL_FIFO &
+
+# Bspwm desktops
+bspc subscribe report > $PANEL_FIFO &
+
+wait

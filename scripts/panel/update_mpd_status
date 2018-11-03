@@ -1,0 +1,2 @@
+#!/bin/zsh
+echo M"%{O10} $($PANEL_DIR/mpd_status) %{O10}" > $PANEL_FIFO
