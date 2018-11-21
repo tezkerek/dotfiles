@@ -3,6 +3,9 @@
 # Reload zshrc
 alias zreload=". $HOME/.zshrc"
 
+# ls colors
+alias ls="ls --color=auto"
+
 # nvim-qt
 alias nvim-qt="nvim-qt --no-ext-tabline"
 
