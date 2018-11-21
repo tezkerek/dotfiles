@@ -1,9 +1,12 @@
+SAVEHIST=50000
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+
 source $HOME/.zsh_env
 
 # Virtual Env
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/devel
-source /usr/bin/virtualenvwrapper.sh
 
 # pyenv
 if command -v pyenv 1>/dev/null 2>&1; then
@@ -74,7 +77,7 @@ man() {
     command man "$@"
 }
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 source "$HOME/.zsh_alias"
 #
