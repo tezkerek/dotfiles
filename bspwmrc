@@ -31,9 +31,6 @@ bspc config external_rules_command $HOME/.config/bspwm/rules
 bspc rule -a "fontforge" state=floating
 bspc rule -a "feh" state=floating
 bspc rule -a "*":'scratchpad' sticky=on state=floating
-bspc rule -a "jetbrains-studio" desktop=focused:^2
-bspc rule -a "jetbrains-phpstorm" desktop=focused:^2
-bspc rule -a "discord" desktop=focused:^5
 bspc rule -a "Pavucontrol" state=floating
 bspc rule -a "Zathura" state=tiled
 
