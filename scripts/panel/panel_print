@@ -5,6 +5,10 @@ Uf=""
 PAD="%{O10}"
 COL="#d79921"
 desktop_icons=(        )
+
+# State
+focused_monitor=0
+
 while read -r line; do
     case $line in
         T*)
@@ -31,6 +35,7 @@ while read -r line; do
                         case $item in
                             M*)
                                 desktops="$desktops%{F-}"
+                                focused_monitor=$MON_INDEX
                                 ;;
                             m*)
                                 desktops="$desktops%{F#555}"
@@ -62,5 +67,5 @@ while read -r line; do
             mpd="$($PANEL_DIR/mpd_status)"
             ;;
     esac
-    printf "%s\n" "%{Sl}%{l}${desktops}%{F-}${windowname}${mpd}%{c}${datetime}%{r}%{Sl} ${volume} ${network}"
+    printf "%s\n" "%{l}${desktops}%{F-}${windowname}%{S$focused_monitor}${mpd}%{c}${datetime}%{r}${volume} ${network}"
 done
