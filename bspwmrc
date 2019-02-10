@@ -42,9 +42,6 @@ bspc monitor --focus DisplayPort-2
 # Wallpaper
 nitrogen --restore &
 
-# Compton
-compton &
-
 # Redshift
 redshift &
 
