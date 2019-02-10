@@ -121,6 +121,11 @@ let g:deoplete#sources#ternjs#docs = 1
 let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
 let g:deoplete#ignore_sources.php = ['omni']
 
+" deoplete with vimtex
+call deoplete#custom#var('omni', 'input_patterns', {
+    \ 'tex': g:vimtex#re#deoplete
+    \ })
+
 "autocmd Filetype json let g:indentLine_setConceal = 0
 
 " ==================
