@@ -35,7 +35,7 @@ super + Return
 # rofi
 super + o
 #rofi -show run -run-list-command ". $HOME/.scripts/list_alias" -run-command "zsh -i -c '\{cmd\}'"
-    rofi -show run -run-command "zsh -i -c '\{cmd\}'"
+	rofi -show run -run-command 'zsh -i -c "\{cmd\}"'
 #dmenu -p '::' -nb '#282828' -nf '#ebdbb2' -sb '#282828' -sf '#d79921' -b < $HOME/.scripts/dmenu_list | zsh -s
 
 # quick open
