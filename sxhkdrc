@@ -76,7 +76,7 @@ super + {_,shift} + x
 
 # navigation
 super + {_,shift} + {h,j,k,l}
-    bspc node {--focus,--swap} {west,next,prev,east}.active
+    bspc node {--focus,--swap} {west,next,prev,east}
 
 # preselect
 super + ctrl + {h,j,k,l}
