@@ -143,13 +143,8 @@ super + {minus,equal}
 super + plus
     bspc config window_gap 0
 
-# float, size and move window to 1920x1080+320+30
+# float, size window to 1280x720 and move it to center
 super + z
     bspc node --state '~floating'; \
-    if $HOME/.scripts/hdmi_connected; then; \
-	xdotool getactivewindow windowmove $(( 1920 + (2560-1920)/2 )) 30; \
-	xdotool getactivewindow windowsize 1920 $(( 1080 - 40 )); \
-    else; \
-	xdotool getactivewindow windowmove $(( (1920-1280)/2 )) $(( (1080-30-720)/2 )); \
-	xdotool getactivewindow windowsize 1280 720; \
-    fi
+    # xdotool getactivewindow windowmove $(( (1920-1280)/2 )) $(( (1080-30-720)/2 )); \
+    xdotool getactivewindow windowsize 1280 720;
