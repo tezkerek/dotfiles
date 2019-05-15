@@ -12,6 +12,9 @@ alias nvim-qt="nvim-qt --no-ext-tabline"
 # nvim with fzf
 alias fvim='nvim $(fzf)'
 
+# copy password to clipboard from keepass
+alias cppass="keepassxc-cli clip $HOME/passwords.kdbx "
+
 # Quit
 alias q="exit"
 
