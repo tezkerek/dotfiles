@@ -1,12 +1,12 @@
 export PATH=$HOME/.config/composer/vendor/bin:$HOME/.node_modules/bin:$PATH
 
-# Add all gems
-for ver in $HOME/.gem/ruby/*/bin; do
-    PATH=$ver:$PATH
-done
+# Fix locale
+export LC_CTYPE=en_US.UTF-8
 
 export EDITOR=/usr/bin/nvim
 export BROWSER=firefox-nightly
+#export GDK_BACKEND=wayland
+export MOZ_ENABLE_WAYLAND=1
 
 # Lemonbar panel
 export PANEL_FIFO="/tmp/panel.fifo"
@@ -21,9 +21,11 @@ export ZSH=/home/andrei/.oh-my-zsh
 # Cheat
 export CHEATCOLORS=true
 
-export FZF_DEFAULT_COMMAND='ag --nocolor -g ""'
+export FZF_DEFAULT_COMMAND='rg --files'
 
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
+export _JAVA_AWT_WM_NONREPARENTING=1
+export IDEA_JDK=/usr/lib/jvm/java-11-openjdk
 export ANDROID_HOME=$HOME/Android/Sdk/
 
 # Wine 32-bit
@@ -33,3 +35,8 @@ export WINEARCH32=win32
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 PATH="$PYENV_ROOT/bin":$PATH
+
+# Add all gems
+#for ver in $HOME/.gem/ruby/*/bin; do
+#    PATH=$ver:$PATH
+#done
