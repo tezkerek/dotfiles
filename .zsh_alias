@@ -15,6 +15,9 @@ alias fvim='nvim $(fzf)'
 # copy password to clipboard from keepass
 alias cppass="keepassxc-cli clip $HOME/passwords.kdbx "
 
+# use adb from Android Studio's downloaded SDK
+alias adb="$HOME/.local/share/android/sdk/platform-tools/adb "
+
 # Quit
 alias q="exit"
 
