@@ -46,8 +46,5 @@ xset r rate 500 25
 # Java graphics support
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-# Set monitor layout
-xrandr --output DisplayPort-2 --pos 0x800
-
 # Window manager
 exec bspwm 2>&1 bspwm.log
