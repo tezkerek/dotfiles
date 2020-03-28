@@ -159,9 +159,9 @@ nnoremap g= gg=G``
 
 " Insert line under cursor
 function! InsertEmptyLine()
-    let a:cursor = getpos(".")
+    let cursor = getpos(".")
     exec "normal o\<Esc>"
-    call setpos(".", a:cursor)
+    call setpos(".", cursor)
 endfunction
 nnoremap <silent> <CR> :call InsertEmptyLine()<CR>
 
