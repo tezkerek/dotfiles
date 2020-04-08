@@ -71,7 +71,7 @@ input * xkb_options "grp:alt_caps_toggle"
 focus_follows_mouse no
 
 # Start a terminal scratchpad
-exec_always alacritty --title "Scratchpad" --class "terminal_scratchpad"
+exec alacritty --title "Scratchpad" --class "terminal_scratchpad"
 for_window [app_id="terminal_scratchpad"] move scratchpad, resize set 1000 1000
 
 ### Key bindings
