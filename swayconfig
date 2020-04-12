@@ -23,7 +23,7 @@ set $menu bemenu-run
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg ~/pics/soviet.jpg fill
 #
 # Example configuration:
 #
@@ -69,6 +69,9 @@ input * xkb_variant ",std"
 input * xkb_options "grp:alt_caps_toggle"
 
 focus_follows_mouse no
+default_border pixel 2
+smart_borders no_gaps
+smart_gaps on
 
 # Start a terminal scratchpad
 exec alacritty --title "Scratchpad" --class "terminal_scratchpad"
