@@ -1,63 +1,53 @@
 scriptencoding utf-8
 
 set nocompatible
+set termguicolors
 
 set runtimepath+=~/.vim/
-
-call plug#begin('~/.vim/plugged')
 
 " ==================
 "  Plugins
 " ==================
+call plug#begin('~/.vim/plugged')
+    " QOL
+    Plug 'itchyny/lightline.vim'
+    Plug 'mhinz/vim-startify'
+    Plug 'christoomey/vim-tmux-navigator'
+    Plug 'moll/vim-bbye'
+    Plug 'embear/vim-localvimrc'
 
-Plug 'itchyny/lightline.vim'
+    " Text editing
+    Plug 'justinmk/vim-sneak'
+    Plug 'jiangmiao/auto-pairs'
+    Plug 'tpope/vim-surround'
+    Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-characterize'
+    Plug 'tpope/vim-repeat'
+    Plug 'tpope/vim-commentary'
 
-Plug 'justinmk/vim-sneak'
-Plug 'jiangmiao/auto-pairs'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-commentary'
+    " Files
+    Plug 'jeetsukumaran/vim-filebeagle'
+    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
 
-" Files
-Plug 'jeetsukumaran/vim-filebeagle'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'embear/vim-localvimrc'
+    " Completion
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
-" QOL
-Plug 'mhinz/vim-startify'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'moll/vim-bbye'
+    " Syntax
+    Plug 'kovetskiy/sxhkd-vim'
+    Plug 'cakebaker/scss-syntax.vim'
+    Plug 'Quramy/vim-js-pretty-template'
+    Plug 'lervag/vimtex'
+    Plug 'vim-scripts/taglist.vim'
+    Plug 'pangloss/vim-javascript'
+    Plug 'ElmCast/elm-vim'
+    Plug 'Vimjas/vim-python-pep8-indent'
+    Plug 'jackguo380/vim-lsp-cxx-highlight'
 
-" Completion
-Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-
-" Syntax
-Plug 'kovetskiy/sxhkd-vim'
-"Plugin 'lilydjwg/colorizer'
-Plug 'walm/jshint.vim'
-"Plug 'shawncplus/phpcomplete.vim'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'nono/jquery.vim'
-Plug 'Quramy/vim-js-pretty-template'
-Plug 'lervag/vimtex'
-Plug 'vim-scripts/taglist.vim'
-Plug 'jwalton512/vim-blade'
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'pangloss/vim-javascript'
-Plug 'ElmCast/elm-vim'
-Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'jackguo380/vim-lsp-cxx-highlight'
-
-" Colorschemes
-Plug 'sjl/badwolf'
-Plug 'altercation/vim-colors-solarized'
-Plug 'morhetz/gruvbox'
-Plug 'jansenfuller/crayon'
-
+    " Colorschemes
+    Plug 'morhetz/gruvbox'
+    Plug 'sainnhe/gruvbox-material'
+    Plug 'ayu-theme/ayu-vim'
 call plug#end()
 
 " ==================
@@ -81,15 +71,6 @@ let g:lightline = {
     \ }
 
 let g:tex_fast = "bMmpr"
-
-" Syntastic checkers
-let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_php_checkers = ['php', 'phplint']
-let g:syntastic_cpp_checkers = ['clang_check']
-
-" Conceal
-let g:indentLine_fileTypeExclude = ['json', 'latex']
-let g:indentLine_char = '▏'
 
 " |-----------------------------------------
 " | Neovim
@@ -148,11 +129,11 @@ xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    autocmd!
+    " Setup formatexpr specified filetype(s).
+    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+    " Update signature help on jump placeholder.
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 " Applying codeAction to the selected region.
@@ -205,18 +186,19 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-"autocmd Filetype json let g:indentLine_setConceal = 0
-
 " ==================
 "  Bindings
 " ==================
-
-" Convert Sass/SCSS to CSS on write
-":autocmd BufWritePost *.scss execute ":silent !sass " . expand('%') .  " " . expand('%:r') . ".css"
 " HTML syntax highlighting in JS
 :autocmd FileType javascript :JsPreTmpl html
 
-" ============================================ Mappings
+" ==================
+"  Mappings
+" ==================
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
 
 " Substitute word under cursor
 nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
@@ -232,17 +214,13 @@ function! InsertEmptyLine()
     exec "normal o\<Esc>"
     call setpos(".", cursor)
 endfunction
-nnoremap <silent> <CR> :call InsertEmptyLine()<CR>
+nnoremap <silent> + :call InsertEmptyLine()<CR>
 
 " Split navigation
 nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
-
-" Buffer navigation
-nnoremap <silent> gb :bnext<CR>
-nnoremap <silent> gB :bprevious<CR>
 
 " Tab navigation
 nnoremap <M-1> 1gt
@@ -258,22 +236,20 @@ nnoremap <silent> <M-9> :tablast<CR>
 " =========
 " fzf
 " =========
-nnoremap <C-P> :Files<CR>
-
+nnoremap <silent> <C-P> :Files<CR>
 " Browse buffers
-nnoremap <Space>b :Buffers<CR>
+nnoremap <silent> <Space>b :Buffers<CR>
 " Jump to window if possible
 let g:fzf_buffers_jump = 1
 
-" Search with ag
-nnoremap <Space>g :Ag<CR>
+" Search with rg
+nnoremap <silent> <Space>g :Rg<CR>
 " Search in current buffer
-nnoremap <Space>/ :BLines<CR>
+nnoremap <silent> <Space>/ :BLines<CR>
 
 " ==================
 "  Options
 " ==================
-
 " Indentation
 set tabstop=4 softtabstop=0
 set expandtab smarttab
@@ -282,7 +258,6 @@ set shiftwidth=4
 " For the lightline.vim plugin
 set laststatus=2
 set noshowmode
-
 
 " Other settings
 filetype plugin indent on
@@ -302,19 +277,8 @@ set list
 set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
 
 " Colorscheme
-colorscheme gruvbox
-let g:gruvbox_italic = 1
-set background=dark
 set t_ut=
-
-" Custom crayon colors
-let current_colorscheme = get(g:, "colors_name", "default")
-if current_colorscheme ==# "crayon"
-    augroup Color
-        autocmd!
-        autocmd ColorScheme * hi CursorLine ctermbg=10 ctermfg=NONE cterm=NONE guibg=NONE guifg=#383E47 gui=NONE
-        autocmd ColorScheme * hi ErrorMsg   ctermbg=NONE ctermfg=9 cterm=NONE guibg=NONE guifg=#383E47 gui=NONE
-        "autocmd ColorScheme * hi MatchParen ctermbg=3 ctermfg=10 cterm=NONE guibg=#D8C27A guifg=#282C33 gui=NONE
-    augroup END
-endif
-
+set background=dark
+let g:gruvbox_material_background='hard'
+let ayucolor='mirage'
+colorscheme gruvbox
