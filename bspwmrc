@@ -2,7 +2,7 @@
 
 # Start sxhkd if not running
 if [ ! $(pgrep sxhkd) != "" ]; then
-    sxhkd & #> $HOME/.config/sxhkd/log
+    sxhkd &
 fi
 
 # Appearance
@@ -47,11 +47,4 @@ redshift -l 47.18:27.60 &
 # Panel
 $PANEL_DIR/panel_info &
 sleep 1
-$PANEL_DIR/panel & > $HOME/panel.log
-
-# Stalonetray and nm-applet
-# nm-applet &
-# if $HOME/.scripts/hdmi_connected
-#     then stalonetray --geometry 1x1+4000+0
-#     else stalonetray --geometry 1x1+1500+0
-# fi
+$PANEL_DIR/panel &
