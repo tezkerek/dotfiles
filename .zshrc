@@ -16,6 +16,11 @@ man() {
     command man "$@"
 }
 
+function md {
+    # Faster creation of directories
+    mkdir --parents $1 && cd $1
+}
+
 source "$HOME/.zsh_alias"
 
 # Vi mode
