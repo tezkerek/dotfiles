@@ -42,6 +42,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'jeetsukumaran/vim-filebeagle'
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
+        let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'yoffset': 0.01, 'highlight': 'GruvboxGreen' } }
 
     " Completion
     Plug 'neoclide/coc.nvim', { 'branch': 'release' }
