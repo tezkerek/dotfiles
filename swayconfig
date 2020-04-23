@@ -64,6 +64,10 @@ input "1267:12363:MSFT0002:01_04F3:304B_Touchpad" {
     middle_emulation enabled
 }
 
+input "1133:49970:Logitech_Gaming_Mouse_G502" {
+    accel_profile flat
+}
+
 input * xkb_layout "us,ro"
 input * xkb_variant ",std"
 input * xkb_options "grp:alt_caps_toggle"
