@@ -228,6 +228,10 @@ bindsym XF86AudioRaiseVolume exec "pamixer --increase 2"
 bindsym XF86MonBrightnessDown exec "xbacklight -dec 5"
 bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
 
+# Screenshot
+bindsym Print exec "grim - | wl-copy"
+bindsym Alt+Print exec "slurp | grim -g - - | wl-copy"
+
 #
 # Status Bar:
 #
