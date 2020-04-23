@@ -36,6 +36,9 @@ export ANDROID_HOME=$HOME/Android/Sdk/
 export WINEPREFIX32=~/.wine32
 export WINEARCH32=win32
 
+# ghcup
+export PATH="$HOME/.ghcup/bin":$PATH
+
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin":$PATH
@@ -43,3 +46,6 @@ export PATH="$PYENV_ROOT/bin":$PATH
 # Virtualenv
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/devel
+
+# Add home bins
+export PATH=$HOME/.local/bin:$PATH
