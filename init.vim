@@ -57,6 +57,14 @@ call plug#begin('~/.vim/plugged')
     Plug 'ElmCast/elm-vim'
     Plug 'Vimjas/vim-python-pep8-indent'
     Plug 'jackguo380/vim-lsp-cxx-highlight'
+    Plug 'neovimhaskell/haskell-vim'
+        let g:haskell_enable_quantification = 1   "  highlighting of `forall`
+        let g:haskell_enable_recursivedo = 1      "  highlighting of `mdo` and `rec`
+        let g:haskell_enable_arrowsyntax = 1      "  highlighting of `proc`
+        let g:haskell_enable_pattern_synonyms = 1 "  highlighting of `pattern`
+        let g:haskell_enable_typeroles = 1        "  highlighting of type roles
+        let g:haskell_enable_static_pointers = 1  "  highlighting of `static`
+        let g:haskell_backpack = 1                "  highlighting of backpack keywords
 
     " Colorschemes
     Plug 'morhetz/gruvbox'
@@ -83,6 +91,7 @@ call plug#end()
     set foldmethod=indent
     set number
     set signcolumn=yes " Always display signcolumn
+    set updatetime=300 " For highlighting text under cursor faster
     set ignorecase
     set smartcase
     set incsearch
