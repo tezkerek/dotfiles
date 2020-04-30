@@ -8,7 +8,7 @@ HISTORY_IGNORE='(ls|cd|exit|q|nvim|htop)'
 export LC_CTYPE=en_US.UTF-8
 
 export EDITOR=/usr/bin/nvim
-export BROWSER=firefox-nightly
+export BROWSER=/usr/bin/firefox
 #export GDK_BACKEND=wayland
 export MOZ_ENABLE_WAYLAND=1
 
