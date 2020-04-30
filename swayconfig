@@ -1,9 +1,3 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
-
 ### Variables
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
@@ -18,18 +12,11 @@ set $term alacritty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu bemenu-run
+set $menu bemenu-run | xargs swaymsg exec --
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg ~/pics/soviet.jpg fill
-#
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
-#
-# You can get the names of your outputs by running: swaymsg -t get_outputs
 
 ### Idle configuration
 #
@@ -45,41 +32,26 @@ output * bg ~/pics/soviet.jpg fill
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 
+
 ### Input configuration
 #
-# Example configuration:
-#
-#   input "2:14:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
-#       natural_scroll enabled
-#       middle_emulation enabled
-#   }
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
-
 input "1267:12363:MSFT0002:01_04F3:304B_Touchpad" {
     tap enabled
     middle_emulation enabled
 }
-
 input "1133:49970:Logitech_Gaming_Mouse_G502" {
     accel_profile flat
 }
-
 input * xkb_layout "us,ro"
 input * xkb_variant ",std"
 input * xkb_options "grp:alt_caps_toggle"
 
+### Sway settings
+#
 focus_follows_mouse no
 default_border pixel 2
 smart_borders no_gaps
 smart_gaps on
-
-# Start a terminal scratchpad
-exec alacritty --title "Scratchpad" --class "terminal_scratchpad"
-for_window [app_id="terminal_scratchpad"] move scratchpad, resize set 1000 1000
 
 ### Key bindings
 #
@@ -106,6 +78,7 @@ for_window [app_id="terminal_scratchpad"] move scratchpad, resize set 1000 1000
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+q exit
+
 #
 # Moving around:
 #
@@ -193,44 +166,42 @@ for_window [app_id="terminal_scratchpad"] move scratchpad, resize set 1000 1000
     # If there are multiple scratchpad windows, this command cycles through them.
     bindsym $mod+Return scratchpad show
 #
+# Function Keys
+#
+    bindsym XF86AudioMicMute exec "amixer set Capture toggle" bindsym XF86AudioMute exec "pamixer --toggle-mute"
+    bindsym XF86AudioLowerVolume exec "pamixer --decrease 2"
+    bindsym XF86AudioRaiseVolume exec "pamixer --increase 2"
+
+    bindsym XF86MonBrightnessDown exec "xbacklight -dec 5"
+    bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
+
+    # Screenshot
+    bindsym Print exec "grim - | wl-copy"
+    bindsym Alt+Print exec "slurp | grim -g - - | wl-copy"
+
+### Modes
+#
 # Resizing containers:
 #
 mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
     bindsym $right resize grow width 10px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
-
     # Return to default mode
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
-
 #
-# Function Keys
+# Fast application launcher
 #
-bindsym XF86AudioMicMute exec "amixer set Capture toggle"
-bindsym XF86AudioMute exec "pamixer --toggle-mute"
-bindsym XF86AudioLowerVolume exec "pamixer --decrease 2"
-bindsym XF86AudioRaiseVolume exec "pamixer --increase 2"
-
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 5"
-bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
-
-# Screenshot
-bindsym Print exec "grim - | wl-copy"
-bindsym Alt+Print exec "slurp | grim -g - - | wl-copy"
+mode "launch" {
+    bindsym f exec firefox
+    bindsym w exec networkmanager_dmenu
+    bindsym Escape mode "default"
+}
+bindsym $mod+i mode "launch"
 
 #
 # Status Bar:
@@ -239,16 +210,15 @@ bindsym Alt+Print exec "slurp | grim -g - - | wl-copy"
 bar {
     position top
     swaybar_command waybar
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
-
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
 }
 
 include /etc/sway/config.d/*
+
+### Startup
+#
+# Start a terminal scratchpad
+exec alacritty --title "Scratchpad" --class "terminal_scratchpad"
+for_window [app_id="terminal_scratchpad"] move scratchpad, resize set 1000 1000
+
+# Start touchpad gestures
+exec libinput-gestures-setup start
