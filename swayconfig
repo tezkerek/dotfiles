@@ -16,7 +16,7 @@ set $menu bemenu-run | xargs swaymsg exec --
 
 ### Output configuration
 #
-output * bg ~/pics/soviet.jpg fill
+output * bg ~/pics/wallpapers/selected fill
 
 ### Idle configuration
 #
