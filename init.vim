@@ -31,7 +31,6 @@ call plug#begin('~/.vim/plugged')
 
     " Text editing
     Plug 'justinmk/vim-sneak'
-    Plug 'jiangmiao/auto-pairs'
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-characterize'
@@ -48,16 +47,10 @@ call plug#begin('~/.vim/plugged')
     Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
     " Syntax
-    Plug 'kovetskiy/sxhkd-vim'
-    Plug 'cakebaker/scss-syntax.vim'
-    Plug 'Quramy/vim-js-pretty-template'
-    Plug 'lervag/vimtex'
     Plug 'vim-scripts/taglist.vim'
-    Plug 'pangloss/vim-javascript'
-    Plug 'ElmCast/elm-vim'
-    Plug 'Vimjas/vim-python-pep8-indent'
     Plug 'jackguo380/vim-lsp-cxx-highlight'
-    Plug 'neovimhaskell/haskell-vim'
+    Plug 'sheerun/vim-polyglot'
+        let g:polyglot_disabled = ['c++11']
         let g:haskell_enable_quantification = 1   "  highlighting of `forall`
         let g:haskell_enable_recursivedo = 1      "  highlighting of `mdo` and `rec`
         let g:haskell_enable_arrowsyntax = 1      "  highlighting of `proc`
@@ -67,7 +60,7 @@ call plug#begin('~/.vim/plugged')
         let g:haskell_backpack = 1                "  highlighting of backpack keywords
 
     " Colorschemes
-    Plug 'morhetz/gruvbox'
+    Plug 'gruvbox-community/gruvbox'
     Plug 'sainnhe/gruvbox-material'
 call plug#end()
 
@@ -146,6 +139,9 @@ augroup end
     nnoremap k gk
     nnoremap gj j
     nnoremap gk k
+
+    " Quickly disable hlsearch
+    nnoremap <silent> <Esc> :nohlsearch<CR>
 
     " Substitute word under cursor
     nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
