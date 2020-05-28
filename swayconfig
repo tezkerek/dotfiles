@@ -53,6 +53,10 @@ default_border pixel 2
 smart_borders no_gaps
 smart_gaps on
 
+### Colors
+#
+client.focused "#e6c547" "#e6c547" "#ffffff" "#e6c547" "#e6c547"
+
 ### Key bindings
 #
 # Basics:
