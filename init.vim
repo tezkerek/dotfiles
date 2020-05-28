@@ -25,9 +25,17 @@ call plug#begin('~/.vim/plugged')
         \   'subseparator': { 'left': '', 'right': '' }
         \ }
     Plug 'mhinz/vim-startify'
-    Plug 'christoomey/vim-tmux-navigator'
     Plug 'moll/vim-bbye'
     Plug 'embear/vim-localvimrc'
+
+    " Integration
+    Plug 'christoomey/vim-tmux-navigator'
+    Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+        let g:firenvim_config = {
+            \ 'localSettings': {
+                \ '.*': {'takeover': 'never'}
+            \}
+        \}
 
     " Text editing
     Plug 'justinmk/vim-sneak'
@@ -45,10 +53,12 @@ call plug#begin('~/.vim/plugged')
 
     " Completion
     Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+    Plug 'honza/vim-snippets'
 
     " Syntax
     Plug 'vim-scripts/taglist.vim'
     Plug 'jackguo380/vim-lsp-cxx-highlight'
+    Plug 'lervag/vimtex'
     Plug 'sheerun/vim-polyglot'
         let g:polyglot_disabled = ['c++11']
         let g:haskell_enable_quantification = 1   "  highlighting of `forall`
@@ -206,6 +216,10 @@ augroup end
         let col = col('.') - 1
         return !col || getline('.')[col - 1]  =~# '\s'
     endfunction
+
+    " Snippet jump
+    let g:coc_snippet_next = '<M-j>'
+    let g:coc_snippet_prev = '<M-k>'
 
     " Use `[g` and `]g` to navigate diagnostics
     nmap <silent> [g <Plug>(coc-diagnostic-prev)
