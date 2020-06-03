@@ -57,6 +57,7 @@ call plug#begin('~/.vim/plugged')
 
     " Syntax
     Plug 'vim-scripts/taglist.vim'
+    Plug 'sbdchd/neoformat'
     Plug 'jackguo380/vim-lsp-cxx-highlight'
     Plug 'lervag/vimtex'
     Plug 'sheerun/vim-polyglot'
@@ -92,7 +93,7 @@ call plug#end()
     filetype plugin indent on
     syntax on
     set foldmethod=indent
-    set number
+    set number relativenumber
     set signcolumn=yes " Always display signcolumn
     set updatetime=300 " For highlighting text under cursor faster
     set ignorecase
@@ -126,17 +127,25 @@ call plug#end()
 " ==================
 "  Autocmd
 " ==================
-augroup mygroup
+augroup autococ
     autocmd!
-    " HTML syntax highlighting in JS
-    autocmd FileType javascript :JsPreTmpl html
-
     " Highlight the symbol and its references when holding the cursor.
     autocmd CursorHold * silent call CocActionAsync('highlight')
     " Setup formatexpr specified filetype(s).
     autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
     " Update signature help on jump placeholder.
     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+augroup indent
+    autocmd!
+    autocmd FileType haskell setlocal shiftwidth=2 softtabstop=2 expandtab
+augroup end
+
+augroup linenum
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup end
 
 " ==================
