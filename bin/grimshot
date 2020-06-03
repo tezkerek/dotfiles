@@ -1,0 +1,23 @@
+#!/usr/bin/zsh
+
+coordfile="/tmp/grimshot.coords"
+
+if [[ ! -e $coordfile ]]; then
+    touch "/tmp/grimshot.coords"
+fi
+
+case $1 in
+    screen)
+        grim -
+        ;;
+    take)
+        coords=$(slurp)
+        echo $coords > $coordfile
+        grim -g $coords -
+        ;;
+    retake)
+        coords=$(cat $coordfile)
+        grim -g $coords -
+        notify-send -t 500 "Screenshot retaken at $coords"
+        ;;
+esac

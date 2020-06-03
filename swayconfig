@@ -183,8 +183,8 @@ client.focused "#e6c547" "#e6c547" "#ffffff" "#e6c547" "#e6c547"
     bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
 
     # Screenshot
-    bindsym Print exec "grim - | wl-copy"
-    bindsym Alt+Print exec "slurp | grim -g - - | wl-copy"
+    bindsym Print exec "grimshot retake | wl-copy"
+    bindsym Alt+Print exec "grimshot take | wl-copy"
 
 ### Modes
 #
