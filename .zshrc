@@ -5,6 +5,9 @@ if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
 
+# z jump around
+[[ -r "/usr/share/z/z.sh" ]] && source "/usr/share/z/z.sh"
+
 man() {
     # Enable colors for manpages
     LESS_TERMCAP_md=$'\e[01;31m' \
