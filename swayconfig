@@ -175,7 +175,8 @@ client.focused "#e6c547" "#e6c547" "#ffffff" "#e6c547" "#e6c547"
 #
 # Function Keys
 #
-    bindsym XF86AudioMicMute exec "amixer set Capture toggle" bindsym XF86AudioMute exec "pamixer --toggle-mute"
+    bindsym XF86AudioMicMute exec "amixer set Capture toggle"
+    bindsym XF86AudioMute exec "pamixer --toggle-mute"
     bindsym XF86AudioLowerVolume exec "pamixer --decrease 2"
     bindsym XF86AudioRaiseVolume exec "pamixer --increase 2"
 
