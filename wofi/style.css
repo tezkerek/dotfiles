@@ -1,0 +1,21 @@
+window {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+#input {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 5px 25px;
+    border: none;
+}
+
+#img {
+    margin-right: 10px;
+}
+
+#entry {
+    margin-left: 15px;
+    background-color: #333333;
+    color: #ffffff;
+}

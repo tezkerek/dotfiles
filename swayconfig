@@ -7,7 +7,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term alacritty
+set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -55,7 +55,9 @@ smart_gaps on
 
 ### Colors
 #
-client.focused "#e6c547" "#e6c547" "#ffffff" "#e6c547" "#e6c547"
+set $focus_color "#e6c547"
+client.focused $focus_color $focus_color "#000000" $focus_color $focus_color
+client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
 
 ### Key bindings
 #
@@ -204,12 +206,7 @@ bindsym $mod+r mode "resize"
 #
 # Fast application launcher
 #
-mode "launch" {
-    bindsym f exec firefox
-    bindsym w exec networkmanager_dmenu
-    bindsym Escape mode "default"
-}
-bindsym $mod+i mode "launch"
+bindsym $mod+i exec wofi --show=drun
 
 #
 # Status Bar:
@@ -225,8 +222,14 @@ include /etc/sway/config.d/*
 ### Startup
 #
 # Start a terminal scratchpad
-exec alacritty --title "Scratchpad" --class "terminal_scratchpad"
-for_window [app_id="terminal_scratchpad"] move scratchpad, resize set 1000 1000
+exec $term --title "Scratchpad" --class "terminal_scratchpad"
+for_window [app_id="terminal_scratchpad"] move scratchpad, move position center
+
+# Other window rules
+for_window [app_id="firefox" title="Launch Application"] floating enable
+for_window [class="Steam" title="Friends List"] floating enable
+for_window [class="jetbrains-studio"] floating enable
+for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
 
 # Start touchpad gestures
 exec libinput-gestures-setup start
