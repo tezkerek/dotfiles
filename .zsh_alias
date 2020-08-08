@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/zsh
 
 # Reload zshrc
 alias zreload=". $HOME/.zshrc"
@@ -6,8 +6,9 @@ alias zreload=". $HOME/.zshrc"
 # ls colors
 alias ls="ls --color=auto"
 
-# nvim with fzf
+# fzf shortcuts
 alias fvim='nvim $(fzf)'
+alias fcd='cd $(FZF_DEFAULT_COMMAND="fd --hidden --type d" fzf)'
 
 # copy password to clipboard from keepass
 alias cppass="keepassxc-cli clip $HOME/passwords.kdbx "

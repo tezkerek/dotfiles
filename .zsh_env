@@ -24,16 +24,12 @@ export LS_COLORS='rs=0:di=01;33:ln=4;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;3
 # Cheat
 export CHEATCOLORS=true
 
-export FZF_DEFAULT_COMMAND='rg --files'
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
 
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
 export _JAVA_AWT_WM_NONREPARENTING=1
 export IDEA_JDK=/usr/lib/jvm/java-11-openjdk
 export ANDROID_HOME=$HOME/Android/Sdk/
-
-# Wine 32-bit
-export WINEPREFIX32=~/.wine32
-export WINEARCH32=win32
 
 # ghcup
 export PATH="$HOME/.ghcup/bin":$PATH
@@ -47,4 +43,4 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/devel
 
 # Add home bins
-export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/.cabal/bin:$PATH

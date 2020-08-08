@@ -45,6 +45,9 @@ nitrogen --restore &
 redshift -l 47.18:27.60 &
 
 # Panel
+export PANEL_FIFO="/tmp/panel.fifo"
+export PANEL_DIR="$HOME/.scripts/panel"
+
 $PANEL_DIR/panel_info &
 sleep 1
 $PANEL_DIR/panel &
