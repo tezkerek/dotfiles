@@ -40,16 +40,19 @@ call plug#begin('~/.vim/plugged')
     " Text editing
     Plug 'justinmk/vim-sneak'
     Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-characterize'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-commentary'
+    Plug 'luochen1990/rainbow'
+    Plug 'junegunn/vim-easy-align'
+    Plug 'tommcdo/vim-exchange'
 
     " Files
     Plug 'jeetsukumaran/vim-filebeagle'
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
         let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'yoffset': 0.01, 'highlight': 'GruvboxGreen' } }
+    Plug 'tpope/vim-fugitive'
 
     " Completion
     Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -57,9 +60,11 @@ call plug#begin('~/.vim/plugged')
 
     " Syntax
     Plug 'vim-scripts/taglist.vim'
+    Plug 'pechorin/any-jump.vim'
     Plug 'sbdchd/neoformat'
     Plug 'jackguo380/vim-lsp-cxx-highlight'
     Plug 'lervag/vimtex'
+        let g:tex_flavor = 'lualatex'
     Plug 'sheerun/vim-polyglot'
         let g:polyglot_disabled = ['c++11']
         let g:haskell_enable_quantification = 1   "  highlighting of `forall`
@@ -158,6 +163,9 @@ augroup end
     nnoremap k gk
     nnoremap gj j
     nnoremap gk k
+
+    " Delete word with ctrl+backspace
+    inoremap <C-H> <C-W>
 
     " Quickly disable hlsearch
     nnoremap <silent> <Esc> :nohlsearch<CR>
@@ -290,8 +298,6 @@ augroup end
     command! -nargs=0 OR     :call CocAction('runCommand', 'editor.action.organizeImport')
 
     " Mappings using CoCList:
-    " Show all diagnostics.
-    nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
     " Manage extensions.
     nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
     " Show commands.
@@ -306,3 +312,9 @@ augroup end
     nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
     " Resume latest coc list.
     nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+" ---------
+" vim-easy-align
+" ---------
+nmap <Space>a <Plug>(EasyAlign)
+xmap <Space>a <Plug>(EasyAlign)
