@@ -52,6 +52,8 @@ focus_follows_mouse no
 default_border pixel 2
 smart_borders no_gaps
 smart_gaps on
+# Hide title bar of single window in a tabbed/stacked workspace
+hide_edge_borders --i3 horizontal
 
 ### Colors
 #
@@ -228,7 +230,7 @@ for_window [app_id="terminal_scratchpad"] move scratchpad, move position center
 # Other window rules
 for_window [app_id="firefox" title="Launch Application"] floating enable
 for_window [class="Steam" title="Friends List"] floating enable
-for_window [class="jetbrains-studio"] floating enable
+#for_window [class="jetbrains-studio"] floating enable
 for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
 
 # Start touchpad gestures
