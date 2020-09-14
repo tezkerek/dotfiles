@@ -9,7 +9,7 @@ HISTORY_IGNORE='(ls|cd|exit|q|nvim|htop)'
 setopt HIST_IGNORE_DUPS
 
 export LC_CTYPE=en_US.UTF-8
-export LS_COLORS=$LS_COLORS:"di=1;33:ex=1;31:ln=4;36"
+export LS_COLORS=$LS_COLORS:"di=1;33:ex=1;31:ln=4;36:*.mkv=35"
 export LESS=iMRj5
 export BROWSER=/usr/bin/firefox
 export EDITOR=/usr/bin/nvim
