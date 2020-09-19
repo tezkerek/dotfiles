@@ -65,6 +65,14 @@ call plug#begin('~/.vim/plugged')
     Plug 'jackguo380/vim-lsp-cxx-highlight'
     Plug 'lervag/vimtex'
         let g:tex_flavor = 'lualatex'
+        let g:vimtex_compiler_method = 'latexrun'
+        let g:vimtex_compiler_latexrun = {
+        \   'build_dir': 'latex.out',
+        \   'options': [
+        \       '--verbose-cmds',
+        \       '--latex-args="-synctex=1"',
+        \   ],
+        \ }
     Plug 'sheerun/vim-polyglot'
         let g:polyglot_disabled = ['c++11']
         let g:haskell_enable_quantification = 1   "  highlighting of `forall`
