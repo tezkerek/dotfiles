@@ -13,7 +13,26 @@ set $menu bemenu-run | xargs swaymsg exec --
 
 ### Output configuration
 #
-output * bg ~/pics/wallpapers/selected fill
+output DP-3 {
+    resolution 1920x1080@144Hz
+    position 0 0
+    background ~/pics/wallpapers/selected_main fill
+}
+output HDMI-A-1 {
+    position 1920 0
+    background ~/pics/wallpapers/selected_secondary fill
+}
+
+# Assign workspaces to outputs
+workspace 1 output DP-3
+workspace 2 output DP-3
+workspace 3 output DP-3
+workspace 4 output DP-3
+workspace 5 output HDMI-A-1
+workspace 6 output HDMI-A-1
+workspace 7 output HDMI-A-1
+workspace 8 output HDMI-A-1
+workspace 9 output DP-3
 
 ### Idle configuration
 #
@@ -32,10 +51,6 @@ output * bg ~/pics/wallpapers/selected fill
 
 ### Input configuration
 #
-input "1267:12363:MSFT0002:01_04F3:304B_Touchpad" {
-    tap enabled
-    middle_emulation enabled
-}
 input "1133:49970:Logitech_Gaming_Mouse_G502" {
     accel_profile flat
 }
@@ -114,6 +129,10 @@ client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
     bindsym $mod+Shift+7 move container to workspace 7
     bindsym $mod+Shift+8 move container to workspace 8
     bindsym $mod+Shift+9 move container to workspace 9
+
+    bindsym $mod+n focus output right
+    bindsym $mod+Shift+n move workspace to output right
+
 #
 # Layout stuff:
 #
@@ -199,6 +218,3 @@ for_window [app_id="terminal_scratchpad"] move scratchpad, move position center
 for_window [app_id="firefox" title="Launch Application"] floating enable
 for_window [class="Steam" title="Friends List"] floating enable
 for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
-
-# Start touchpad gestures
-exec libinput-gestures-setup start
