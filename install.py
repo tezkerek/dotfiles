@@ -5,7 +5,8 @@ import sys
 
 home_links = {
     "zshrc": ".zshrc",
-    "tmux.conf": ".tmux.conf"
+    "tmux.conf": ".tmux.conf",
+    "ideavimrc": ".ideavimrc",
 }
 
 xdg_config_links = {

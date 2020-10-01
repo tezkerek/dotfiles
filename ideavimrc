@@ -1,0 +1,12 @@
+let mapleader=" "
+
+set ideajoin
+set incsearch
+set surround
+set easymotion
+set exchange
+
+nnoremap <C-H> :action PreviousTab<CR>
+nnoremap <C-L> :action NextTab<CR>
+
+nnoremap + o<Esc>k
