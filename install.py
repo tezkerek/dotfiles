@@ -24,16 +24,24 @@ xdg_config_links = {
     "sway/wofi/style.css": "wofi/style.css",
 }
 
-force = len(sys.argv) >= 2 and sys.argv[1] == "-f"
+force_overwrite = len(sys.argv) >= 2 and sys.argv[1] == "-f"
+ask_on_overwrite = len(sys.argv) >= 2 and sys.argv[1] == "-a"
 
 def try_symlink(target, link_name):
     target = os.path.abspath(target)
     link_name = os.path.abspath(link_name)
 
-    # Ask on conflict if force flag not set
     if os.path.lexists(link_name):
-        should_remove = force
-        if not force:
+        # Link already exists
+
+        if not ask_on_overwrite:
+            # Skip this link
+            print(f"{link_name} already exists. Skipping.")
+            return
+
+        # Ask whether to overwrite the link
+        should_remove = force_overwrite
+        if not force_overwrite:
             answer = input(f"{link_name} exists. Link anyway? [Y/n]")
             if answer.upper() == "Y":
                 should_remove = True
@@ -42,6 +50,11 @@ def try_symlink(target, link_name):
         if should_remove:
             os.remove(link_name)
             print(f"Removed {link_name}")
+    else:
+        # Create parent directories as needed
+        dirpath = os.path.dirname(link_name)
+        if not os.path.exists(dirpath):
+            os.makedirs(dirpath)
 
     os.symlink(target, link_name)
     print(f"{link_name} -> {target}")
