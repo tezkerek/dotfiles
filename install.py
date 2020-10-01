@@ -11,6 +11,7 @@ home_links = {
 
 xdg_config_links = {
     "init.vim": "nvim/init.vim",
+    "gitconfig": "git/config",
     "kitty.conf": "kitty/kitty.conf",
     "alacritty.yml": "alacritty/alacritty.yml",
     "bspwm/bspwmrc": "bspwm/bspwmrc",
