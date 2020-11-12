@@ -1,0 +1,11 @@
+#!/bin/bash
+
+case $1 in
+    pull)
+        rclone sync dropbox:passwords.kdbx /tmp/ --progress
+        keepassxc-cli merge $HOME/passwords.kdbx /tmp/passwords.kdbx --same-credentials
+        ;;
+    push)
+        rclone sync $HOME/passwords.kdbx dropbox: --progress
+        ;;
+esac
