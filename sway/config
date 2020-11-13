@@ -188,8 +188,9 @@ client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
     bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
 
     # Screenshot
-    bindsym Print exec "grimshot retake | wl-copy"
+    bindsym Alt+Shift+Print exec "grimshot retake | wl-copy"
     bindsym Alt+Print exec "grimshot take | wl-copy"
+    bindsym Print exec "grimshot screen | wl-copy"
 
 ### Modes
 #
