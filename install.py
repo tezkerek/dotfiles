@@ -24,8 +24,22 @@ xdg_config_links = {
     "sway/wofi/style.css": "wofi/style.css",
 }
 
-force_overwrite = len(sys.argv) >= 2 and sys.argv[1] == "-f"
-ask_on_overwrite = len(sys.argv) >= 2 and sys.argv[1] == "-a"
+# Link device-specific configs
+if len(sys.argv) >= 2:
+    device = sys.argv[1]
+    if device in ("laptop", "desktop"):
+        xdg_config_links[f"sway/config.{device}"] = "sway/config.device"
+    else:
+        fail("Device must be laptop or desktop")
+else:
+    fail("You must provide a device, e.g. ./install.py <laptop|desktop> [flags]")
+
+force_overwrite = len(sys.argv) >= 3 and sys.argv[2] == "-f"
+ask_on_overwrite = len(sys.argv) >= 3 and sys.argv[2] == "-a"
+
+def fail(message):
+    print(message)
+    exit(1)
 
 def try_symlink(target, link_name):
     target = os.path.abspath(target)

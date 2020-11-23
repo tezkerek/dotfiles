@@ -1,0 +1,9 @@
+output * bg ~/pics/wallpapers/primary fill
+
+input "1267:12363:MSFT0002:01_04F3:304B_Touchpad" {
+    tap enabled
+    middle_emulation enabled
+}
+
+# Start touchpad gestures
+exec libinput-gestures-setup start
