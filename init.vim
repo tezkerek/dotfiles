@@ -60,6 +60,7 @@ call plug#begin('~/.vim/plugged')
 
     " Syntax
     Plug 'vim-scripts/taglist.vim'
+    Plug 'AndrewRadev/splitjoin.vim'
     Plug 'pechorin/any-jump.vim'
     Plug 'sbdchd/neoformat'
     Plug 'jackguo380/vim-lsp-cxx-highlight'
