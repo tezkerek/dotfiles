@@ -33,7 +33,7 @@ input "1133:49970:Logitech_Gaming_Mouse_G502" {
 }
 input * xkb_layout "us,ro"
 input * xkb_variant ",std"
-input * xkb_options "grp:alt_caps_toggle"
+input * xkb_options "ctrl:nocaps,grp:win_space_toggle"
 
 ### Sway settings
 #
@@ -123,10 +123,10 @@ client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
     bindsym $mod+s sticky toggle
 
     # Toggle the current focus between tiling and floating mode
-    bindsym $mod+space floating toggle
+    bindsym $mod+y floating toggle
 
     # Swap focus between the tiling area and the floating area
-    bindsym $mod+Shift+space focus mode_toggle
+    bindsym $mod+Shift+y focus mode_toggle
 
     # Focus parent container
     bindsym $mod+a focus parent
