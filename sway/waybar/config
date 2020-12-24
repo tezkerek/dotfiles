@@ -3,7 +3,7 @@
     "position": "bottom",
     "height": 25,
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
-    "modules-center": [],
+    "modules-center": ["custom/mpris"],
     "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery", "clock", "tray"],
     "sway/window": {
         "max-length": 50
@@ -93,6 +93,11 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "custom/mpris": {
+        "format": " {}",
+        "max-length": 50,
+        "exec": "playerctl metadata --follow --format '{{ artist }} - {{ title }}'"
     }
 }
 // vim:ft=javascript

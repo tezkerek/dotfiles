@@ -150,6 +150,10 @@ client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
     bindsym XF86AudioLowerVolume exec "pamixer --decrease 2"
     bindsym XF86AudioRaiseVolume exec "pamixer --increase 2"
 
+    bindsym XF86AudioPlay exec "playerctl play-pause"
+    bindsym XF86AudioNext exec "playerctl next"
+    bindsym XF86AudioPrev exec "playerctl prev"
+
     bindsym XF86MonBrightnessDown exec "xbacklight -dec 5"
     bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
 
