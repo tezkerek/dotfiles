@@ -43,6 +43,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-characterize'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-commentary'
+    Plug 'tpope/vim-sleuth'
     Plug 'luochen1990/rainbow'
     Plug 'junegunn/vim-easy-align'
     Plug 'tommcdo/vim-exchange'
