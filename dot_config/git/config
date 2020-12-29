@@ -2,6 +2,9 @@
 	email = andrei.ancuta@gmail.com
 	name = Tezkerek
 
+[core]
+    pager = delta
+
 [alias]
 	st = status
 	diffc = diff --cached

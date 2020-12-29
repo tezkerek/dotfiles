@@ -39,6 +39,7 @@ input * xkb_options "ctrl:nocaps,grp:win_space_toggle"
 #
 focus_follows_mouse no
 floating_modifier $mod normal
+default_floating_border pixel
 default_border pixel 2
 smart_borders no_gaps
 smart_gaps on
@@ -194,7 +195,51 @@ for_window [app_id="terminal_scratchpad"] move scratchpad, move position center
 
 # Other window rules
 for_window [app_id="firefox" title="Launch Application"] floating enable
+for_window [app_id="firefox" title="Picture-in-Picture"] \
+    floating enable, sticky enable, move position 1190 80
 for_window [class="Steam" title="Friends List"] floating enable
 for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
 
-include config.device
+{{ if (contains "desktop" .chezmoi.hostname) }}
+### Desktop specific config
+#
+set $primary DP-3
+set $secondary HDMI-A-1
+
+output $primary {
+    resolution 1920x1080@144Hz
+    position 0 0
+    background ~/pics/wallpapers/primary fill
+}
+output $secondary {
+    position 1920 0
+    background ~/pics/wallpapers/secondary fill
+}
+
+# Assign workspaces to outputs
+workspace 1 output $primary
+workspace 2 output $primary
+workspace 3 output $primary
+workspace 4 output $primary
+workspace 5 output $secondary
+workspace 6 output $secondary
+workspace 7 output $secondary
+workspace 8 output $secondary
+workspace 9 output $primary
+
+bindsym $mod+n focus output right
+bindsym $mod+Shift+n move workspace to output right
+
+{{ else if (contains "laptop" .chezmoi.hostname) }}
+### Laptop specific config
+#
+output * bg ~/pics/wallpapers/primary fill
+
+input "1267:12363:MSFT0002:01_04F3:304B_Touchpad" {
+    tap enabled
+    middle_emulation enabled
+}
+
+# Start touchpad gestures
+exec libinput-gestures-setup start
+{{- end }}
