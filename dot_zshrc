@@ -15,7 +15,7 @@ export BROWSER=/usr/bin/firefox
 export EDITOR=/usr/bin/nvim
 
 export CHEATCOLORS=true
-export FZF_DEFAULT_COMMAND='rg --files --hidden'
+export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!\.git'"
 export IDEA_JDK=/usr/lib/jvm/java-11-openjdk
 export ANDROID_HOME=$HOME/Android/Sdk/
 
