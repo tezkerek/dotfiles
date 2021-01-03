@@ -82,6 +82,7 @@ alias sudo="sudo "
 alias q="exit"
 alias ls="ls --color=auto"
 alias adb="$HOME/.local/share/android/sdk/platform-tools/adb "
+alias dotedit="chezmoi edit --apply "
 
 alias fvim='nvim $(fzf)'
 alias fcd='cd $(FZF_DEFAULT_COMMAND="fd --hidden --type d" fzf)'
