@@ -8,13 +8,20 @@ function fetch_file {
     rclone copyto $remotefile $tmpfile --progress
 }
 
+function merge_file {
+    keepassxc-cli merge $localfile $tmpfile --same-credentials
+}
+
 case $1 in
     fetch)
         fetch_file
         ;;
+    merge)
+        merge_file
+        ;;
     pull)
         fetch_file
-        keepassxc-cli merge $localfile $tmpfile --same-credentials
+        merge_file
         ;;
     push)
         rclone copyto $localfile $remotefile --progress
