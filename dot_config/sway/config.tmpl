@@ -200,7 +200,7 @@ for_window [app_id="firefox" title="Picture-in-Picture"] \
 for_window [class="Steam" title="Friends List"] floating enable
 for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
 
-{{ if (contains "desktop" .chezmoi.hostname) }}
+{{ if eq .device "desktop" -}}
 ### Desktop specific config
 #
 set $primary DP-3
@@ -230,7 +230,7 @@ workspace 9 output $primary
 bindsym $mod+n focus output right
 bindsym $mod+Shift+n move workspace to output right
 
-{{ else if (contains "laptop" .chezmoi.hostname) }}
+{{ else if eq .device "laptop" -}}
 ### Laptop specific config
 #
 output * bg ~/pics/wallpapers/primary fill
@@ -242,4 +242,4 @@ input "1267:12363:MSFT0002:01_04F3:304B_Touchpad" {
 
 # Start touchpad gestures
 exec libinput-gestures-setup start
-{{- end }}
+{{- end -}}
