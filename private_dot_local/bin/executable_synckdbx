@@ -1,11 +1,25 @@
-#!/bin/bash
+#!/bin/zsh
+
+local localfile="$HOME/passwords.kdbx"
+local remotefile="dropbox:passwords.kdbx"
+local tmpfile="/tmp/remote_passwords.kdbx"
+
+function fetch_file {
+    rclone copyto $remotefile $tmpfile --progress
+}
 
 case $1 in
+    fetch)
+        fetch_file
+        ;;
     pull)
-        rclone sync dropbox:passwords.kdbx /tmp/ --progress
-        keepassxc-cli merge $HOME/passwords.kdbx /tmp/passwords.kdbx --same-credentials
+        fetch_file
+        keepassxc-cli merge $localfile $tmpfile --same-credentials
         ;;
     push)
-        rclone sync $HOME/passwords.kdbx dropbox: --progress
+        rclone copyto $localfile $remotefile --progress
+        ;;
+    diff)
+        keepass-diff $localfile $tmpfile
         ;;
 esac
