@@ -25,6 +25,5 @@
     "rust-analyzer.server.path": "/usr/bin/rust-analyzer",
     "tsserver.log": "verbose",
     "tsserver.trace.server": "verbose",
-    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true
 }
