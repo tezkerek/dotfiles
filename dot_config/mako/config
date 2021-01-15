@@ -1,0 +1,10 @@
+font=mononoki 11
+
+default-timeout=4000
+
+padding=20
+border-radius=5
+
+border-color=#504945
+text-color=#EBDBB2
+background-color=#282828
