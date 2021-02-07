@@ -30,10 +30,16 @@ set $menu bemenu-run | xargs swaymsg exec --
 #
 input "1133:49970:Logitech_Gaming_Mouse_G502" {
     accel_profile flat
+    scroll_factor 1.75
 }
-input * xkb_layout "us,ro"
-input * xkb_variant ",std"
-input * xkb_options "ctrl:nocaps,grp:win_space_toggle"
+input type:keyboard xkb_layout "us,ro,us"
+input type:keyboard xkb_variant ",std,colemak"
+input type:keyboard xkb_options "ctrl:nocaps"
+
+# Workaround for https://github.com/swaywm/sway/issues/5359
+seat * keyboard_grouping none
+bindsym $mod+space input type:keyboard xkb_switch_layout next
+bindsym $mod+Shift+space input type:keyboard xkb_switch_layout prev
 
 ### Sway settings
 #
