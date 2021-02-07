@@ -68,6 +68,7 @@ call plug#begin(stdpath('data') . '/plugged')
     \   , 'yoffset': 0.01
     \   , 'highlight': 'GruvboxGreen' } }
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-eunuch'
 
   " Completion
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
