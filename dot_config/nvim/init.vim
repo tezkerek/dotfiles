@@ -52,13 +52,13 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'tpope/vim-characterize'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-sleuth'
   Plug 'luochen1990/rainbow'
   Plug 'junegunn/vim-easy-align'
   Plug 'tommcdo/vim-exchange'
 
   " Files
   Plug 'jeetsukumaran/vim-filebeagle'
+  Plug 'preservim/nerdtree'
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
     let g:fzf_layout =
@@ -79,6 +79,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'pechorin/any-jump.vim'
   Plug 'sbdchd/neoformat'
   Plug 'jackguo380/vim-lsp-cxx-highlight'
+  Plug 'ap/vim-css-color'
   Plug 'lervag/vimtex'
     let g:tex_flavor = 'lualatex'
     let g:vimtex_compiler_method = 'latexrun'
@@ -135,7 +136,7 @@ augroup indent
 augroup end
 augroup linenum
   autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufEnter,FocusGained,InsertLeave * if &number | set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup end
 
@@ -166,9 +167,9 @@ augroup end
 
   " Insert line under cursor
   function! InsertEmptyLine()
-      let cursor = getpos(".")
-      exec "normal o\<Esc>"
-      call setpos(".", cursor)
+    let cursor = getpos(".")
+    exec "normal o\<Esc>"
+    call setpos(".", cursor)
   endfunction
   nnoremap <silent> + :call InsertEmptyLine()<CR>
 
@@ -188,6 +189,10 @@ augroup end
   nnoremap <M-7> 7gt
   nnoremap <M-8> 8gt
   nnoremap <silent> <M-9> :tablast<CR>
+
+  " Remap jumplist commands because of completion <TAB> conflict
+  nnoremap <M-i> <C-I>
+  nnoremap <M-o> <C-O>
 
 " ---------
 " fzf
@@ -216,8 +221,8 @@ augroup end
   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
   function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
   endfunction
 
   " Snippet jump
@@ -230,6 +235,8 @@ augroup end
 
   " GoTo code navigation.
   nmap <silent> gd <Plug>(coc-definition)
+  " Go to definition in split window
+  nmap <silent> <Space>wgd :vsplit<CR>:norm gd<CR>
   nmap <silent> gy <Plug>(coc-type-definition)
   nmap <silent> gi <Plug>(coc-implementation)
   nmap <silent> gr <Plug>(coc-references)
