@@ -27,6 +27,6 @@ case $1 in
         rclone copyto $localfile $remotefile --progress
         ;;
     diff)
-        keepass-diff $localfile $tmpfile
+        keepass-diff $localfile $tmpfile --verbose
         ;;
 esac
