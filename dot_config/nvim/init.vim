@@ -55,6 +55,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'luochen1990/rainbow'
   Plug 'junegunn/vim-easy-align'
   Plug 'tommcdo/vim-exchange'
+  Plug 'dhruvasagar/vim-table-mode'
 
   " Files
   Plug 'jeetsukumaran/vim-filebeagle'
