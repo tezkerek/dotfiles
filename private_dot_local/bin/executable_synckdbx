@@ -27,6 +27,6 @@ case $1 in
         rclone copyto $localfile $remotefile --progress
         ;;
     diff)
-        keepass-diff $localfile $tmpfile --verbose
+        keepass-diff $localfile $tmpfile --same-password --verbose
         ;;
 esac
