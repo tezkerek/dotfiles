@@ -9,7 +9,7 @@ scriptencoding utf-8
   set noshowmode shortmess+=c " Disable completion status spam
   set list listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,space:·
   set wildignore+=lib,generated,.git,vendor,node_modules
-  set foldmethod=indent
+  set foldmethod=indent foldlevelstart=5
   set number relativenumber signcolumn=yes
   set updatetime=300 " For highlighting text under cursor faster
   set ignorecase smartcase inccommand="nosplit"
