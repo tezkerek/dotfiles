@@ -9,7 +9,7 @@ set $right l
 
 set $term kitty
 
-set $menu bemenu-run | xargs swaymsg exec --
+set $menu bemenu-run --no-overlap --monitor=all --tf=$focus_color --hf=$focus_color --prompt="|>" | xargs swaymsg exec --
 
 ### Idle configuration
 #
