@@ -9,6 +9,7 @@ scriptencoding utf-8
   set noshowmode shortmess+=c " Disable completion status spam
   set list listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,space:·
   set wildignore+=lib,generated,.git,vendor,node_modules
+  set wildmode=longest:full,full " Shell-like tab completion
   set foldmethod=indent foldlevelstart=5
   set number relativenumber signcolumn=yes
   set updatetime=300 " For highlighting text under cursor faster
@@ -51,6 +52,7 @@ call plug#begin(stdpath('data') . '/plugged')
   " Text editing
   Plug 'justinmk/vim-sneak'
   Plug 'tpope/vim-surround'
+  Plug 'wellle/targets.vim'
   Plug 'tpope/vim-characterize'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-commentary'
@@ -111,7 +113,7 @@ call plug#end()
 " ==================
   set termguicolors
   let g:gruvbox_material_background='hard'
-  colorscheme gruvbox
+  colorscheme gruvbox-material
 
 " ==================
 "  Autocmd
@@ -177,6 +179,22 @@ augroup end
     call setpos(".", cursor)
   endfunction
 
+  " Toggle semicolon at end of line
+  nnoremap <silent> <M-;> :call ToggleSemicolon()<CR>
+  inoremap <silent> <M-;> <C-O>:call ToggleSemicolon()<CR>
+  function! ToggleSemicolon()
+    let lnum = line(".")
+    let l = getline(".")
+    let linelen = strchars(l)
+    let c = nr2char(strgetchar(l, linelen-1))
+    if c == ';'
+      call setline(lnum, strcharpart(l, 0, linelen-1))
+    else
+      call setline(lnum, l .. ';')
+    endif
+    "call setpos(".", initialpos)
+  endfunction
+
   " Better leader for window management
   nnoremap <Space>w <C-W>
 
@@ -204,7 +222,7 @@ augroup end
 " ---------
 " fzf
 " ---------
-  nnoremap <silent> <C-P> :Files<CR>
+  nnoremap <silent> <Space>f :Files<CR>
   " Browse buffers
   nnoremap <silent> <Space>b :Buffers<CR>
   " Jump to window if possible
