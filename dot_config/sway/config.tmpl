@@ -11,6 +11,8 @@ set $term kitty
 
 set $menu bemenu-run --no-overlap --monitor=all --tf=$focus_color --hf=$focus_color --prompt="|>" | xargs swaymsg exec --
 
+set $file-finder kitty --title "Open file" --class "popup_terminal" zsh -ic 'fzo'
+
 ### Idle configuration
 #
 # Example configuration:
@@ -71,6 +73,7 @@ client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
     # Launchers
     bindsym $mod+o exec $menu
     bindsym $mod+i exec wofi --show=drun
+    bindsym $mod+p exec $file-finder
 
     # Reload config
     bindsym $mod+Shift+Escape reload
@@ -205,6 +208,7 @@ for_window [app_id="firefox" title="Picture-in-Picture"] \
     floating enable, sticky enable, move position 1190 80
 for_window [class="Steam" title="Friends List"] floating enable
 for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
+for_window [app_id="popup_terminal"] floating enable, border pixel 1
 
 {{ if eq .device "desktop" -}}
 ### Desktop specific config

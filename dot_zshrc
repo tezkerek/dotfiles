@@ -86,6 +86,10 @@ alias dotedit="chezmoi edit --apply "
 
 alias fvim='nvim $(fzf)'
 alias fcd='cd $(FZF_DEFAULT_COMMAND="fd --hidden --type d" fzf)'
+function fzo {
+    local f=$(fd --follow --type f | fzf)
+    (handlr open $f & disown) > /dev/null 2>&1
+}
 
 alias lock="swaylock -c 000000"
 alias cppass="keepassxc-cli clip $HOME/passwords.kdbx "
