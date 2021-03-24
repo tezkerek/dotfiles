@@ -16,6 +16,11 @@ export EDITOR=/usr/bin/nvim
 
 export CHEATCOLORS=true
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!\.git'"
+export FZF_DEFAULT_OPTS="--bind=alt-j:preview-down,alt-k:preview-up,\
+ctrl-alt-d:preview-half-page-down,ctrl-alt-u:preview-half-page-up"
+export BAT_THEME="gruvbox-dark"
+export FORGIT_COPY_CMD="wl-copy"
+
 export IDEA_JDK=/usr/lib/jvm/java-11-openjdk
 
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
@@ -44,6 +49,8 @@ fi
 
 # z jump around
 [[ -r "/usr/share/z/z.sh" ]] && source "/usr/share/z/z.sh"
+
+[[ -r "/usr/share/zsh/plugins/forgit-git/forgit.plugin.zsh" ]] && source "/usr/share/zsh/plugins/forgit-git/forgit.plugin.zsh"
 
 
 ###############
@@ -127,3 +134,5 @@ compinit
 # Prompt
 export PS1="%F{yellow} %~  %f"
 export RPS1="%(?..%F{red}[%?])"
+
+# vim:ft=zsh
