@@ -1,5 +1,9 @@
 font=mononoki 11
 
+{{ if eq .device "desktop" -}}
+output=DP-3
+{{- end }}
+
 default-timeout=4000
 
 padding=20
