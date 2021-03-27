@@ -7,4 +7,13 @@ export XDG_SESSION_TYPE=wayland
 
 export MOZ_ENABLE_WAYLAND=1
 
-sway
+if [[ $# -eq 0 ]]
+then
+    sway
+else
+    case "$1" in
+        debug)
+            sway > sway.log 2>&1
+            ;;
+    esac
+fi
