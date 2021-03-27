@@ -1,3 +1,12 @@
+# vim:ft=zsh
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 ###############
 # Envs and options
 ###############
@@ -39,8 +48,15 @@ export PATH=$HOME/.local/bin:$HOME/.ghcup/bin:$HOME/.cabal/bin:$PATH
 
 
 ###############
-# External sources
+# Plugins
 ###############
+
+source ~/.zinit/bin/zinit.zsh
+
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
+zinit load wfxr/forgit
 
 # pyenv
 if command -v pyenv 1>/dev/null 2>&1; then
@@ -49,8 +65,6 @@ fi
 
 # z jump around
 [[ -r "/usr/share/z/z.sh" ]] && source "/usr/share/z/z.sh"
-
-[[ -r "/usr/share/zsh/plugins/forgit-git/forgit.plugin.zsh" ]] && source "/usr/share/zsh/plugins/forgit-git/forgit.plugin.zsh"
 
 
 ###############
@@ -85,6 +99,8 @@ function dirsize {
 
 alias zreload=". $HOME/.zshrc"
 alias sudo="sudo "
+alias l="exa -l"
+alias o="handlr open"
 alias q="exit"
 alias ls="ls --color=auto"
 alias adb="$HOME/.local/share/android/sdk/platform-tools/adb "
@@ -134,5 +150,4 @@ compinit
 # Prompt
 export PS1="%F{yellow} %~  %f"
 export RPS1="%(?..%F{red}[%?])"
-
-# vim:ft=zsh
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

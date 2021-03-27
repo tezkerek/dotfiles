@@ -14,6 +14,9 @@ scriptencoding utf-8
   set number relativenumber signcolumn=yes
   set updatetime=300 " For highlighting text under cursor faster
   set ignorecase smartcase inccommand="nosplit"
+  set splitright
+
+  set guifont=FiraCode:h14
 
   let g:tex_fast = "bMmpr" " Better performance in tex
   let g:python_host_prog = '/usr/bin/python2' | let g:python3_host_prog = '/usr/bin/python3'
@@ -42,6 +45,11 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:startify_change_to_vcs_root = 1
   Plug 'moll/vim-bbye'
   Plug 'embear/vim-localvimrc'
+  Plug 'liuchengxu/vim-which-key'
+  Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
+    let g:indent_blankline_space_char = '·'
+    let g:indent_blankline_space_char_blankline = ' '
+    let g:indent_blankline_show_trailing_blankline_indent = v:false
 
   " Integration
   Plug 'christoomey/vim-tmux-navigator'
@@ -60,9 +68,10 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'junegunn/vim-easy-align'
   Plug 'tommcdo/vim-exchange'
   Plug 'dhruvasagar/vim-table-mode'
+  Plug 'kana/vim-textobj-user'
+  Plug 'Julian/vim-textobj-variable-segment'
 
   " Files
-  Plug 'jeetsukumaran/vim-filebeagle'
   Plug 'preservim/nerdtree'
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
@@ -84,6 +93,7 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'pechorin/any-jump.vim'
   Plug 'sbdchd/neoformat'
+  Plug 'aouelete/sway-vim-syntax'
   Plug 'jackguo380/vim-lsp-cxx-highlight'
   Plug 'ap/vim-css-color'
   Plug 'lervag/vimtex'
@@ -92,6 +102,8 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:vimtex_compiler_latexrun =
     \ { 'build_dir': 'latex.out'
     \ , 'options': ['--verbose-cmds', '--latex-args="-synctex=1"'] }
+  Plug 'vim-pandoc/vim-pandoc'
+  Plug 'vim-pandoc/vim-pandoc-syntax'
   Plug 'OmniSharp/omnisharp-vim'
   Plug 'sheerun/vim-polyglot'
     let g:polyglot_disabled = ['c++11']
@@ -102,6 +114,7 @@ call plug#begin(stdpath('data') . '/plugged')
     let g:haskell_enable_typeroles = 1        "  highlighting of type roles
     let g:haskell_enable_static_pointers = 1  "  highlighting of `static`
     let g:haskell_backpack = 1                "  highlighting of backpack keywords
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
   " Colorschemes
   Plug 'gruvbox-community/gruvbox'
@@ -134,7 +147,7 @@ augroup omnisharp
 
   autocmd FileType cs nmap <silent> <buffer> K <Plug>(omnisharp_documentation)
   autocmd FileType cs nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
-  autocmd FileType cs nmap <silent> <buffer> <Space>ca <Plug>(omnisharp_code_actions)
+  autocmd FileType cs nmap <silent> <buffer> <leader>ca <Plug>(omnisharp_code_actions)
 augroup end
 augroup indent
   autocmd!
@@ -149,9 +162,18 @@ augroup end
 " ==================
 "  Keyboard mapping
 " ==================
+  let g:mapleader = "\<Space>"
+
+" ---------
+" which-key
+" ---------
+  nnoremap <silent> <leader> :<C-U>WhichKey '<Space>'<CR>
+
 " ---------
 " Misc
 " ---------
+  cnoreabbrev h vert h
+
   nnoremap j gj
   nnoremap gj j
   nnoremap k gk
@@ -164,9 +186,9 @@ augroup end
   nnoremap <silent> <Esc> :nohlsearch<CR>
 
   " Substitute word under cursor
-  nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
+  nnoremap <leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
   " Substitute visual selection
-  vnoremap <Leader>s "sy:%s/\<<C-r>s\>//g<Left><Left>
+  vnoremap <leader>s "sy:%s/\<<C-r>s\>//g<Left><Left>
 
   " Indent all and return to position
   nnoremap g= gg=G``
@@ -196,7 +218,7 @@ augroup end
   endfunction
 
   " Better leader for window management
-  nnoremap <Space>w <C-W>
+  nnoremap <leader>w <C-W>
 
   " Split navigation
   nnoremap <C-H> <C-W>h
@@ -220,18 +242,20 @@ augroup end
   nnoremap <M-o> <C-O>
 
 " ---------
-" fzf
+" Files
 " ---------
-  nnoremap <silent> <Space>f :Files<CR>
+  nnoremap <silent> <leader>fw :w<CR>
+  nnoremap <silent> <leader>ff :Files<CR>
+  nnoremap <silent> <leader>ft :NERDTreeToggle<CR>
   " Browse buffers
-  nnoremap <silent> <Space>b :Buffers<CR>
+  nnoremap <silent> <leader>, :Buffers<CR>
   " Jump to window if possible
   let g:fzf_buffers_jump = 1
 
   " Search with rg
-  nnoremap <silent> <Space>g :Rg<CR>
+  nnoremap <silent> <leader>fg :Rg<CR>
   " Search in current buffer
-  nnoremap <silent> <Space>/ :BLines<CR>
+  nnoremap <silent> <leader>/ :BLines<CR>
 
 " ---------
 " coc.nvim
@@ -250,6 +274,10 @@ augroup end
     return !col || getline('.')[col - 1]  =~# '\s'
   endfunction
 
+  " Scroll popup
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
   " Snippet jump
   let g:coc_snippet_next = '<M-j>'
   let g:coc_snippet_prev = '<M-k>'
@@ -261,7 +289,7 @@ augroup end
   " GoTo code navigation.
   nmap <silent> gd <Plug>(coc-definition)
   " Go to definition in split window
-  nmap <silent> <Space>wgd :vsplit<CR>:norm gd<CR>
+  nmap <silent> <leader>wgd :vsplit<CR>:norm gd<CR>
   nmap <silent> gy <Plug>(coc-type-definition)
   nmap <silent> gi <Plug>(coc-implementation)
   nmap <silent> gr <Plug>(coc-references)
@@ -280,18 +308,18 @@ augroup end
   nmap <F2> <Plug>(coc-rename)
 
   " Formatting selected code.
-  xmap <Space>cf  <Plug>(coc-format-selected)
-  nmap <Space>cf  <Plug>(coc-format-selected)
+  xmap <leader>cf  <Plug>(coc-format-selected)
+  nmap <leader>cf  <Plug>(coc-format-selected)
 
   " Applying codeAction to the selected region.
   " Example: `<leader>aap` for current paragraph
-  xmap <Space>ca  <Plug>(coc-codeaction-selected)
-  nmap <Space>ca  <Plug>(coc-codeaction-selected)
+  xmap <leader>ca  <Plug>(coc-codeaction-selected)
+  nmap <leader>ca  <Plug>(coc-codeaction-selected)
 
   " Apply codeAction to the current line.
-  nmap <Space>cal  <Plug>(coc-codeaction)
+  nmap <leader>cal  <Plug>(coc-codeaction)
   " Apply AutoFix to problem on the current line.
-  nmap <Space>cqf  <Plug>(coc-fix-current)
+  nmap <leader>cqf  <Plug>(coc-fix-current)
 
   " Introduce function text object
   " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -326,5 +354,21 @@ augroup end
 " ---------
 " vim-easy-align
 " ---------
-nmap <Space>a <Plug>(EasyAlign)
-xmap <Space>a <Plug>(EasyAlign)
+nmap <leader>a <Plug>(EasyAlign)
+xmap <leader>a <Plug>(EasyAlign)
+
+
+" ==================
+"  Lua
+" ==================
+lua <<EOF
+-- treesitter
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true
+  },
+  indent = {
+    enable = true
+  }
+}
+EOF
