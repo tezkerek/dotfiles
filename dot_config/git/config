@@ -2,8 +2,15 @@
 	email = andrei.ancuta@gmail.com
 	name = Tezkerek
 
+[include]
+	path = /etc/gitconfig.delta
+
 [core]
     pager = delta
+
+[delta]
+	syntax-theme = gruvbox
+	features = woolly-mammoth
 
 [alias]
 	st = status
