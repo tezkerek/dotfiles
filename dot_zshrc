@@ -59,12 +59,14 @@ zinit light romkatv/powerlevel10k
 zinit load wfxr/forgit
 
 # pyenv
-if command -v pyenv 1>/dev/null 2>&1; then
+if (( $+commands[pyenv] )); then
     eval "$(pyenv init -)"
 fi
 
-# z jump around
-[[ -r "/usr/share/z/z.sh" ]] && source "/usr/share/z/z.sh"
+# zoxide
+if (( $+commands[zoxide] )); then
+    eval "$(zoxide init zsh)"
+fi
 
 
 ###############
