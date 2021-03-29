@@ -53,6 +53,9 @@ call plug#begin(stdpath('data') . '/plugged')
 
   " Integration
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'tpope/vim-fugitive'
+  Plug 'nvim-lua/plenary.nvim' " lua helper lib
+  Plug 'lewis6991/gitsigns.nvim'
   Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
     let g:firenvim_config =
     \ {'localSettings': {'.*': {'takeover': 'never'}}}
@@ -81,7 +84,6 @@ call plug#begin(stdpath('data') . '/plugged')
     \   , 'height': 0.8
     \   , 'yoffset': 0.01
     \   , 'highlight': 'GruvboxGreen' } }
-  Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-eunuch'
 
   " Completion
@@ -371,4 +373,5 @@ require'nvim-treesitter.configs'.setup {
     enable = true
   }
 }
+require'gitsigns'.setup()
 EOF
