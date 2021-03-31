@@ -15,17 +15,10 @@ set $file-finder kitty --title "Open file" --class "popup_terminal" zsh -ic 'fzo
 
 ### Idle configuration
 #
-# Example configuration:
-#
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * dpms off"' \
-#               resume 'swaymsg "output * dpms on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
+exec swayidle -w \
+    timeout 10 'if pgrep swaylock; then swaymsg "output * dpms off"; fi' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep 'lockscreen'
 
 
 ### Input configuration
@@ -171,6 +164,7 @@ client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
     bindsym Alt+Shift+Print exec "grimshot retake | wl-copy"
     bindsym Alt+Print exec "grimshot take | wl-copy"
     bindsym Print exec "grimshot screen | wl-copy"
+    bindsym Ctrl+Print exec "grimshot take | swappy -f -"
 
 ### Modes
 #
@@ -208,6 +202,7 @@ for_window [app_id="firefox" title="Picture-in-Picture"] \
     floating enable, sticky enable, move position 1190 80
 for_window [class="Steam" title="Friends List"] floating enable
 for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
+for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="popup_terminal"] floating enable, border pixel 1
 
 {{ if eq .device "desktop" -}}
@@ -238,7 +233,7 @@ workspace 8 output $secondary
 workspace 9 output $primary
 
 bindsym $mod+n focus output right
-bindsym $mod+Shift+n move workspace to output right
+bindsym $mod+Shift+n move container to output right
 
 {{ else if eq .device "laptop" -}}
 ### Laptop specific config
