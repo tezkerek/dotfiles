@@ -47,9 +47,11 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'embear/vim-localvimrc'
   Plug 'liuchengxu/vim-which-key'
   Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
-    let g:indent_blankline_space_char = '·'
+    let g:indent_blankline_char = '│'
+    let g:indent_blankline_space_char = ' '
     let g:indent_blankline_space_char_blankline = ' '
     let g:indent_blankline_show_trailing_blankline_indent = v:false
+    let g:indent_blankline_filetype_exclude = ['help', 'startify']
 
   " Integration
   Plug 'christoomey/vim-tmux-navigator'
@@ -105,6 +107,7 @@ call plug#begin(stdpath('data') . '/plugged')
     \ { 'build_dir': 'latex.out'
     \ , 'options': ['--verbose-cmds', '--latex-args="-synctex=1"'] }
   Plug 'vim-pandoc/vim-pandoc'
+    let g:pandoc#spell#default_langs = ['en', 'ro']
   Plug 'vim-pandoc/vim-pandoc-syntax'
   Plug 'OmniSharp/omnisharp-vim'
   Plug 'sheerun/vim-polyglot'
