@@ -16,7 +16,7 @@ scriptencoding utf-8
   set ignorecase smartcase inccommand="nosplit"
   set splitright
 
-  set guifont=FiraCode:h14
+  set guifont=monospace:h15
 
   let g:tex_fast = "bMmpr" " Better performance in tex
   let g:python_host_prog = '/usr/bin/python2' | let g:python3_host_prog = '/usr/bin/python3'
