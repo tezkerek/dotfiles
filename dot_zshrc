@@ -11,17 +11,27 @@ fi
 # Envs and options
 ###############
 
-SAVEHIST=50000
-HISTFILE=~/.zsh_history
-HISTSIZE=50000
-HISTORY_IGNORE='(ls|cd|exit|q|nvim|htop)'
-setopt HIST_IGNORE_DUPS
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_BIN_HOME="$HOME/.local/bin"
 
-export LC_CTYPE=en_US.UTF-8
+SAVEHIST=50000
+HISTFILE="$XDG_DATA_HOME/zsh/history"
+HISTSIZE=50000
+HISTORY_IGNORE='(l|ls|cd|exit|q|nvim|htop)'
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt INC_APPEND_HISTORY
+
+setopt INTERACTIVE_COMMENTS
+
+export LC_CTYPE="en_US.UTF-8"
 export LS_COLORS=$LS_COLORS:"di=1;33:ex=1;31:ln=4;36:*.mkv=35"
-export LESS=iMRj5
-export BROWSER=/usr/bin/firefox
-export EDITOR=/usr/bin/nvim
+export LESS="iMRj5"
+export BROWSER="/usr/bin/firefox"
+export EDITOR="/usr/bin/nvim"
+export TERMINAL="kitty"
 
 export CHEATCOLORS=true
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!\.git'"
@@ -30,28 +40,28 @@ ctrl-alt-d:preview-half-page-down,ctrl-alt-u:preview-half-page-up"
 export BAT_THEME="gruvbox-dark"
 export FORGIT_COPY_CMD="wl-copy"
 
-export IDEA_JDK=/usr/lib/jvm/java-11-openjdk
+export IDEA_JDK="/usr/lib/jvm/java-11-openjdk"
 
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin":$PATH
-
 # Virtualenv
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/devel
+export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
+export PROJECT_HOME="$HOME/devel"
 
-# Add home bins
-export PATH=$HOME/.local/bin:$HOME/.ghcup/bin:$HOME/.cabal/bin:$PATH
+export GHCUP_USE_XDG_DIRS=true
+
+typeset -U PATH path
+path=($XDG_BIN_HOME $path)
 
 
 ###############
 # Plugins
 ###############
 
-source ~/.zinit/bin/zinit.zsh
+declare -A ZINIT
+ZINIT[HOME_DIR]=$XDG_DATA_HOME/zinit
+source $ZINIT[HOME_DIR]/bin/zinit.zsh
 
 zinit ice depth=1
 zinit light romkatv/powerlevel10k
@@ -59,6 +69,7 @@ zinit light romkatv/powerlevel10k
 zinit load wfxr/forgit
 
 # pyenv
+export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
 if (( $+commands[pyenv] )); then
     eval "$(pyenv init -)"
 fi
@@ -94,29 +105,57 @@ function dirsize {
     du --all --total --human-readable --max-depth=1 $1 | sort -hr | less
 }
 
+function __is_binary {
+    file --mime $1 |& grep -q --invert-match ': text/'
+}
+
 
 ###############
 # Aliases
 ###############
 
-alias zreload=". $HOME/.zshrc"
+alias zreload="source $HOME/.zshrc"
 alias sudo="sudo "
 alias l="exa -l"
 alias o="handlr open"
+function v {
+    # List directory, preview text file, or open binary file
+    if [[ -d $1 ]]; then
+        l $1
+    elif [[ -f $1 ]]; then
+        if __is_binary $1; then
+            o $1
+        else
+            bat $1
+        fi
+    else
+        printf "Could not handle %s" $(file $1)
+    fi
+}
 alias q="exit"
 alias ls="ls --color=auto"
-alias adb="$HOME/.local/share/android/sdk/platform-tools/adb "
-alias dotedit="chezmoi edit --apply "
+alias adb="$XDG_DATA_HOME/android/sdk/platform-tools/adb"
+alias dotedit="chezmoi edit --apply"
 
 alias fvim='nvim $(fzf)'
 alias fcd='cd $(FZF_DEFAULT_COMMAND="fd --hidden --type d" fzf)'
 function fzo {
-    local f=$(fd --follow --type f | fzf)
-    (handlr open $f & disown) > /dev/null 2>&1
+    # Enter to open file
+    # CTRL-F to open its directory
+    # CTRL-O to cd to its directory
+    local result=$(fd --follow --type f | fzf --expect=ctrl-o,ctrl-f)
+    local file=$(tail -n1 <<< $result)
+    echo $file
+    if [[ $(head -n1 <<< $result) == "ctrl-o" ]]; then
+        zsh -c "cd $(dirname $file); zsh -i"
+    else
+        (o $file & disown) > /dev/null 2>&1
+    fi
 }
 
-alias lock="swaylock -c 000000"
-alias cppass="keepassxc-cli clip $HOME/passwords.kdbx "
+alias lockscreen="\
+    swaylock --clock --indicator --effect-pixelate 25 --screenshots --fade-in 0.1"
+alias cppass="keepassxc-cli clip $HOME/passwords.kdbx"
 alias labs='curl --silent http://liis.ro/hosted/activitati/2013/laboratoare/labs.pdf | zathura -'
 
 
