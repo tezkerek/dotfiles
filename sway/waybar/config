@@ -1,10 +1,10 @@
 {
     "layer": "bottom",
     "position": "bottom",
-    "height": {{ if eq .device "desktop" -}} 20 {{- else if eq .device "laptop" -}} 25 {{- end }},
+    "height": {{bar_height}},
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
     "modules-center": ["custom/mpris"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery", "clock", "tray"],
+    "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery", "sway/language", "clock", "tray"],
     "sway/window": {
         "max-length": 50
     },
@@ -97,7 +97,8 @@
     "custom/mpris": {
         "format": " {}",
         "max-length": 50,
-        "exec": "playerctl metadata --follow --format '{{ "{{ artist }}" }} - {{ "{{ title }}" }}'"
+        {{{{raw~}}}}
+        "exec": "playerctl metadata --follow --format '{{ artist }} - {{ title }}'"
+        {{{{~/raw}}}}
     }
 }
-// vim:ft=javascript

@@ -1,0 +1,47 @@
+[helpers]
+
+
+[default]
+depends = ["nvim", "sway", "shell", "apps"]
+
+
+[programs.variables]
+terminal = "kitty"
+browser = "firefox-developer-edition"
+
+
+[nvim.files]
+nvim = "$XDG_CONFIG_HOME/nvim"
+
+
+[shell]
+depends = ["programs"]
+
+[shell.files]
+"shell/zsh/zshenv" = "$HOME/.zshenv"
+"shell/zsh/zshrc" = "$XDG_CONFIG_HOME/zsh/.zshrc"
+"shell/zsh/p10k.zsh" = "$XDG_CONFIG_HOME/zsh/p10k.zsh"
+"shell/gitconfig" = "$XDG_CONFIG_HOME/git/config"
+"shell/tigconfig" = "$XDG_CONFIG_HOME/tig/config"
+
+
+[sway.files]
+"sway/sway" = "$XDG_CONFIG_HOME/sway"
+"sway/waybar" = "$XDG_CONFIG_HOME/waybar"
+"sway/gammastep.ini" = "$XDG_CONFIG_HOME/gammastep/config.ini"
+"sway/wofi" = "$XDG_CONFIG_HOME/wofi"
+"sway/mako" = "$XDG_CONFIG_HOME/mako/config"
+"bin/swayrun" = "$XDG_BIN_HOME/swayrun"
+"bin/grimshot" = "$XDG_BIN_HOME/grimshot"
+
+[sway.variables]
+device = "unknown"
+
+
+[apps.files]
+"apps/alacritty.yml" = "$XDG_CONFIG_HOME/alacritty/alacritty.yml"
+"apps/ideavimrc" = "$HOME/.ideavimrc"
+"apps/kitty.conf" = "$XDG_CONFIG_HOME/kitty/kitty.conf"
+"apps/mpv.conf" = "$XDG_CONFIG_HOME/mpv/mpv.conf"
+"fonts.conf" = "$XDG_CONFIG_HOME/fontconfig/fonts.conf"
+"bin/synckdbx" = "$XDG_BIN_HOME/synckdbx"

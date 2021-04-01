@@ -2,7 +2,7 @@
     border: none;
     border-radius: 0px;
     font-family: mononoki, "Font Awesome 5 Free";
-    font-size: {{ if eq .device "desktop" -}} 12px {{- else if eq .device "laptop" -}} 16px {{- end}};
+    font-size: {{bar_font_size}};
     color: #ebdbb2;
     padding: 0;
     min-height: 0;

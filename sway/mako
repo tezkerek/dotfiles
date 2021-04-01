@@ -1,8 +1,6 @@
 font=mononoki 11
 
-{{ if eq .device "desktop" -}}
-output=DP-3
-{{- end }}
+output={{primary_output}}
 
 default-timeout=4000
 

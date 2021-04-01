@@ -1,0 +1,24 @@
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_BIN_HOME="$HOME/.local/bin"
+
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
+export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
+export GHCUP_USE_XDG_DIRS=true
+# Virtualenv
+export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
+export PROJECT_HOME="$HOME/devel"
+
+export LC_CTYPE="en_US.UTF-8"
+export LESS="iMRj5"
+export BROWSER="{{browser}}"
+export EDITOR="nvim"
+export TERMINAL="{{terminal}}"
+
+export IDEA_JDK="/usr/lib/jvm/java-11-openjdk"
+export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
+
+typeset -U PATH path
+path=($XDG_BIN_HOME $path)

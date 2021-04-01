@@ -1,6 +1,0 @@
-[diff]
-format = "git"
-pager = "delta"
-
-[data]
-device = {{ if contains "laptop" .chezmoi.hostname -}} "laptop" {{- else if contains "desktop" .chezmoi.hostname -}} "desktop" {{- else -}} "unknown" {{- end}}

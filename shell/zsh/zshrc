@@ -1,20 +1,11 @@
-# vim:ft=zsh
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+F="$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" && [[ -f $F ]] && source $F
 
 ###############
-# Envs and options
+# Zsh options
 ###############
-
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_BIN_HOME="$HOME/.local/bin"
 
 SAVEHIST=50000
 HISTFILE="$XDG_DATA_HOME/zsh/history"
@@ -26,38 +17,25 @@ setopt INC_APPEND_HISTORY
 
 setopt INTERACTIVE_COMMENTS
 
-export LC_CTYPE="en_US.UTF-8"
-export LS_COLORS=$LS_COLORS:"di=1;33:ex=1;31:ln=4;36:*.mkv=35"
-export LESS="iMRj5"
-export BROWSER="/usr/bin/firefox"
-export EDITOR="/usr/bin/nvim"
-export TERMINAL="kitty"
 
+###############
+# Interactive options
+###############
+
+export LS_COLORS=$LS_COLORS:"di=1;33:ex=1;31:ln=4;36:*.mkv=35"
 export CHEATCOLORS=true
+export BAT_THEME="gruvbox-dark"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!\.git'"
 export FZF_DEFAULT_OPTS="--bind=alt-j:preview-down,alt-k:preview-up,\
 ctrl-alt-d:preview-half-page-down,ctrl-alt-u:preview-half-page-up"
-export BAT_THEME="gruvbox-dark"
-export FORGIT_COPY_CMD="wl-copy"
-
-export IDEA_JDK="/usr/lib/jvm/java-11-openjdk"
-
-export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
-export _JAVA_AWT_WM_NONREPARENTING=1
-
-# Virtualenv
-export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
-export PROJECT_HOME="$HOME/devel"
-
-export GHCUP_USE_XDG_DIRS=true
-
-typeset -U PATH path
-path=($XDG_BIN_HOME $path)
 
 
 ###############
 # Plugins
 ###############
+
+(( $+commands[pyenv] )) && eval "$(pyenv init -)"
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 
 declare -A ZINIT
 ZINIT[HOME_DIR]=$XDG_DATA_HOME/zinit
@@ -68,20 +46,8 @@ zinit light romkatv/powerlevel10k
 
 zinit load wfxr/forgit
 
-# pyenv
-export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
-if (( $+commands[pyenv] )); then
-    eval "$(pyenv init -)"
-fi
-
-# zoxide
-if (( $+commands[zoxide] )); then
-    eval "$(zoxide init zsh)"
-fi
-
-
 ###############
-# User defined functions
+# Functions and aliases
 ###############
 
 function man {
@@ -109,13 +75,6 @@ function __is_binary {
     file --mime $1 |& grep -q --invert-match ': text/'
 }
 
-
-###############
-# Aliases
-###############
-
-alias zreload="source $HOME/.zshrc"
-alias sudo="sudo "
 alias l="exa -l"
 alias o="handlr open"
 function v {
@@ -133,24 +92,33 @@ function v {
     fi
 }
 alias q="exit"
+alias zreload="source $HOME/.zshrc"
+alias sudo="sudo "
+
 alias ls="ls --color=auto"
 alias adb="$XDG_DATA_HOME/android/sdk/platform-tools/adb"
 alias dotedit="chezmoi edit --apply"
 
-alias fvim='nvim $(fzf)'
-alias fcd='cd $(FZF_DEFAULT_COMMAND="fd --hidden --type d" fzf)'
+alias fvim='nvim $(fd --hidden | fzf)'
+alias fcd='cd $(fd --hidden --type d | fzf)'
 function fzo {
     # Enter to open file
     # CTRL-F to open its directory
     # CTRL-O to cd to its directory
     local result=$(fd --follow --type f | fzf --expect=ctrl-o,ctrl-f)
     local file=$(tail -n1 <<< $result)
-    echo $file
-    if [[ $(head -n1 <<< $result) == "ctrl-o" ]]; then
-        zsh -c "cd $(dirname $file); zsh -i"
-    else
-        (o $file & disown) > /dev/null 2>&1
-    fi
+    local cmd=$(head -n1 <<< $result)
+    case $cmd in
+        ctrl-o)
+            zsh -c "cd $(dirname $file); zsh -i"
+            ;;
+        ctrl-f)
+            (o $(dirname $file) & disown) > /dev/null 2>&1
+            ;;
+        *)
+            (o $file & disown) > /dev/null 2>&1
+            ;;
+    esac
 }
 
 alias lockscreen="\
@@ -191,4 +159,4 @@ compinit
 # Prompt
 export PS1="%F{yellow} %~  %f"
 export RPS1="%(?..%F{red}[%?])"
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+F=$XDG_CONFIG_HOME/zsh/p10k.zsh && [[ -f $F ]] && source $F

@@ -2,3 +2,4 @@ prompt=
 hide_scroll=true
 insensitive=true
 allow_images=true
+key_expand=Control_L-space

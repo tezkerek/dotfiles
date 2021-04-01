@@ -6,6 +6,8 @@ export XDG_SESSION_TYPE=wayland
 #export GDK_BACKEND=wayland
 
 export MOZ_ENABLE_WAYLAND=1
+export _JAVA_AWT_WM_NONREPARENTING=1
+export FORGIT_COPY_CMD="wl-copy"
 
 if [[ $# -eq 0 ]]
 then

@@ -7,11 +7,14 @@ set $down j
 set $up k
 set $right l
 
-set $term kitty
+set $term {{terminal}}
 
 set $menu bemenu-run --no-overlap --monitor=all --tf=$focus_color --hf=$focus_color --prompt="|>" | xargs swaymsg exec --
 
-set $file-finder kitty --title "Open file" --class "popup_terminal" zsh -ic 'fzo'
+set $file-finder $term --title "Open file" --class "popup_terminal" zsh -ic 'fzo'
+
+# Startup
+exec flashfocus --time 250 --no-flash-on-focus
 
 ### Idle configuration
 #
@@ -205,11 +208,11 @@ for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access R
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="popup_terminal"] floating enable, border pixel 1
 
-{{ if eq .device "desktop" -}}
+{{#if (eq device "desktop") ~}}
 ### Desktop specific config
 #
-set $primary DP-3
-set $secondary HDMI-A-1
+set $primary {{primary_output}}
+set $secondary {{secondary_output}}
 
 output $primary {
     resolution 1920x1080@144Hz
@@ -232,10 +235,10 @@ workspace 7 output $secondary
 workspace 8 output $secondary
 workspace 9 output $primary
 
-bindsym $mod+n focus output right
-bindsym $mod+Shift+n move container to output right
+bindsym $mod+n focus output right, exec flash_window
+bindsym $mod+Shift+n move container to output right, focus output right, exec flash_window
 
-{{ else if eq .device "laptop" -}}
+{{else}}{{#if (eq device "laptop") ~}}
 ### Laptop specific config
 #
 output * bg ~/pics/wallpapers/primary fill
@@ -249,4 +252,4 @@ input "1267:12363:MSFT0002:01_04F3:304B_Touchpad" {
 # Start touchpad gestures
 exec ydotoold
 exec libinput-gestures-setup start
-{{- end -}}
+{{/if}}{{~/if~}}
