@@ -25,106 +25,43 @@ scriptencoding utf-8
 " ==================
 "  Plugins
 " ==================
-call plug#begin(stdpath('data') . '/plugged')
-  " QOL
-  Plug 'itchyny/lightline.vim'
-    let g:Powerline_symbols = 'fancy'
-    let g:lightline =
-    \ { 'colorscheme': 'wombat'
-    \ , 'active':
-    \   { 'left':
-    \     [ ['mode', 'paste']
-    \     , ['readonly', 'buffnumber', 'filename', 'modified'] ] }
-    \   , 'component':
-    \       { 'readonly': '%{&readonly?"":""}'
-    \       , 'buffnumber': '%n' }
-    \   , 'separator': { 'left': '', 'right': '' }
-    \   , 'subseparator': { 'left': '', 'right': '' } }
-  Plug 'mhinz/vim-startify'
-    let g:startify_change_to_dir = 0
-    let g:startify_change_to_vcs_root = 1
-  Plug 'moll/vim-bbye'
-  Plug 'embear/vim-localvimrc'
-  Plug 'liuchengxu/vim-which-key'
-  Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
-    let g:indent_blankline_char = '│'
-    let g:indent_blankline_space_char = ' '
-    let g:indent_blankline_space_char_blankline = ' '
-    let g:indent_blankline_show_trailing_blankline_indent = v:false
-    let g:indent_blankline_filetype_exclude = ['help', 'startify']
+  lua require('plugins')
 
-  " Integration
-  Plug 'christoomey/vim-tmux-navigator'
-  Plug 'tpope/vim-fugitive'
-  Plug 'nvim-lua/plenary.nvim' " lua helper lib
-  Plug 'lewis6991/gitsigns.nvim'
-  Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-    let g:firenvim_config =
-    \ {'localSettings': {'.*': {'takeover': 'never'}}}
+  let g:startify_change_to_dir = 0
+  let g:startify_change_to_vcs_root = 1
 
-  " Text editing
-  Plug 'justinmk/vim-sneak'
-  Plug 'tpope/vim-surround'
-  Plug 'wellle/targets.vim'
-  Plug 'tpope/vim-characterize'
-  Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-commentary'
-  Plug 'luochen1990/rainbow'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'tommcdo/vim-exchange'
-  Plug 'dhruvasagar/vim-table-mode'
-  Plug 'kana/vim-textobj-user'
-  Plug 'Julian/vim-textobj-variable-segment'
+  let g:indent_blankline_char = '│'
+  let g:indent_blankline_space_char = ' '
+  let g:indent_blankline_space_char_blankline = ' '
+  let g:indent_blankline_show_trailing_blankline_indent = v:false
+  let g:indent_blankline_filetype_exclude = ['help', 'startify']
 
-  " Files
-  Plug 'preservim/nerdtree'
-  Plug 'junegunn/fzf'
-  Plug 'junegunn/fzf.vim'
-    let g:fzf_layout =
-    \ { 'window':
-    \   { 'width': 1
-    \   , 'height': 0.8
-    \   , 'yoffset': 0.01
-    \   , 'highlight': 'GruvboxGreen' } }
-  Plug 'tpope/vim-eunuch'
+  let g:firenvim_config =
+  \ {'localSettings': {'.*': {'takeover': 'never'}}}
 
-  " Completion
-  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-  Plug 'honza/vim-snippets'
+  let g:fzf_layout =
+  \ { 'window':
+  \   { 'width': 1
+  \   , 'height': 0.8
+  \   , 'yoffset': 0.01
+  \   , 'highlight': 'GruvboxGreen' } }
 
-  " Syntax
-  Plug 'vim-scripts/taglist.vim'
-  Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'pechorin/any-jump.vim'
-  Plug 'sbdchd/neoformat'
-  Plug 'aouelete/sway-vim-syntax'
-  Plug 'jackguo380/vim-lsp-cxx-highlight'
-  Plug 'ap/vim-css-color'
-  Plug 'lervag/vimtex'
-    let g:tex_flavor = 'lualatex'
-    let g:vimtex_compiler_method = 'latexrun'
-    let g:vimtex_compiler_latexrun =
-    \ { 'build_dir': 'latex.out'
-    \ , 'options': ['--verbose-cmds', '--latex-args="-synctex=1"'] }
-  Plug 'vim-pandoc/vim-pandoc'
-    let g:pandoc#spell#default_langs = ['en', 'ro']
-  Plug 'vim-pandoc/vim-pandoc-syntax'
-  Plug 'OmniSharp/omnisharp-vim'
-  Plug 'sheerun/vim-polyglot'
-    let g:polyglot_disabled = ['c++11']
-    let g:haskell_enable_quantification = 1   "  highlighting of `forall`
-    let g:haskell_enable_recursivedo = 1      "  highlighting of `mdo` and `rec`
-    let g:haskell_enable_arrowsyntax = 1      "  highlighting of `proc`
-    let g:haskell_enable_pattern_synonyms = 1 "  highlighting of `pattern`
-    let g:haskell_enable_typeroles = 1        "  highlighting of type roles
-    let g:haskell_enable_static_pointers = 1  "  highlighting of `static`
-    let g:haskell_backpack = 1                "  highlighting of backpack keywords
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  let g:tex_flavor = 'lualatex'
+  let g:vimtex_compiler_method = 'latexrun'
+  let g:vimtex_compiler_latexrun =
+  \ { 'build_dir': 'latex.out'
+  \ , 'options': ['--verbose-cmds', '--latex-args="-synctex=1"'] }
 
-  " Colorschemes
-  Plug 'gruvbox-community/gruvbox'
-  Plug 'sainnhe/gruvbox-material'
-call plug#end()
+  let g:pandoc#spell#default_langs = ['en', 'ro']
+
+  let g:polyglot_disabled = ['c++11']
+  let g:haskell_enable_quantification = 1   "  highlighting of `forall`
+  let g:haskell_enable_recursivedo = 1      "  highlighting of `mdo` and `rec`
+  let g:haskell_enable_arrowsyntax = 1      "  highlighting of `proc`
+  let g:haskell_enable_pattern_synonyms = 1 "  highlighting of `pattern`
+  let g:haskell_enable_typeroles = 1        "  highlighting of type roles
+  let g:haskell_enable_static_pointers = 1  "  highlighting of `static`
+  let g:haskell_backpack = 1                "  highlighting of backpack keywords
 
 " ==================
 "  Colors
@@ -361,20 +298,3 @@ augroup end
 " ---------
 nmap <leader>a <Plug>(EasyAlign)
 xmap <leader>a <Plug>(EasyAlign)
-
-
-" ==================
-"  Lua
-" ==================
-lua <<EOF
--- treesitter
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true
-  },
-  indent = {
-    enable = true
-  }
-}
-require'gitsigns'.setup()
-EOF
