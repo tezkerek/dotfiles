@@ -7,6 +7,7 @@ default-timeout=4000
 padding=20
 border-radius=5
 
-border-color=#504945
-text-color=#EBDBB2
-background-color=#282828
+background-color=#{{colors.background}}
+text-color=#{{colors.foreground}}
+border-color=#{{colors.accent}}
+progress-color=source #{{colors.highlight}}

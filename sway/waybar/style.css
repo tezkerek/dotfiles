@@ -1,107 +1,60 @@
+window#waybar {
+    background: #{{colors.background}};
+}
+
 * {
     border: none;
-    border-radius: 0px;
-    font-family: mononoki, "Font Awesome 5 Free";
+    border-radius: 0;
+    font-family: monospace, "Symbols Nerd Font";
     font-size: {{bar_font_size}};
-    color: #ebdbb2;
+    color: #{{colors.foreground}};
     padding: 0;
     min-height: 0;
 }
 
-window#waybar {
-    border-bottom-style: inset;
-    background: #1d2021;
-}
-
-#workspaces, #clock, #custom-music { 
-    font-weight: 800;
-}
-
-#workspaces button {
-    min-width: 0;
-    padding: 0 5px;
-}
-
-/* Workspace Buttons */
-#workspaces button {
+/* Add a border to all components, to keep text aligned */
+#workspaces button, widget > label, #tray image {
+    border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
 }
+
+/* Reset default hover effect */
 #workspaces button:hover {
-    background: inherit;
-    box-shadow: inherit;
-    border-bottom: 1px solid #e6c547;
-}
-#workspaces button.focused {
-    border-bottom-color: #e6c547;
-}
-#workspaces button label {
-    /* color: #689d6a; */
-}
-#workspaces button label {
-    border-bottom-color: #e6c547;
-}
-#workspaces button.focused label {
-    /* color: #1d2021; */
+    background: none;
 }
 
-#window {
-    margin-left: 25px;
-    color: #888888;
+/* Spacing between components */
+widget > label, #tray {
+    padding: 0 5px;
+    margin: 0 5px;
+}
+
+/* Highlighted components */
+#workspaces button.focused, #network, #clock, #idle_inhibitor.activated {
+    border-bottom-color: #{{colors.accent}};
+    background-color: #{{colors.highlight}};
 }
 
 #mode {
     font-style: italic;
-    background-color: #cc241d;
-    color: white;
+    border-bottom-color: #{{colors.red}};
+    background-color: #{{colors.highlight}};
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #tray, #mode, #idle_inhibitor {
-    padding: 0 5px;
-    margin: 0 10px;
-}
-
-
-#idle_inhibitor {
-    padding: 0 10px;
+#window {
+    color: #{{colors.accent}};
 }
 
 #idle_inhibitor.activated {
-    background-color: #e6c547;
-    color: #1d2021;
+    background-color: #{{colors.highlight}};
 }
-
-#network {
-    border-bottom: 1px solid #7aa6da;
-}
-
-#custom-music {
-    color: #b8bb26;
-    margin: 0 15px;
-    padding: 0 20px;
-    border-bottom: 1px solid #b8bb26;
-}
-
-#custom-worktime {
-    padding: 0 5px;
-    border-bottom: 1px solid #ebdbb2
-
-}
-
-#clock {
-    margin: 0;
-    color: #e6c547;
-    border-bottom: 1px solid #fabd2f;
-}
-
-
-#network.disconnected {
-    color: #cc241d;
-    border-bottom: 1px solid #cc241d;
-}
-
 
 #pulseaudio.muted {
-    padding: 0 20px;
-    color: #cc241d;
-    border-bottom: 1px solid #cc241d;
+    color: #{{colors.red}};
+    border-bottom-color: #{{colors.red}};
+}
+
+#network.disconnected {
+    color: #{{colors.red}};
+    border-bottom-color: #{{colors.red}};
 }

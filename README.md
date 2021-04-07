@@ -15,4 +15,4 @@ Optional:
 
 # Fonts
 
-    ttf-jetbrains-mono ttf-mononoki
+    ttf-jetbrains-mono ttf-mononoki ttf-nerd-font-symbols

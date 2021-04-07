@@ -4,7 +4,7 @@
     "height": {{bar_height}},
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
     "modules-center": ["custom/mpris"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery", "sway/language", "clock", "tray"],
+    "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery", "custom/keyboard_layout", "clock", "tray"],
     "sway/window": {
         "max-length": 50
     },
@@ -24,14 +24,14 @@
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%H:%M}",
-        "format": "{:%Y-%m-%d %H:%M}"
+        "format": " {:%Y-%m-%d %H:%M}"
     },
     "cpu": {
-        "format": "{usage}% ",
+        "format": " {usage}%",
         "tooltip": false
     },
     "memory": {
-        "format": "{}% "
+        "format": " {}%"
     },
     "temperature": {
         "critical-threshold": 80,
@@ -47,10 +47,10 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
+        "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": "ﮣ {capacity}%",
+        "format-alt": "{icon} {time}",
         "format-icons": ["", "", "", "", ""]
     },
     "battery#bat2": {
@@ -58,19 +58,19 @@
     },
     "network": {
         //"interface": "wlp0*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr}",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
+        "format-wifi": " {essid} ({signalStrength}%)",
+        "format-ethernet": " {ipaddr}/{cidr}",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "⚠ disconnected",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
+        "format": "{icon} {volume}  {format_source}",
+        "format-bluetooth": "{icon} {volume} {format_source}",
+        "format-bluetooth-muted": "{icon}  {volume} {format_source}",
+        "format-muted": " {volume}  {format_source}",
+        "format-source": " {volume}",
+        "format-source-muted": " {volume}",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -78,7 +78,7 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["", "", ""]
+            "default": ["奄", "奔", "墳"]
         },
         "on-click": "pavucontrol"
     },
@@ -97,8 +97,11 @@
     "custom/mpris": {
         "format": " {}",
         "max-length": 50,
-        {{{{raw~}}}}
-        "exec": "playerctl metadata --follow --format '{{ artist }} - {{ title }}'"
-        {{{{~/raw}}}}
+        "return-type": "json",
+        "exec": "waybar_mpris"
+    },
+    "custom/keyboard_layout": {
+        "format": " {}",
+        "exec": "waybar_keyboard_layout"
     }
 }

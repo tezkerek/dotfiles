@@ -1,0 +1,7 @@
+#! /usr/bin/zsh
+
+# Print initial layout
+swaymsg -rt get_inputs | jq -r 'map(select(.type == "keyboard"))[0] | .xkb_active_layout_name'
+
+swaymsg -mrt subscribe '["input"]' | jq -r --unbuffered \
+    'select(.change == "xkb_layout") | .input | select(.type == "keyboard") | .xkb_active_layout_name'

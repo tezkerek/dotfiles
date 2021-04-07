@@ -1,0 +1,3 @@
+#! /usr/bin/zsh
+playerctl metadata --follow \
+    --format '{"text": "{{ title }}", "tooltip": "{{ artist }} - {{ title }}"}'

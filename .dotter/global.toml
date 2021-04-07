@@ -7,7 +7,25 @@ depends = ["nvim", "sway", "shell", "apps"]
 
 [programs.variables]
 terminal = "kitty"
-browser = "firefox-developer-edition"
+browser  = "firefox-developer-edition"
+
+[colors.variables.colors]
+background = "1d2021"
+foreground = "d4be98"
+cursor     = "a89984"
+accent     = "a9b665"
+highlight  = "313739"
+# 16-bit colors
+black      = "665c54"
+red        = "ea6962"
+green      = "a9b665"
+orange     = "e78a4e"
+yellow     = "d8a657"
+blue       = "7daea3"
+purple     = "d3869b"
+cyan       = "89b482"
+white      = "d4be98"
+gray       = "928374"
 
 
 [nvim.files]
@@ -18,21 +36,26 @@ nvim = "$XDG_CONFIG_HOME/nvim"
 depends = ["programs"]
 
 [shell.files]
-"shell/zsh/zshenv" = "$HOME/.zshenv"
-"shell/zsh/zshrc" = "$XDG_CONFIG_HOME/zsh/.zshrc"
+"shell/zsh/zshenv"   = "$HOME/.zshenv"
+"shell/zsh/zshrc"    = "$XDG_CONFIG_HOME/zsh/.zshrc"
 "shell/zsh/p10k.zsh" = "$XDG_CONFIG_HOME/zsh/p10k.zsh"
-"shell/gitconfig" = "$XDG_CONFIG_HOME/git/config"
-"shell/tigconfig" = "$XDG_CONFIG_HOME/tig/config"
+"shell/gitconfig"    = "$XDG_CONFIG_HOME/git/config"
+"shell/tigconfig"    = "$XDG_CONFIG_HOME/tig/config"
 
+
+[sway]
+depends = ["colors"]
 
 [sway.files]
-"sway/sway" = "$XDG_CONFIG_HOME/sway"
-"sway/waybar" = "$XDG_CONFIG_HOME/waybar"
-"sway/gammastep.ini" = "$XDG_CONFIG_HOME/gammastep/config.ini"
-"sway/wofi" = "$XDG_CONFIG_HOME/wofi"
-"sway/mako" = "$XDG_CONFIG_HOME/mako/config"
-"bin/swayrun" = "$XDG_BIN_HOME/swayrun"
-"bin/grimshot" = "$XDG_BIN_HOME/grimshot"
+"sway/sway"                  = "$XDG_CONFIG_HOME/sway"
+"sway/waybar"                = "$XDG_CONFIG_HOME/waybar"
+"sway/gammastep.ini"         = "$XDG_CONFIG_HOME/gammastep/config.ini"
+"sway/wofi"                  = "$XDG_CONFIG_HOME/wofi"
+"sway/mako"                  = "$XDG_CONFIG_HOME/mako/config"
+"bin/swayrun"                = "$XDG_BIN_HOME/swayrun"
+"bin/grimshot"               = "$XDG_BIN_HOME/grimshot"
+"bin/waybar_mpris"           = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
+"bin/waybar_keyboard_layout" = "$XDG_BIN_HOME/waybar_keyboard_layout"
 
 [sway.variables]
 device = "unknown"
@@ -40,8 +63,9 @@ device = "unknown"
 
 [apps.files]
 "apps/alacritty.yml" = "$XDG_CONFIG_HOME/alacritty/alacritty.yml"
-"apps/ideavimrc" = "$HOME/.ideavimrc"
-"apps/kitty.conf" = "$XDG_CONFIG_HOME/kitty/kitty.conf"
-"apps/mpv.conf" = "$XDG_CONFIG_HOME/mpv/mpv.conf"
-"fonts.conf" = "$XDG_CONFIG_HOME/fontconfig/fonts.conf"
-"bin/synckdbx" = "$XDG_BIN_HOME/synckdbx"
+"apps/ideavimrc"     = "$HOME/.ideavimrc"
+"apps/kitty.conf"    = "$XDG_CONFIG_HOME/kitty/kitty.conf"
+"apps/mpv.conf"      = "$XDG_CONFIG_HOME/mpv/mpv.conf"
+"apps/zathurarc"     = "$XDG_CONFIG_HOME/zathura/zathurarc"
+"fonts.conf"         = "$XDG_CONFIG_HOME/fontconfig/fonts.conf"
+"bin/synckdbx"       = "$XDG_BIN_HOME/synckdbx"

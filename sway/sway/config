@@ -8,13 +8,12 @@ set $up k
 set $right l
 
 set $term {{terminal}}
+set $menu \
+    bemenu-run --no-overlap --monitor=all --tf=$accent_color --hf=$accent_color \
+    --prompt="|>" | xargs swaymsg exec --
+set $launcher wofi --show=drun
+set $file_finder $term --title "Open file" --class "popup_terminal" zsh -ic 'fzo'
 
-set $menu bemenu-run --no-overlap --monitor=all --tf=$focus_color --hf=$focus_color --prompt="|>" | xargs swaymsg exec --
-
-set $file-finder $term --title "Open file" --class "popup_terminal" zsh -ic 'fzo'
-
-# Startup
-exec flashfocus --time 250 --no-flash-on-focus
 
 ### Idle configuration
 #
@@ -44,17 +43,31 @@ bindsym $mod+Shift+space input type:keyboard xkb_switch_layout prev
 focus_follows_mouse no
 floating_modifier $mod normal
 default_floating_border pixel
-default_border pixel 2
+default_border pixel 1
 smart_borders no_gaps
 smart_gaps on
 # Hide title bar of single window in a tabbed/stacked workspace
-hide_edge_borders --i3 horizontal
+hide_edge_borders --i3 none
 
 ### Colors
-#
-set $focus_color "#e6c547"
-client.focused $focus_color $focus_color "#000000" $focus_color $focus_color
-client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
+# <border> <background> <text> [<indicator> [<child_border>]]
+set $accent_color "#{{colors.accent}}"
+client.focused \
+    $accent_color \
+    "#{{colors.background}}" \
+    $accent_color \
+    $accent_color \
+    $accent_color
+client.focused_inactive \
+    "#{{colors.highlight}}" \
+    "#{{colors.background}}" \
+    $accent_color
+client.unfocused \
+    "#{{colors.highlight}}" \
+    "#{{colors.background}}" \
+    "#{{colors.foreground}}" \
+    "#{{colors.gray}}" \
+    "#{{colors.background}}"
 
 ### Key bindings
 #
@@ -68,8 +81,8 @@ client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
 
     # Launchers
     bindsym $mod+o exec $menu
-    bindsym $mod+i exec wofi --show=drun
-    bindsym $mod+p exec $file-finder
+    bindsym $mod+i exec $launcher
+    bindsym $mod+p exec $file_finder
 
     # Reload config
     bindsym $mod+Shift+Escape reload
@@ -115,7 +128,7 @@ client.unfocused "#333333" "#222222" "#cccccc" "#292d2e" "#222222"
 #
 # Layout stuff:
 #
-    bindsym $mod+b splith
+    bindsym $mod+semicolon splith
     bindsym $mod+v splitv
 
     # Layout
@@ -235,8 +248,8 @@ workspace 7 output $secondary
 workspace 8 output $secondary
 workspace 9 output $primary
 
-bindsym $mod+n focus output right, exec flash_window
-bindsym $mod+Shift+n move container to output right, focus output right, exec flash_window
+bindsym $mod+n focus output right
+bindsym $mod+Shift+n move container to output right, focus output right
 
 {{else}}{{#if (eq device "laptop") ~}}
 ### Laptop specific config
