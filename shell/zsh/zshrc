@@ -46,6 +46,9 @@ zinit light romkatv/powerlevel10k
 
 zinit load wfxr/forgit
 
+zinit ice as=program pick="bin/git-fuzzy"
+zinit light bigH/git-fuzzy
+
 ###############
 # Functions and aliases
 ###############
