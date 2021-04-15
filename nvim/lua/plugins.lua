@@ -81,8 +81,6 @@ return require('packer').startup(function(use)
     use 'AndrewRadev/splitjoin.vim'
     use 'pechorin/any-jump.vim'
     use 'sbdchd/neoformat'
-    use 'aouelete/sway-vim-syntax'
-    use 'jackguo380/vim-lsp-cxx-highlight'
     use 'ap/vim-css-color'
     use 'lervag/vimtex'
     use 'vim-pandoc/vim-pandoc'
