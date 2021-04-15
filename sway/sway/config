@@ -176,15 +176,7 @@ client.unfocused \
     bindsym XF86MonBrightnessDown exec "xbacklight -dec 5"
     bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
 
-    # Screenshot
-    bindsym Alt+Shift+Print exec "grimshot retake | wl-copy"
-    bindsym Alt+Print exec "grimshot take | wl-copy"
-    bindsym Print exec "grimshot screen | wl-copy"
-    bindsym Ctrl+Print exec "grimshot take | swappy -f -"
-
 ### Modes
-#
-# Resizing containers:
 #
 mode "resize" {
     bindsym $left resize shrink width 10px
@@ -196,6 +188,21 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
+
+mode "screenshot" {
+    bindsym s exec "grimshot copy screen"
+    bindsym o exec "grimshot copy output"
+    bindsym c exec "grimshot copy active"
+    bindsym w exec "grimshot copy window"
+    bindsym a exec "grimshot copy area"
+    bindsym r exec "grimshot copy prev-area"
+    # Edit screenshot
+    bindsym e exec "wl-paste | swappy -f -"
+
+    bindsym Return mode "default"
+}
+bindsym $mod+Print mode "screenshot"
+bindsym Print exec "grimshot save screen - | swappy -f -"
 
 ### Status Bar
 #
