@@ -8,6 +8,8 @@ set $up k
 set $right l
 
 set $term {{terminal}}
+set $scratchpad $term --title "Scratchpad" --class "terminal_scratchpad" --override \
+    background_opacity=0.8
 set $menu \
     bemenu-run --no-overlap --monitor=all --tf=$accent_color --hf=$accent_color \
     --prompt="|>" | xargs swaymsg exec --
@@ -70,139 +72,144 @@ client.unfocused \
     "#{{colors.background}}"
 
 ### Key bindings
-#
-# Basics:
-#
+bindsym --to-code {
+    #
+    # Basics:
+    #
     # Start terminal
-    bindsym $mod+Shift+Return exec $term
+    $mod+Shift+Return exec $term
 
     # Kill window
-    bindsym $mod+x kill
+    $mod+x kill
 
     # Launchers
-    bindsym $mod+o exec $menu
-    bindsym $mod+i exec $launcher
-    bindsym $mod+p exec $file_finder
+    $mod+o exec $menu
+    $mod+i exec $launcher
+    $mod+p exec $file_finder
 
     # Reload config
-    bindsym $mod+Shift+Escape reload
+    $mod+Shift+Escape reload
 
     # Exit sway
-    bindsym $mod+Shift+q exit
+    $mod+Shift+q exit
 
     # Focus windows
-    bindsym $mod+$left focus left
-    bindsym $mod+$down focus down
-    bindsym $mod+$up focus up
-    bindsym $mod+$right focus right
+    $mod+$left focus left
+    $mod+$down focus down
+    $mod+$up focus up
+    $mod+$right focus right
 
     # Move windows
-    bindsym $mod+Shift+$left move left
-    bindsym $mod+Shift+$down move down
-    bindsym $mod+Shift+$up move up
-    bindsym $mod+Shift+$right move right
-#
-# Workspaces:
-#
+    $mod+Shift+$left move left
+    $mod+Shift+$down move down
+    $mod+Shift+$up move up
+    $mod+Shift+$right move right
+    #
+    # Workspaces:
+    #
     # Focus workspace
-    bindsym $mod+1 workspace 1
-    bindsym $mod+2 workspace 2
-    bindsym $mod+3 workspace 3
-    bindsym $mod+4 workspace 4
-    bindsym $mod+5 workspace 5
-    bindsym $mod+6 workspace 6
-    bindsym $mod+7 workspace 7
-    bindsym $mod+8 workspace 8
-    bindsym $mod+9 workspace 9
+    $mod+1 workspace 1
+    $mod+2 workspace 2
+    $mod+3 workspace 3
+    $mod+4 workspace 4
+    $mod+5 workspace 5
+    $mod+6 workspace 6
+    $mod+7 workspace 7
+    $mod+8 workspace 8
+    $mod+9 workspace 9
 
     # Move window to workspace
-    bindsym $mod+Shift+1 move container to workspace 1
-    bindsym $mod+Shift+2 move container to workspace 2
-    bindsym $mod+Shift+3 move container to workspace 3
-    bindsym $mod+Shift+4 move container to workspace 4
-    bindsym $mod+Shift+5 move container to workspace 5
-    bindsym $mod+Shift+6 move container to workspace 6
-    bindsym $mod+Shift+7 move container to workspace 7
-    bindsym $mod+Shift+8 move container to workspace 8
-    bindsym $mod+Shift+9 move container to workspace 9
-#
-# Layout stuff:
-#
-    bindsym $mod+semicolon splith
-    bindsym $mod+v splitv
+    $mod+Shift+1 move container to workspace 1
+    $mod+Shift+2 move container to workspace 2
+    $mod+Shift+3 move container to workspace 3
+    $mod+Shift+4 move container to workspace 4
+    $mod+Shift+5 move container to workspace 5
+    $mod+Shift+6 move container to workspace 6
+    $mod+Shift+7 move container to workspace 7
+    $mod+Shift+8 move container to workspace 8
+    $mod+Shift+9 move container to workspace 9
 
     # Layout
-    bindsym $mod+w layout tabbed
-    bindsym $mod+Shift+w layout stacking
-    bindsym $mod+t layout toggle split
+    $mod+w layout tabbed
+    $mod+Shift+w layout stacking
+    $mod+t layout toggle split
+    $mod+semicolon splith
+    $mod+v splitv
 
-    bindsym $mod+f fullscreen
+    $mod+f fullscreen
 
     # Make the current focus sticky
-    bindsym $mod+s sticky toggle
+    $mod+s sticky toggle
 
     # Toggle the current focus between tiling and floating mode
-    bindsym $mod+y floating toggle
+    $mod+y floating toggle
 
     # Swap focus between the tiling area and the floating area
-    bindsym $mod+Shift+y focus mode_toggle
+    $mod+Shift+y focus mode_toggle
 
     # Focus parent container
-    bindsym $mod+a focus parent
+    $mod+a focus parent
 
     # Focus child container
-    bindsym $mod+Shift+a focus child
-#
-# Scratchpad:
-#
+    $mod+Shift+a focus child
+    #
+    # Scratchpad:
+    #
     # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+minus move scratchpad
+    $mod+Shift+minus move scratchpad
 
     # Show the next scratchpad window or hide the focused scratchpad window.
     # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+Return scratchpad show
-#
-# Function Keys
-#
-    bindsym XF86AudioMicMute exec "amixer set Capture toggle"
-    bindsym XF86AudioMute exec "pamixer --toggle-mute"
-    bindsym XF86AudioLowerVolume exec "pamixer --decrease 2"
-    bindsym XF86AudioRaiseVolume exec "pamixer --increase 2"
+    $mod+Return [app_id="terminal_scratchpad"] \
+        scratchpad show, resize set 1920 px 100 ppt, move position center
 
-    bindsym XF86AudioPlay exec "playerctl play-pause"
-    bindsym XF86AudioNext exec "playerctl next"
-    bindsym XF86AudioPrev exec "playerctl prev"
+    #
+    # Function Keys
+    #
+    XF86AudioMicMute exec "amixer set Capture toggle"
+    XF86AudioMute exec "pamixer --toggle-mute"
+    XF86AudioLowerVolume exec "pamixer --decrease 2"
+    XF86AudioRaiseVolume exec "pamixer --increase 2"
 
-    bindsym XF86MonBrightnessDown exec "xbacklight -dec 5"
-    bindsym XF86MonBrightnessUp exec "xbacklight -inc 5"
+    XF86AudioPlay exec "playerctl play-pause"
+    XF86AudioNext exec "playerctl next"
+    XF86AudioPrev exec "playerctl prev"
+
+    XF86MonBrightnessDown exec "xbacklight -dec 5"
+    XF86MonBrightnessUp exec "xbacklight -inc 5"
+}
 
 ### Modes
 #
 mode "resize" {
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
-    # Return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+    bindsym --to-code {
+        $left resize shrink width 10px
+        $down resize grow height 10px
+        $up resize shrink height 10px
+        $right resize grow width 10px
+        # Return to default mode
+        Return mode "default"
+        Escape mode "default"
+    }
 }
-bindsym $mod+r mode "resize"
+bindsym --to-code $mod+r mode "resize"
 
 mode "screenshot" {
-    bindsym s exec "grimshot copy screen"
-    bindsym o exec "grimshot copy output"
-    bindsym c exec "grimshot copy active"
-    bindsym w exec "grimshot copy window"
-    bindsym a exec "grimshot copy area"
-    bindsym r exec "grimshot copy prev-area"
-    # Edit screenshot
-    bindsym e exec "wl-paste | swappy -f -"
+    bindsym --to-code {
+        s exec "grimshot copy screen"
+        o exec "grimshot copy output"
+        c exec "grimshot copy active"
+        w exec "grimshot copy window"
+        a exec "grimshot copy area"
+        r exec "grimshot copy prev-area"
+        # Edit screenshot
+        e exec "wl-paste | swappy -f -"
 
-    bindsym Return mode "default"
+        Return mode "default"
+    }
 }
-bindsym $mod+Print mode "screenshot"
-bindsym Print exec "grimshot save screen - | swappy -f -"
+bindsym --to-code $mod+Print mode "screenshot"
+bindsym --to-code Print exec "grimshot save screen - | swappy -f -"
 
 ### Status Bar
 #
@@ -216,11 +223,12 @@ include /etc/sway/config.d/*
 ### Startup
 #
 # Start a terminal scratchpad
-exec $term --title "Scratchpad" --class "terminal_scratchpad"
-for_window [app_id="terminal_scratchpad"] move scratchpad, move position center
+exec_always $scratchpad
+for_window [app_id="terminal_scratchpad"] move scratchpad
 
 # Other window rules
 for_window [app_id="firefox" title="Launch Application"] floating enable
+for_window [app_id="firefox" title="Sharing Indicator"] kill
 for_window [app_id="firefox" title="Picture-in-Picture"] \
     floating enable, sticky enable, move position 1190 80
 for_window [class="Steam" title="Friends List"] floating enable
@@ -255,8 +263,10 @@ workspace 7 output $secondary
 workspace 8 output $secondary
 workspace 9 output $primary
 
-bindsym $mod+n focus output right
-bindsym $mod+Shift+n move container to output right, focus output right
+bindsym --to-code {
+    $mod+n focus output right
+    $mod+Shift+n move container to output right, focus output right
+}
 
 {{else}}{{#if (eq device "laptop") ~}}
 ### Laptop specific config

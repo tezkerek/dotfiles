@@ -76,7 +76,7 @@ function dirsize {
 }
 
 function __is_binary {
-    file --mime $1 |& grep -q --invert-match ': text/'
+    file --mime-encoding $1 |& grep -q 'binary$'
 }
 
 alias l="exa -l"
@@ -101,7 +101,6 @@ alias sudo="sudo "
 
 alias ls="ls --color=auto"
 alias adb="$XDG_DATA_HOME/android/sdk/platform-tools/adb"
-alias dotedit="chezmoi edit --apply"
 
 alias fvim='nvim $(fd --hidden | fzf)'
 alias fcd='cd $(fd --hidden --type d | fzf)'
@@ -155,6 +154,9 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey "^E" edit-command-line
 
+# Help
+unalias run-help
+autoload run-help
 
 # Completion
 autoload -Uz compinit
