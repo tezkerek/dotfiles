@@ -35,8 +35,8 @@
     },
     "temperature": {
         "critical-threshold": 80,
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""]
     },
     "backlight": {
         "format": "{percent}% {icon}",
@@ -49,7 +49,7 @@
         },
         "format": "{icon} {capacity}%",
         "format-charging": " {capacity}%",
-        "format-plugged": "ﮣ {capacity}%",
+        "format-plugged": " {capacity}%",
         "format-alt": "{icon} {time}",
         "format-icons": ["", "", "", "", ""]
     },
