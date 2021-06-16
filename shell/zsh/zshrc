@@ -108,7 +108,10 @@ function fzo {
     # Enter to open file
     # CTRL-F to open its directory
     # CTRL-O to cd to its directory
-    local result=$(fd --follow --type f | fzf --expect=ctrl-o,ctrl-f)
+    local fzf_header="CTRL-F: open dir    CTRL-O: cd dir
+
+"
+    local result=$(fd --follow --type f . $@ | fzf --reverse --expect=ctrl-o,ctrl-f --header $fzf_header)
     local file=$(tail -n1 <<< $result)
     local cmd=$(head -n1 <<< $result)
     case $cmd in

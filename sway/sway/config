@@ -14,7 +14,8 @@ set $menu \
     bemenu-run --no-overlap --monitor=all --tf=$accent_color --hf=$accent_color \
     --prompt="|>" | xargs swaymsg exec --
 set $launcher wofi --show=drun
-set $file_finder $term --title "Open file" --class "popup_terminal" zsh -ic 'fzo'
+set $file_finder $term --title "Open file" --class "popup_terminal" zsh -ic 'fzo doc/ downloads/ pics/ vid/ data/movies/'
+set $all_file_finder $term --title "Open file" --class "popup_terminal" zsh -ic 'fzo'
 
 
 ### Idle configuration
@@ -86,6 +87,7 @@ bindsym --to-code {
     $mod+o exec $menu
     $mod+i exec $launcher
     $mod+p exec $file_finder
+    $mod+Shift+p exec $all_file_finder
 
     # Reload config
     $mod+Shift+Escape reload
