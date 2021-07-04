@@ -7,6 +7,9 @@ set $down j
 set $up k
 set $right l
 
+set $primary {{primary_output}}
+set $secondary {{secondary_output}}
+
 set $term {{terminal}}
 set $scratchpad $term --title "Scratchpad" --class "terminal_scratchpad" --override \
     background_opacity=0.8
@@ -131,6 +134,10 @@ bindsym --to-code {
     $mod+Shift+8 move container to workspace 8
     $mod+Shift+9 move container to workspace 9
 
+    # Outputs
+    $mod+n exec swayextmsg focus_next_output
+    $mod+Shift+n exec swayextmsg move_container_to_next_output
+
     # Layout
     $mod+w layout tabbed
     $mod+Shift+w layout stacking
@@ -238,21 +245,6 @@ for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access R
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="popup_terminal"] floating enable, border pixel 1
 
-{{#if (eq device "desktop") ~}}
-### Desktop specific config
-#
-set $primary {{primary_output}}
-set $secondary {{secondary_output}}
-
-output $primary {
-    resolution 1920x1080@144Hz
-    position 0 0
-    background ~/pics/wallpapers/primary fill
-}
-output $secondary {
-    position 1920 0
-    background ~/pics/wallpapers/secondary fill
-}
 
 # Assign workspaces to outputs
 workspace 1 output $primary
@@ -274,9 +266,18 @@ workspace 17 output $secondary
 workspace 18 output $secondary
 workspace 19 output $secondary
 
-bindsym --to-code {
-    $mod+n exec swayextmsg focus_next_output
-    $mod+Shift+n exec swayextmsg move_container_to_next_output
+{{#if (eq device "desktop") ~}}
+### Desktop specific config
+#
+
+output $primary {
+    resolution 1920x1080@144Hz
+    position 0 0
+    background ~/pics/wallpapers/primary fill
+}
+output $secondary {
+    position 1920 0
+    background ~/pics/wallpapers/secondary fill
 }
 
 {{else}}{{#if (eq device "laptop") ~}}
