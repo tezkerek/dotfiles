@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Returns output index on first line and output name on second line
+function get_next_output {
+    swaymsg -t get_outputs | jq -r '
+        to_entries
+        | ((map(select(.value.focused))[0].key + 1) % length) as $next_index 
+        | $next_index, .[$next_index].value.name'
+}
+
+function switch_to_next_output {
+    next_output_pair=$(get_next_output)
+    next_output_index=$(head -n 1 <<< $next_output_pair)
+    next_output_name=$(tail -n 1 <<< $next_output_pair)
+
+    swaymsg focus output $next_output_name
+
+    for key in {1..9}; do
+        w=$(( $key + 10*$next_output_index ))
+        swaymsg 'bindsym --to-code $mod+'$key' workspace number '$w
+        swaymsg 'bindsym --to-code $mod+Shift+'$key' move container to workspace number '$w
+    done
+}
+
+case $1 in
+    focus_next_output)
+        switch_to_next_output
+        ;;
+    move_container_to_next_output)
+        swaymsg move container to output $(get_next_output | tail -n 1)
+        ;;
+esac

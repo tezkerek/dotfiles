@@ -56,6 +56,7 @@ depends = ["colors"]
 "bin/grimshot"               = "$XDG_BIN_HOME/grimshot"
 "bin/waybar_mpris"           = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
 "bin/waybar_keyboard_layout" = "$XDG_BIN_HOME/waybar_keyboard_layout"
+"bin/swayextmsg"             = "$XDG_BIN_HOME/swayextmsg"
 
 [sway.variables]
 device = "unknown"
