@@ -1,1 +1,4 @@
 set recolor-lightcolor "#{{colors.background}}"
+
+set synctex true
+set synctex-editor-command "nvr --remote +\"%{line}\" \"%{input}\""
