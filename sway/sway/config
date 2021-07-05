@@ -220,6 +220,12 @@ mode "screenshot" {
 bindsym --to-code $mod+Print mode "screenshot"
 bindsym --to-code Print exec "grimshot save screen - | swappy -f -"
 
+mode "ignore" {
+    bindsym --to-code $mod+Insert mode "default"
+}
+
+bindsym --to-code $mod+Insert mode "ignore"
+
 ### Status Bar
 #
 bar {
