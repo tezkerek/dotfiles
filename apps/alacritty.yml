@@ -56,21 +56,6 @@ draw_bold_text_with_bright_colors: false
 # * https://wiki.archlinux.org/index.php/font_configuration#Fontconfig_configuration
 # * file:///usr/share/doc/fontconfig/fontconfig-user.html
 font:
-  # The normal (roman) font face to use.
-  normal:
-      family: mononoki
-      style: Regular
-
-  # The bold font face
-  bold:
-    family: mononoki
-    style: Bold
-
-  # The italic font face
-  italic:
-    family: mononoki
-    style: Italic
-
   # Point size of the font
   size: 13.0
 
@@ -285,7 +270,7 @@ key_bindings:
   - { key: Insert,   mods: Shift,   action: PasteSelection               }
   - { key: Key0,     mods: Control, action: ResetFontSize                }
   - { key: Equals,   mods: Control, action: IncreaseFontSize             }
-  - { key: Subtract, mods: Control, action: DecreaseFontSize             }
+  - { key: Minus,    mods: Control, action: DecreaseFontSize             }
   - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,                    chars: "\x1b[H",   mode: ~AppCursor  }
   - { key: End,                     chars: "\x1bOF",   mode: AppCursor   }
