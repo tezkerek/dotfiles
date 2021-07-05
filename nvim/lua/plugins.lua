@@ -28,10 +28,8 @@ return require('packer').startup(function(use)
     use 'moll/vim-bbye'
     use 'embear/vim-localvimrc'
     use 'liuchengxu/vim-which-key'
-    use {
-        'lukas-reineke/indent-blankline.nvim',
-        branch = 'lua'
-    }
+    use 'lukas-reineke/indent-blankline.nvim'
+
 
     -- Integration
     use 'christoomey/vim-tmux-navigator'
