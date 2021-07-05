@@ -17,6 +17,7 @@ setopt INC_APPEND_HISTORY
 setopt EXTENDED_HISTORY
 
 setopt INTERACTIVE_COMMENTS
+setopt AUTO_CD
 
 
 ###############
@@ -105,6 +106,7 @@ alias zreload="source $HOME/.zshrc"
 alias sudo="sudo "
 
 alias ls="ls --color=auto"
+alias sysu="systemctl --user"
 alias adb="$XDG_DATA_HOME/android/sdk/platform-tools/adb"
 
 alias fvim='nvim $(fd --hidden | fzf)'
@@ -169,6 +171,12 @@ autoload run-help
 # Completion
 autoload -Uz compinit
 compinit
+
+# Fuzzy completion from https://superuser.com/a/815317
+zstyle ':completion:*' matcher-list '' \
+    'm:{a-z\-}={A-Z\_}' \
+    'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+    'r:|?=** m:{a-z\-}={A-Z\_}'
 
 # Prompt
 export PS1="%F{yellow} %~  %f"
