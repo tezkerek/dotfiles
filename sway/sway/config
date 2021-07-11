@@ -116,26 +116,26 @@ bindsym --to-code {
     # Workspaces:
     #
     # Focus workspace
-    $mod+1 workspace 1
-    $mod+2 workspace 2
-    $mod+3 workspace 3
-    $mod+4 workspace 4
-    $mod+5 workspace 5
-    $mod+6 workspace 6
-    $mod+7 workspace 7
-    $mod+8 workspace 8
-    $mod+9 workspace 9
+    $mod+1 exec swayextmsg focus_local_workspace 1
+    $mod+2 exec swayextmsg focus_local_workspace 2
+    $mod+3 exec swayextmsg focus_local_workspace 3
+    $mod+4 exec swayextmsg focus_local_workspace 4
+    $mod+5 exec swayextmsg focus_local_workspace 5
+    $mod+6 exec swayextmsg focus_local_workspace 6
+    $mod+7 exec swayextmsg focus_local_workspace 7
+    $mod+8 exec swayextmsg focus_local_workspace 8
+    $mod+9 exec swayextmsg focus_local_workspace 9
 
     # Move window to workspace
-    $mod+Shift+1 move container to workspace 1
-    $mod+Shift+2 move container to workspace 2
-    $mod+Shift+3 move container to workspace 3
-    $mod+Shift+4 move container to workspace 4
-    $mod+Shift+5 move container to workspace 5
-    $mod+Shift+6 move container to workspace 6
-    $mod+Shift+7 move container to workspace 7
-    $mod+Shift+8 move container to workspace 8
-    $mod+Shift+9 move container to workspace 9
+    $mod+Shift+1 exec swayextmsg move_container_to_local_workspace 1
+    $mod+Shift+2 exec swayextmsg move_container_to_local_workspace 2
+    $mod+Shift+3 exec swayextmsg move_container_to_local_workspace 3
+    $mod+Shift+4 exec swayextmsg move_container_to_local_workspace 4
+    $mod+Shift+5 exec swayextmsg move_container_to_local_workspace 5
+    $mod+Shift+6 exec swayextmsg move_container_to_local_workspace 6
+    $mod+Shift+7 exec swayextmsg move_container_to_local_workspace 7
+    $mod+Shift+8 exec swayextmsg move_container_to_local_workspace 8
+    $mod+Shift+9 exec swayextmsg move_container_to_local_workspace 9
 
     # Outputs
     $mod+n exec swayextmsg focus_next_output

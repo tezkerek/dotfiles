@@ -1,6 +1,14 @@
 #!/bin/bash
 
 # Returns output index on first line and output name on second line
+function get_current_output {
+    swaymsg -t get_outputs | jq -r '
+    to_entries
+    | map(select(.value.focused))[0]
+    | .key, .value.name'
+}
+
+# Returns output index on first line and output name on second line
 function get_next_output {
     swaymsg -t get_outputs | jq -r '
         to_entries
@@ -8,23 +16,22 @@ function get_next_output {
         | $next_index, .[$next_index].value.name'
 }
 
-function switch_to_next_output {
-    next_output_pair=$(get_next_output)
-    next_output_index=$(head -n 1 <<< $next_output_pair)
-    next_output_name=$(tail -n 1 <<< $next_output_pair)
-
-    swaymsg focus output $next_output_name
-
-    for key in {1..9}; do
-        w=$(( $key + 10*$next_output_index ))
-        swaymsg 'bindsym --to-code $mod+'$key' workspace number '$w
-        swaymsg 'bindsym --to-code $mod+Shift+'$key' move container to workspace number '$w
-    done
+# Receives a local workspace number and outputs the global workspace number
+function get_global_workspace {
+    workspace_num=$1
+    output_index=$(get_current_output | head -n 1)
+    echo $(( $workspace_num + 10*$output_index ))
 }
 
 case $1 in
     focus_next_output)
-        switch_to_next_output
+        swaymsg focus output $(get_next_output | tail -n 1)
+        ;;
+    focus_local_workspace)
+        swaymsg workspace number $(get_global_workspace $2)
+        ;;
+    move_container_to_local_workspace)
+        swaymsg move container to workspace number $(get_global_workspace $2)
         ;;
     move_container_to_next_output)
         swaymsg move container to output $(get_next_output | tail -n 1)
