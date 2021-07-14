@@ -49,6 +49,7 @@ bindsym $mod+Shift+space input type:keyboard xkb_switch_layout prev
 
 ### Sway settings
 #
+workspace_layout tabbed
 focus_follows_mouse no
 floating_modifier $mod normal
 default_floating_border pixel
