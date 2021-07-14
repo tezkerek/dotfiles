@@ -36,4 +36,20 @@ case $1 in
     move_container_to_next_output)
         swaymsg move container to output $(get_next_output | tail -n 1)
         ;;
+    toggle_terminal_scratchpad)
+        app_id="terminal_scratchpad"
+
+        if ! swaymsg -t get_tree | grep --quiet "\"app_id\": \"$app_id\""; then
+            # Scratchpad not found, start it
+            notify-send --expire-time 1000 "Starting scratchpad"
+            $TERMINAL --detach \
+                --title "Scratchpad" \
+                --class "$app_id" \
+                --override background_opacity=0.8
+            # Wait a bit for sway to know about the window
+            sleep 0.15
+        fi
+        swaymsg "[app_id=\"$app_id\"] scratchpad show, \
+            resize set 100 ppt 100 ppt, move position center"
+        ;;
 esac
