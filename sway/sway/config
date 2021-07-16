@@ -89,8 +89,8 @@ bindsym --to-code {
     # Launchers
     $mod+o exec $menu
     $mod+i exec $launcher
-    $mod+p exec $file_finder
-    $mod+Shift+p exec $all_file_finder
+    $mod+p exec swayextmsg show_file_finder
+    $mod+Shift+p exec swayextmsg show_file_finder --all
 
     # Reload config
     $mod+Shift+Escape reload

@@ -51,4 +51,18 @@ case $1 in
         swaymsg "[app_id=\"$app_id\"] scratchpad show, \
             resize set 100 ppt 100 ppt, move position center"
         ;;
+    show_file_finder)
+        # Pass --all to search all files
+        cmd="fzo doc/ downloads/ pics/ vid/ data/movies/"
+        if [[ $# -ge 2 && $2 == "--all" ]]; then
+            cmd="fzo"
+        fi
+
+        $TERMINAL --detach \
+            --title "Open file" \
+            --class "popup_terminal" \
+            zsh -ic $cmd
+        sleep 0.15
+        swaymsg "resize set 80 ppt 90 ppt, move position center"
+        ;;
 esac
