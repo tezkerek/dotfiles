@@ -11,14 +11,10 @@ set $primary {{primary_output}}
 set $secondary {{secondary_output}}
 
 set $term {{terminal}}
-set $scratchpad $term --title "Scratchpad" --class "terminal_scratchpad" --override \
-    background_opacity=0.8
 set $menu \
     bemenu-run --no-overlap --monitor=all --tf=$accent_color --hf=$accent_color \
     --prompt="|>" | xargs swaymsg exec --
 set $launcher wofi --show=drun
-set $file_finder $term --title "Open file" --class "popup_terminal" zsh -ic 'fzo doc/ downloads/ pics/ vid/ data/movies/'
-set $all_file_finder $term --title "Open file" --class "popup_terminal" zsh -ic 'fzo'
 
 
 ### Idle configuration
@@ -237,13 +233,8 @@ bar {
 
 include /etc/sway/config.d/*
 
-### Startup
+### Window rules
 #
-# Start a terminal scratchpad
-exec $scratchpad
-for_window [app_id="terminal_scratchpad"] move scratchpad
-
-# Other window rules
 for_window [app_id="firefox" title="Launch Application"] floating enable
 for_window [app_id="firefox" title="Sharing Indicator"] kill
 for_window [app_id="firefox" title="Picture-in-Picture"] \
@@ -251,6 +242,7 @@ for_window [app_id="firefox" title="Picture-in-Picture"] \
 for_window [class="Steam" title="Friends List"] floating enable
 for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
 for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="terminal_scratchpad"] move scratchpad
 for_window [app_id="popup_terminal"] floating enable, border pixel 1
 
 

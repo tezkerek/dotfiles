@@ -41,7 +41,6 @@ case $1 in
 
         if ! swaymsg -t get_tree | grep --quiet "\"app_id\": \"$app_id\""; then
             # Scratchpad not found, start it
-            notify-send --expire-time 1000 "Starting scratchpad"
             $TERMINAL --detach \
                 --title "Scratchpad" \
                 --class "$app_id" \
