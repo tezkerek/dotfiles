@@ -32,6 +32,7 @@ widget > label, #tray {
 /* Highlighted components */
 #workspaces button.focused, #network, #clock, #idle_inhibitor.activated {
     border-bottom-color: #{{colors.accent}};
+    border-top-color: #{{colors.highlight}};
     background-color: #{{colors.highlight}};
 }
 
