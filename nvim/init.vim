@@ -15,6 +15,7 @@ scriptencoding utf-8
   set updatetime=300 " For highlighting text under cursor faster
   set ignorecase smartcase inccommand="nosplit"
   set splitright
+  set completeopt=menuone,noselect
 
   set guifont=monospace:h15
 
@@ -25,6 +26,7 @@ scriptencoding utf-8
 " ==================
 "  Plugins
 " ==================
+  lua vim.lsp.set_log_level("debug")
   lua require('plugins')
 
   let g:startify_change_to_dir = 0
@@ -74,15 +76,6 @@ scriptencoding utf-8
 " ==================
 "  Autocmd
 " ==================
-augroup autococ
-  autocmd!
-  " Highlight the symbol and its references when holding the cursor.
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
 augroup omnisharp
   autocmd!
 
@@ -199,100 +192,6 @@ augroup end
   nnoremap <silent> <leader>fg :Rg<CR>
   " Search in current buffer
   nnoremap <silent> <leader>/ :BLines<CR>
-
-" ---------
-" coc.nvim
-" ---------
-  " Use TAB for completion
-  inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-  inoremap <silent><expr> <c-space> coc#refresh()
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-
-  " Scroll popup
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-
-  " Snippet jump
-  let g:coc_snippet_next = '<M-j>'
-  let g:coc_snippet_prev = '<M-k>'
-
-  " Use `[g` and `]g` to navigate diagnostics
-  nmap <silent> [g <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-  " GoTo code navigation.
-  nmap <silent> gd <Plug>(coc-definition)
-  " Go to definition in split window
-  nmap <silent> <leader>wgd :vsplit<CR>:norm gd<CR>
-  nmap <silent> gy <Plug>(coc-type-definition)
-  nmap <silent> gi <Plug>(coc-implementation)
-  nmap <silent> gr <Plug>(coc-references)
-
-  " Use K to show documentation in preview window.
-  nnoremap <silent> K :call <SID>show_documentation()<CR>
-  function! s:show_documentation()
-      if (index(['vim','help'], &filetype) >= 0)
-          execute 'vert h '.expand('<cword>')
-      else
-          call CocAction('doHover')
-      endif
-  endfunction
-
-  " Symbol renaming.
-  nmap <F2> <Plug>(coc-rename)
-
-  " Formatting selected code.
-  xmap <leader>cf  <Plug>(coc-format-selected)
-  nmap <leader>cf  <Plug>(coc-format-selected)
-
-  " Applying codeAction to the selected region.
-  " Example: `<leader>aap` for current paragraph
-  xmap <leader>ca  <Plug>(coc-codeaction-selected)
-  nmap <leader>ca  <Plug>(coc-codeaction-selected)
-
-  " Apply codeAction to the current line.
-  nmap <leader>cal  <Plug>(coc-codeaction)
-  " Apply AutoFix to problem on the current line.
-  nmap <leader>cqf  <Plug>(coc-fix-current)
-
-  " Introduce function text object
-  " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-  xmap if <Plug>(coc-funcobj-i)
-  xmap af <Plug>(coc-funcobj-a)
-  omap if <Plug>(coc-funcobj-i)
-  omap af <Plug>(coc-funcobj-a)
-
-  " Use <TAB> for selections ranges.
-  " NOTE: Requires 'textDocument/selectionRange' support from the language server.
-  " coc-tsserver, coc-python are the examples of servers that support it.
-  nmap <silent> <TAB> <Plug>(coc-range-select)
-  xmap <silent> <TAB> <Plug>(coc-range-select)
-
-  " Add `:Format` command to format current buffer.
-  command! -nargs=0 Format :call CocAction('format')
-  " Add `:Fold` command to fold current buffer.
-  command! -nargs=? Fold   :call CocAction('fold', <f-args>)
-  " Add `:OR` command for organize imports of the current buffer.
-  command! -nargs=0 OR     :call CocAction('runCommand', 'editor.action.organizeImport')
-  " Manage extensions.
-  command! -nargs=0 CocExtensions  :<C-u>CocList extensions<cr>
-
-  " Mappings using CocList:
-  " Show Coc commands.
-  nnoremap <silent> <space>cc  :<C-u>CocList commands<cr>
-  " Find symbols in current document.
-  nnoremap <silent> <space>co  :<C-u>CocList outline<cr>
-  " Quickly reopen last CocList screen.
-  nnoremap <silent> <space>cl  :<C-u>CocListResume<CR>
 
 " ---------
 " vim-easy-align

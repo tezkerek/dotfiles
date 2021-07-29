@@ -28,7 +28,12 @@ return require('packer').startup(function(use)
     use 'moll/vim-bbye'
     use 'embear/vim-localvimrc'
     use 'liuchengxu/vim-which-key'
-    use 'lukas-reineke/indent-blankline.nvim'
+    use {
+        'lukas-reineke/indent-blankline.nvim',
+        config = function()
+            vim.g.indent_blankline_filetype_exclude = {"NvimTree", "help"}
+        end
+    }
 
 
     -- Integration
@@ -60,19 +65,37 @@ return require('packer').startup(function(use)
     use 'dhruvasagar/vim-table-mode'
     use 'kana/vim-textobj-user'
     use 'Julian/vim-textobj-variable-segment'
+    use {
+        'windwp/nvim-autopairs',
+        config = function()
+            require('nvim-autopairs').setup()
+            require('nvim-autopairs.completion.compe').setup({
+                    map_cr = true,
+                    map_complete = true
+                })
+        end
+    }
 
     -- Files
     use 'preservim/nerdtree'
+    use 'kyazdani42/nvim-tree.lua'
     use 'junegunn/fzf'
     use 'junegunn/fzf.vim'
     use 'tpope/vim-eunuch'
 
     -- Completion
     use {
-        'neoclide/coc.nvim',
-        branch = 'release'
+        'neovim/nvim-lspconfig',
+        event = "BufEnter",
+        config = function() require("plugins/lspconfig") end
     }
+    use {
+        'hrsh7th/nvim-compe',
+        config = function() require("plugins/compe") end
+    }
+    use 'ray-x/lsp_signature.nvim'
     use 'honza/vim-snippets'
+    use 'hrsh7th/vim-vsnip'
 
     -- Syntax
     use 'vim-scripts/taglist.vim'
