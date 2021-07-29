@@ -68,7 +68,8 @@ scriptencoding utf-8
 " ==================
   set termguicolors
   let g:gruvbox_material_background='hard'
-  colorscheme gruvbox-material
+  let g:onedark_style = 'darker'
+  colorscheme tokyonight
 
 " ==================
 "  Autocmd

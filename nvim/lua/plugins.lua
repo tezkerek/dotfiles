@@ -17,7 +17,7 @@ return require('packer').startup(function(use)
         config = function()
             require('lualine').setup {
                 options = {
-                    theme = 'gruvbox_material',
+                    theme = 'tokyonight',
                     icons_enabled = true,
                 },
                 extensions = {'fzf', 'fugitive', 'nerdtree'}
@@ -99,4 +99,6 @@ return require('packer').startup(function(use)
     -- Colorschemes
     use 'gruvbox-community/gruvbox'
     use 'sainnhe/gruvbox-material'
+    use 'navarasu/onedark.nvim'
+    use 'folke/tokyonight.nvim'
 end)
