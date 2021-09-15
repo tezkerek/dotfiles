@@ -129,6 +129,8 @@ augroup end
   " Indent all and return to position
   nnoremap g= gg=G``
 
+  nnoremap <silent> <leader>cf :Neoformat<CR>
+
   " Insert line under cursor
   nnoremap <silent> + :call InsertEmptyLine()<CR>
   function! InsertEmptyLine()
