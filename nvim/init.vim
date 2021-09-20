@@ -7,7 +7,7 @@ scriptencoding utf-8
   set tabstop=4 softtabstop=0 expandtab shiftwidth=4
   " Status bar
   set noshowmode shortmess+=c " Disable completion status spam
-  set list listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,space:·
+  set list listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,lead:⠀,space:·
   set wildignore+=lib,generated,.git,vendor,node_modules
   set wildmode=longest:full,full " Shell-like tab completion
   set foldmethod=indent foldlevelstart=5
@@ -31,12 +31,6 @@ scriptencoding utf-8
 
   let g:startify_change_to_dir = 0
   let g:startify_change_to_vcs_root = 1
-
-  let g:indent_blankline_char = '│'
-  let g:indent_blankline_space_char = ' '
-  let g:indent_blankline_space_char_blankline = ' '
-  let g:indent_blankline_show_trailing_blankline_indent = v:false
-  let g:indent_blankline_filetype_exclude = ['help', 'startify']
 
   let g:firenvim_config =
   \ {'localSettings': {'.*': {'takeover': 'never'}}}

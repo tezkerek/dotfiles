@@ -31,7 +31,11 @@ return require('packer').startup(function(use)
     use {
         'lukas-reineke/indent-blankline.nvim',
         config = function()
-            vim.g.indent_blankline_filetype_exclude = {"NvimTree", "help"}
+            require('indent_blankline').setup {
+                filetype_exclude = {"NvimTree", "help", "startify"},
+                char = '│',
+                show_trailing_blankline_indent = false
+            }
         end
     }
 
