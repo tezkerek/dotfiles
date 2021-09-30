@@ -60,7 +60,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local function setup_servers()
-    local servers = {"sumneko_lua", "pyright", "rust_analyzer", "tsserver", "cssls"}
+    local servers = {"sumneko_lua", "pyright", "rust_analyzer", "tsserver"}
     for _, lsp in ipairs(servers) do
         lspconfig[lsp].setup {
             on_attach = on_attach,
@@ -71,6 +71,12 @@ local function setup_servers()
             -- }
         }
     end
+
+    lspconfig.cssls.setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = {"vscode-css-languageserver", "--stdio"},
+    }
 end
 
 setup_servers()
