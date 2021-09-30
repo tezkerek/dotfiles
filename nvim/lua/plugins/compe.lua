@@ -14,6 +14,7 @@ compe.setup {
         vsnip = true;
         ultisnips = true;
         luasnip = true;
+        omni = true;
     };
 }
 
