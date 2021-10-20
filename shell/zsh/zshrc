@@ -136,7 +136,9 @@ function fzo {
 
 alias lockscreen="\
     swaylock --clock --indicator --effect-pixelate 25 --screenshots --fade-in 0.1"
-alias cppass="keepassxc-cli clip $HOME/passwords.kdbx"
+function cppass {
+    keepassxc-cli clip $HOME/passwords.kdbx $1 10
+}
 alias labs='curl --silent http://liis.ro/hosted/activitati/2013/laboratoare/labs.pdf | zathura -'
 
 
