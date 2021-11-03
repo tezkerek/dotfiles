@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Returns output index on first line and output name on second line
 function get_current_output {
