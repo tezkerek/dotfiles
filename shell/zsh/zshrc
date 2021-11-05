@@ -73,7 +73,7 @@ function md {
 
 function cpprun {
     local executable=${1%.cpp}
-    g++ -Wall -Wextra $1 -o $executable && ./$executable
+    g++ -Wall -Wextra -g $1 -o $executable && ./$executable
 }
 
 function dirsize {
