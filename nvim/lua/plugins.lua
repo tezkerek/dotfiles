@@ -95,6 +95,7 @@ return require('packer').startup(function(use)
     use 'tpope/vim-eunuch'
 
     -- Syntax
+    use 'tpope/vim-sleuth'
     use 'vim-scripts/taglist.vim'
     use 'AndrewRadev/splitjoin.vim'
     use 'pechorin/any-jump.vim'
@@ -114,7 +115,6 @@ return require('packer').startup(function(use)
     use 'vim-pandoc/vim-pandoc'
     use 'vim-pandoc/vim-pandoc-syntax'
     use 'OmniSharp/omnisharp-vim'
-    use 'sheerun/vim-polyglot'
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
