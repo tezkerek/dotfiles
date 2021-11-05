@@ -71,12 +71,19 @@ return require('packer').startup(function(use)
     use 'Julian/vim-textobj-variable-segment'
     use {
         'windwp/nvim-autopairs',
+        after = {'nvim-cmp'},
         config = function()
             require('nvim-autopairs').setup()
-            require('nvim-autopairs.completion.compe').setup({
-                    map_cr = true,
-                    map_complete = true
-                })
+            require("nvim-autopairs.completion.cmp").setup({
+                map_cr = true, --  map <CR> on insert mode
+                map_complete = true, -- it will auto insert `(` (map_char) after select function or method item
+                auto_select = true, -- automatically select the first item
+                insert = false, -- use insert confirm behavior instead of replace
+                map_char = { -- modifies the function or method delimiter by filetypes
+                    all = '(',
+                    tex = '{'
+                }
+            })
         end
     }
 
@@ -86,20 +93,6 @@ return require('packer').startup(function(use)
     use 'junegunn/fzf'
     use 'junegunn/fzf.vim'
     use 'tpope/vim-eunuch'
-
-    -- Completion
-    use {
-        'neovim/nvim-lspconfig',
-        event = "BufEnter",
-        config = function() require("plugins/lspconfig") end
-    }
-    use {
-        'hrsh7th/nvim-compe',
-        config = function() require("plugins/compe") end
-    }
-    use 'ray-x/lsp_signature.nvim'
-    use 'honza/vim-snippets'
-    use 'hrsh7th/vim-vsnip'
 
     -- Syntax
     use 'vim-scripts/taglist.vim'
@@ -132,6 +125,24 @@ return require('packer').startup(function(use)
             }
         end
     }
+
+    -- Completion
+    use {
+        'neovim/nvim-lspconfig',
+        event = "BufEnter",
+        config = function() require("plugins/lspconfig") end
+    }
+    use {
+        'hrsh7th/nvim-cmp',
+        requires = {
+            'hrsh7th/cmp-vsnip', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-omni'
+        },
+        after = {'vimtex'},
+        config = function() require("plugins/cmp") end
+    }
+    use 'ray-x/lsp_signature.nvim'
+    use 'honza/vim-snippets'
+    use 'hrsh7th/vim-vsnip'
 
     -- Colorschemes
     use 'gruvbox-community/gruvbox'
