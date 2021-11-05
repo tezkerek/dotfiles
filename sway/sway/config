@@ -27,6 +27,8 @@ exec swayidle -w \
 ### Autostart
 #
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec keepassxc
+exec gammastep-indicator
 
 ### Input configuration
 #
