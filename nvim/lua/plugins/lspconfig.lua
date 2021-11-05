@@ -61,7 +61,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 local function setup_servers()
-    local servers = {"sumneko_lua", "pyright", "rust_analyzer", "tsserver"}
+    local servers = {"jedi_language_server", "rust_analyzer", "tsserver", "clangd"}
     for _, lsp in ipairs(servers) do
         lspconfig[lsp].setup {
             on_attach = on_attach,
@@ -72,6 +72,23 @@ local function setup_servers()
             -- }
         }
     end
+
+    lspconfig.sumneko_lua.setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = { "lua-language-server" },
+        settings = {
+            Lua = {
+                diagnostics = {
+                    globals = { "vim" },
+                },
+                workspace = {
+                    -- Make the server aware of Neovim runtime files
+                    library = vim.api.nvim_get_runtime_file('', true),
+                },
+            },
+        },
+    }
 
     lspconfig.cssls.setup {
         on_attach = on_attach,
