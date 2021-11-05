@@ -107,7 +107,17 @@ return require('packer').startup(function(use)
     use 'pechorin/any-jump.vim'
     use 'sbdchd/neoformat'
     use 'ap/vim-css-color'
-    use 'lervag/vimtex'
+    use {
+        'lervag/vimtex',
+        config = function()
+            vim.g.tex_flavor = 'lualatex'
+            vim.g.vimtex_compiler_method = 'latexrun'
+            vim.g.vimtex_compiler_latexrun = {
+                build_dir = 'latex.out',
+                options = {'--verbose-cmds', '--latex-args="-synctex=1"'}
+            }
+        end
+    }
     use 'vim-pandoc/vim-pandoc'
     use 'vim-pandoc/vim-pandoc-syntax'
     use 'OmniSharp/omnisharp-vim'

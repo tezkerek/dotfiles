@@ -42,12 +42,6 @@ scriptencoding utf-8
   \   , 'yoffset': 0.01
   \   , 'highlight': 'GruvboxGreen' } }
 
-  let g:tex_flavor = 'lualatex'
-  let g:vimtex_compiler_method = 'latexrun'
-  let g:vimtex_compiler_latexrun =
-  \ { 'build_dir': 'latex.out'
-  \ , 'options': ['--verbose-cmds', '--latex-args="-synctex=1"'] }
-
   let g:pandoc#spell#default_langs = ['en', 'ro']
 
   let g:polyglot_disabled = ['c++11']
