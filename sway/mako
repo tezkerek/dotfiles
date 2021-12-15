@@ -1,9 +1,11 @@
-font=mononoki 11
+font=sans-serif 10
 
 output={{primary_output}}
+anchor=bottom-right
 
 default-timeout=4000
 
+height=400
 padding=20
 border-radius=5
 
@@ -11,3 +13,9 @@ background-color=#{{colors.background}}
 text-color=#{{colors.foreground}}
 border-color=#{{colors.accent}}
 progress-color=source #{{colors.highlight}}
+
+format=<span foreground="#{{colors.accent}}" weight="bold">%s</span>\n%b
+
+# Supress notifications
+[mode=inhibit]
+invisible=1
