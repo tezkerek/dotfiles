@@ -7,7 +7,7 @@ scriptencoding utf-8
   set tabstop=4 softtabstop=0 expandtab shiftwidth=4
   " Status bar
   set noshowmode shortmess+=c " Disable completion status spam
-  set list listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,lead:⠀,space:·
+  set list listchars=tab:┄┄⇥,extends:›,precedes:‹,nbsp:·,lead:⠀,space:·
   set wildignore+=lib,generated,.git,vendor,node_modules
   set wildmode=longest:full,full " Shell-like tab completion
   set foldmethod=indent foldlevelstart=5
