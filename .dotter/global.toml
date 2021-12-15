@@ -69,6 +69,7 @@ depends = ["colors"]
 [sway.files]
 "sway/sway"                  = "$XDG_CONFIG_HOME/sway"
 "sway/waybar"                = "$XDG_CONFIG_HOME/waybar"
+"sway/swaylock"              = "$XDG_CONFIG_HOME/swaylock/config"
 "sway/gammastep.ini"         = "$XDG_CONFIG_HOME/gammastep/config.ini"
 "sway/wofi"                  = "$XDG_CONFIG_HOME/wofi"
 "sway/mako"                  = "$XDG_CONFIG_HOME/mako/config"

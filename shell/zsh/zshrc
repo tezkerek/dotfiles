@@ -134,8 +134,6 @@ function fzo {
     esac
 }
 
-alias lockscreen="\
-    swaylock --clock --indicator --effect-pixelate 25 --screenshots --fade-in 0.1"
 function cppass {
     keepassxc-cli clip $HOME/passwords.kdbx $1 10
 }
