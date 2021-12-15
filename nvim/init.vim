@@ -82,6 +82,10 @@ augroup linenum
   autocmd BufEnter,FocusGained,InsertLeave * if &number | set relativenumber
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup end
+augroup sigwinch
+  autocmd!
+  autocmd VimEnter * silent exec "!kill -s SIGWINCH" getpid()
+augroup end
 
 " ==================
 "  Keyboard mapping
