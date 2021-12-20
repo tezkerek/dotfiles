@@ -121,7 +121,7 @@ return require('packer').startup(function(use)
     use {
         'hrsh7th/nvim-cmp',
         requires = {
-            'hrsh7th/cmp-vsnip', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-omni'
+            'hrsh7th/cmp-vsnip', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-omni', 'hrsh7th/cmp-buffer'
         },
         after = {'vimtex'},
         config = function() require("plugins/cmp") end
