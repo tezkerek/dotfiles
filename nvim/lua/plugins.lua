@@ -1,7 +1,9 @@
-local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local install_path = vim.fn.stdpath('data') ..
+                         '/site/pack/packer/start/packer.nvim'
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    vim.api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+    vim.api.nvim_command(
+        '!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
     vim.api.nvim_command 'packadd packer.nvim'
 end
 
@@ -16,10 +18,7 @@ return require('packer').startup(function(use)
         requires = 'kyazdani42/nvim-web-devicons',
         config = function()
             require('lualine').setup {
-                options = {
-                    theme = 'tokyonight',
-                    icons_enabled = true,
-                },
+                options = {theme = 'tokyonight', icons_enabled = true},
                 extensions = {'fzf', 'fugitive', 'nerdtree'}
             }
         end
@@ -39,7 +38,6 @@ return require('packer').startup(function(use)
         end
     }
 
-
     -- Integration
     use 'christoomey/vim-tmux-navigator'
     use 'tpope/vim-fugitive'
@@ -47,9 +45,7 @@ return require('packer').startup(function(use)
     use {
         'lewis6991/gitsigns.nvim',
         requires = 'nvim-lua/plenary.nvim',
-        config = function ()
-            require('gitsigns').setup()
-        end
+        config = function() require('gitsigns').setup() end
     }
     use {
         'glacambre/firenvim',
@@ -108,7 +104,7 @@ return require('packer').startup(function(use)
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
-        config = function ()
+        config = function()
             require('nvim-treesitter.configs').setup {
                 highlight = {enable = true},
                 indent = {enable = true}
