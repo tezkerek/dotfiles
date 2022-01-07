@@ -23,7 +23,7 @@
     },
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%H:%M}",
+        "format-alt": " {:%H:%M}",
         "format": " {:%Y-%m-%d %H:%M}"
     },
     "cpu": {
@@ -59,16 +59,17 @@
     "network": {
         //"interface": "wlp0*", // (Optional) To force the use of this interface
         "format-wifi": " {essid} ({signalStrength}%)",
-        "format-ethernet": " {ipaddr}/{cidr}",
+        "format-ethernet": "<tt> {ipaddr}/{cidr}</tt>",
         "format-linked": " {ifname} (No IP)",
-        "format-disconnected": "⚠ disconnected",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-disconnected": "睊 disconnected",
+        "format-alt": "{ifname}: <tt>{ipaddr}/{cidr}</tt>",
+        "tooltip": false
     },
     "pulseaudio": {
-        "format": "{icon} {volume}  {format_source}",
+        "format": "{icon} {volume} ｜ {format_source}",
         "format-bluetooth": "{icon} {volume} {format_source}",
         "format-bluetooth-muted": "{icon}  {volume} {format_source}",
-        "format-muted": " {volume}  {format_source}",
+        "format-muted": " {volume} ｜ {format_source}",
         "format-source": " {volume}",
         "format-source-muted": " {volume}",
         "format-icons": {
@@ -95,7 +96,7 @@
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "custom/mpris": {
-        "format": " {}",
+        "format": " {}",
         "max-length": 50,
         "return-type": "json",
         "exec": "waybar_mpris"

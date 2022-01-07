@@ -12,6 +12,7 @@ browser  = "firefox-developer-edition"
 [colors.variables.colors]
 # tokyonight
 background = "1a1b26"
+bg_light   = "3b4261"
 foreground = "c0caf5"
 cursor     = "c0caf5"
 accent     = "7aa2f7"

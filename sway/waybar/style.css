@@ -1,61 +1,105 @@
-window#waybar {
-    background: #{{colors.background}};
-}
-
 * {
     border: none;
-    border-radius: 0;
-    font-family: monospace, "Symbols Nerd Font";
+    font-family: sans-serif;
     font-size: {{bar_font_size}};
-    color: #{{colors.foreground}};
     padding: 0;
     min-height: 0;
 }
 
-/* Add a border to all components, to keep text aligned */
-#workspaces button, widget > label, #tray image {
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-/* Reset default hover effect */
+/* Disable default hover effect */
 #workspaces button:hover {
     background: none;
+    text-shadow: none;
 }
 
-/* Spacing between components */
-widget > label, #tray {
-    padding: 0 5px;
-    margin: 0 5px;
+window#waybar {
+    background: transparent;
 }
 
-/* Highlighted components */
-#workspaces button.focused, #network, #clock, #idle_inhibitor.activated {
-    border-bottom-color: #{{colors.accent}};
-    border-top-color: #{{colors.highlight}};
-    background-color: #{{colors.highlight}};
+/* Vertical padding in the entire bar */
+window > .horizontal {
+    padding: 3px 0;
 }
 
-#mode {
-    font-style: italic;
-    border-bottom-color: #{{colors.red}};
-    background-color: #{{colors.highlight}};
+/* Horizontal padding in every module */
+widget > label {
+    padding: 0 10px;
 }
 
-#window {
-    color: #{{colors.accent}};
+/* LEFT MODULES */
+#workspaces, #mode {
+    border-radius: 5px;
+    background-color: #{{colors.bg_light}};
+    margin-right: 10px;
+}
+/* First workspace has rounded borders on the left side */
+#workspaces button:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+/* Last workspace has rounded borders on the right side */
+#workspaces button:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+#workspaces button {
+    padding: 2px;
+    border-radius: 0;
+}
+#workspaces button.focused {
+    background-color: #{{colors.accent}};
+    color: #{{colors.black}};
+    margin-bottom: 1px;
 }
 
+/* CENTER MODULES */
+#custom-mpris {
+    border-radius: 5px;
+    background-color: #{{colors.green}};
+    color: #{{colors.black}};
+}
+
+/* RIGHT MODULES */
+/* These modules have rounded corners on the left */
+#idle_inhibitor, #network, #custom-keyboard_layout, #tray {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+/* These modules have rounded corners on the right */
+#pulseaudio, #memory, #clock, #tray {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin-right: 10px;
+}
+
+/* Modules grouped in one pill */
+#idle_inhibitor, #pulseaudio {
+    background-color: #{{colors.bg_light}};
+}
 #idle_inhibitor.activated {
-    background-color: #{{colors.highlight}};
+    background-color: #{{colors.accent}};
+    color: #{{colors.black}};
 }
-
 #pulseaudio.muted {
     color: #{{colors.red}};
-    border-bottom-color: #{{colors.red}};
 }
 
+/* Modules grouped in one pill */
+#network, #cpu, #memory {
+    background-color: #{{colors.bg_light}};
+}
 #network.disconnected {
     color: #{{colors.red}};
-    border-bottom-color: #{{colors.red}};
+}
+
+/* Modules grouped in one pill */
+#custom-keyboard_layout, #clock {
+    background-color: #{{colors.bg_light}};
+}
+
+/* Module in one pill */
+#tray {
+    background-color: #{{colors.bg_light}};
+    padding: 0 10px;
 }
