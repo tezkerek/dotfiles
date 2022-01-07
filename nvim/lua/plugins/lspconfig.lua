@@ -61,7 +61,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 local function setup_servers()
-    local servers = {"jedi_language_server", "rust_analyzer", "tsserver", "clangd"}
+    local servers = {"jedi_language_server", "rust_analyzer", "tsserver", "clangd", "hls"}
     for _, lsp in ipairs(servers) do
         lspconfig[lsp].setup {
             on_attach = on_attach,
