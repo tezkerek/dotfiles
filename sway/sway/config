@@ -180,9 +180,10 @@ bindsym --to-code {
     XF86AudioLowerVolume exec "pamixer --decrease 2"
     XF86AudioRaiseVolume exec "pamixer --increase 2"
 
-    XF86AudioPlay exec "playerctl play-pause"
-    XF86AudioNext exec "playerctl next"
-    XF86AudioPrev exec "playerctl prev"
+    XF86AudioStop exec "playerctl --all-players play-pause"
+    XF86AudioPlay exec "playerctl --player=spotify play-pause"
+    XF86AudioNext exec "playerctl --player=spotify next"
+    XF86AudioPrev exec "playerctl --player=spotify prev"
 
     XF86MonBrightnessDown exec "xbacklight -dec 5"
     XF86MonBrightnessUp exec "xbacklight -inc 5"
