@@ -61,6 +61,7 @@ depends = ["programs"]
 "shell/zsh/p10k.zsh" = "$XDG_CONFIG_HOME/zsh/p10k.zsh"
 "shell/gitconfig"    = "$XDG_CONFIG_HOME/git/config"
 "shell/tigconfig"    = "$XDG_CONFIG_HOME/tig/config"
+"shell/gitui"        = "$XDG_CONFIG_HOME/gitui"
 "shell/paru.conf"    = "$XDG_CONFIG_HOME/paru/paru.conf"
 
 
