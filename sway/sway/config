@@ -295,7 +295,6 @@ input "1267:12363:MSFT0002:01_04F3:304B_Touchpad" {
     scroll_factor 0.5
 }
 
-# Start touchpad gestures
-exec ydotoold
 exec libinput-gestures-setup start
+exec kanshi
 {{/if}}{{~/if~}}

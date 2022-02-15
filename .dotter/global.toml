@@ -75,6 +75,7 @@ depends = ["colors"]
 "sway/gammastep.ini"         = "$XDG_CONFIG_HOME/gammastep/config.ini"
 "sway/wofi"                  = "$XDG_CONFIG_HOME/wofi"
 "sway/mako"                  = "$XDG_CONFIG_HOME/mako/config"
+"sway/kanshi"                = "$XDG_CONFIG_HOME/kanshi/config"
 "bin/swayrun"                = "$XDG_BIN_HOME/swayrun"
 "bin/grimshot"               = "$XDG_BIN_HOME/grimshot"
 "bin/waybar_mpris"           = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
