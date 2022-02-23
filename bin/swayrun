@@ -9,6 +9,10 @@ export MOZ_ENABLE_WAYLAND=1
 export _JAVA_AWT_WM_NONREPARENTING=1
 export FORGIT_COPY_CMD="wl-copy"
 
+# Start gnome keyring
+eval $(gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
+
 if [[ $# -eq 0 ]]
 then
     sway
