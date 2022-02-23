@@ -107,7 +107,7 @@ return require('packer').startup(function(use)
         config = function()
             require('nvim-treesitter.configs').setup {
                 highlight = {enable = true},
-                indent = {enable = true}
+                indent = {enable = false}
             }
         end
     }
