@@ -1,6 +1,5 @@
 font=sans-serif 10
 
-output={{primary_output}}
 anchor=bottom-right
 
 default-timeout=4000
