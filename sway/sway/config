@@ -278,12 +278,11 @@ workspace 19 output $secondary
 
 output $primary {
     resolution 1920x1080@144Hz
-    position 0 700
+    position 0 0
     background ~/pics/wallpapers/primary fill
 }
 output $secondary {
     position 1920 0
-    transform 270
     background ~/pics/wallpapers/secondary fill
 }
 
