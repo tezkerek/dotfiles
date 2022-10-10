@@ -29,6 +29,7 @@ exec swayidle -w \
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec keepassxc
 exec gammastep-indicator
+exec swayrd
 
 ### Input configuration
 #
@@ -89,6 +90,7 @@ bindsym --to-code {
     $mod+x kill
 
     # Launchers
+    $mod+u exec swayr switch-window
     $mod+o exec $menu
     $mod+i exec $launcher
     $mod+p exec swayextmsg show_file_finder
