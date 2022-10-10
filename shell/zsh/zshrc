@@ -153,6 +153,7 @@ unalias run-help
 autoload run-help
 
 # Completion
+fpath=($ZDOTDIR/completions $fpath)
 autoload -Uz compinit
 compinit
 

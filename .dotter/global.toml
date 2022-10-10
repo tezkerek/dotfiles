@@ -56,13 +56,14 @@ nvim = "$XDG_CONFIG_HOME/nvim"
 depends = ["programs"]
 
 [shell.files]
-"shell/zsh/zshenv"   = "$HOME/.zshenv"
-"shell/zsh/zshrc"    = "$XDG_CONFIG_HOME/zsh/.zshrc"
-"shell/zsh/p10k.zsh" = "$XDG_CONFIG_HOME/zsh/p10k.zsh"
-"shell/gitconfig"    = "$XDG_CONFIG_HOME/git/config"
-"shell/tigconfig"    = "$XDG_CONFIG_HOME/tig/config"
-"shell/gitui"        = "$XDG_CONFIG_HOME/gitui"
-"shell/paru.conf"    = "$XDG_CONFIG_HOME/paru/paru.conf"
+"shell/zsh/zshenv"      = "$HOME/.zshenv"
+"shell/zsh/zshrc"       = "$XDG_CONFIG_HOME/zsh/.zshrc"
+"shell/zsh/p10k.zsh"    = "$XDG_CONFIG_HOME/zsh/p10k.zsh"
+"shell/zsh/completions" = "$XDG_CONFIG_HOME/zsh/completions"
+"shell/gitconfig"       = "$XDG_CONFIG_HOME/git/config"
+"shell/tigconfig"       = "$XDG_CONFIG_HOME/tig/config"
+"shell/gitui"           = "$XDG_CONFIG_HOME/gitui"
+"shell/paru.conf"       = "$XDG_CONFIG_HOME/paru/paru.conf"
 
 
 [sway]
