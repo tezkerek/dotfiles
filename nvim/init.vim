@@ -17,7 +17,7 @@ scriptencoding utf-8
   set splitright
   set completeopt=menu,menuone,noselect
 
-  set guifont=monospace:h15
+  set guifont=monospace:h11
 
   let g:tex_fast = "bMmpr" " Better performance in tex
   let g:python_host_prog = '/usr/bin/python2' | let g:python3_host_prog = '/usr/bin/python3'
