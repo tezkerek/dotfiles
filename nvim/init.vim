@@ -73,7 +73,7 @@ augroup omnisharp
   autocmd FileType cs nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
   autocmd FileType cs nmap <silent> <buffer> <leader>ca <Plug>(omnisharp_code_actions)
 augroup end
-augroup indent
+augroup langindent
   autocmd!
   autocmd FileType haskell setlocal shiftwidth=2 softtabstop=2 expandtab
 augroup end
