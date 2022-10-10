@@ -3,6 +3,7 @@
 # confirmations, etc.) must go above this block; everything else may go below.
 F="$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" && [[ -f $F ]] && source $F
 
+
 ###############
 # Zsh options
 ###############
@@ -30,26 +31,9 @@ export BAT_THEME="gruvbox-dark"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!\.git'"
 export FZF_DEFAULT_OPTS="--bind=alt-j:preview-down,alt-k:preview-up,\
 ctrl-alt-d:preview-half-page-down,ctrl-alt-u:preview-half-page-up"
+export MCFLY_KEY_SCHEME=vim
+export MCFLY_FUZZY=true
 
-
-###############
-# Plugins
-###############
-
-(( $+commands[pyenv] )) && eval "$(pyenv init -)"
-(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
-
-declare -A ZINIT
-ZINIT[HOME_DIR]=$XDG_DATA_HOME/zinit
-source $ZINIT[HOME_DIR]/bin/zinit.zsh
-
-zinit ice depth=1
-zinit light romkatv/powerlevel10k
-
-zinit load wfxr/forgit
-
-zinit ice as=program pick="bin/git-fuzzy"
-zinit light bigH/git-fuzzy
 
 ###############
 # Functions and aliases
@@ -182,3 +166,24 @@ zstyle ':completion:*' matcher-list '' \
 export PS1="%F{yellow} %~  %f"
 export RPS1="%(?..%F{red}[%?])"
 F=$XDG_CONFIG_HOME/zsh/p10k.zsh && [[ -f $F ]] && source $F
+
+
+###############
+# Plugins
+###############
+
+(( $+commands[pyenv] )) && eval "$(pyenv init -)"
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+(( $+commands[mcfly] )) && eval "$(mcfly init zsh)"
+
+declare -A ZINIT
+ZINIT[HOME_DIR]=$XDG_DATA_HOME/zinit
+source $ZINIT[HOME_DIR]/bin/zinit.zsh
+
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
+zinit load wfxr/forgit
+
+zinit ice as=program pick="bin/git-fuzzy"
+zinit light bigH/git-fuzzy
