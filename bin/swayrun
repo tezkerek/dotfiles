@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 export QT_QPA_PLATFORMTHEME=qt5ct
+export GTK_THEME=Adwaita:dark
 export XDG_CURRENT_DESKTOP=sway
 export XDG_SESSION_TYPE=wayland
 #export GDK_BACKEND=wayland
