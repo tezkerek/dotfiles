@@ -4,12 +4,14 @@
     font-size: {{bar_font_size}};
     padding: 0;
     min-height: 0;
+    border-radius: 0;
 }
 
 /* Disable default hover effect */
-#workspaces button:hover {
-    background: none;
-    text-shadow: none;
+widget > button:hover, #workspaces button:hover {
+    box-shadow: inherit;
+    background: inherit;
+    text-shadow: inherit;
 }
 
 window#waybar {
@@ -22,8 +24,9 @@ window > .horizontal {
 }
 
 /* Horizontal padding in every module */
-widget > label {
+widget > button {
     padding: 0 10px;
+    color: #eeeeee;
 }
 
 /* LEFT MODULES */
