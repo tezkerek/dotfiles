@@ -56,9 +56,7 @@ local function on_attach(client, bufnr)
     require("lsp_signature").on_attach()
 end
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local function setup_servers()
     local servers = {"pyright", "rust_analyzer", "tsserver", "clangd", "hls"}
