@@ -24,7 +24,7 @@ window > .horizontal {
 }
 
 /* Horizontal padding in every module */
-widget > button {
+widget > label {
     padding: 0 10px;
     color: #eeeeee;
 }
