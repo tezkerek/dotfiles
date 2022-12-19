@@ -126,7 +126,16 @@ return require('packer').startup(function(use)
         after = {'vimtex'},
         config = function() require("plugins/cmp") end
     }
-    use 'ray-x/lsp_signature.nvim'
+    use {
+        'ray-x/lsp_signature.nvim',
+        config = function()
+            require('lsp_signature').setup {
+                bind = true,
+                handler_opts = {border = 'rounded'},
+                toggle_key = '<M-p>'
+            }
+        end
+    }
     use 'honza/vim-snippets'
     use 'hrsh7th/vim-vsnip'
 
