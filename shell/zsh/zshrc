@@ -60,6 +60,11 @@ function cpprun {
     g++ -std=c++20 -Wall -Wextra -g $1 -o $executable && ./$executable
 }
 
+function crun {
+    local executable=${1%.c}
+    gcc -Wall -Wextra -g $1 -o $executable && ./$executable && rm ./$executable
+}
+
 function dirsize {
     # View disk usage of a directory
     du --all --total --human-readable --max-depth=1 $1 | sort -hr | less
