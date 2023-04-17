@@ -17,7 +17,6 @@ export BROWSER="{{browser}}"
 export EDITOR="nvim"
 export TERMINAL="{{terminal}}"
 
-export IDEA_JDK="/usr/lib/jvm/java-11-openjdk"
 export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true"
 
 typeset -U PATH path
