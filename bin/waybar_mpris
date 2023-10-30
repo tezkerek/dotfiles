@@ -1,3 +1,3 @@
 #! /usr/bin/zsh
-playerctl metadata --follow --player spotify \
+playerctl metadata --follow \
     --format '{"text": "{{ title }}", "tooltip": "{{ artist }} - {{ title }}"}'
