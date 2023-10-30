@@ -247,6 +247,7 @@ for_window [app_id="firefox" title="Picture-in-Picture"] \
 for_window [class="Steam" title="Friends List"] floating enable
 for_window [app_id="org.keepassxc.KeePassXC" title="KeePassXC - Browser Access Request"] floating enable
 for_window [app_id="net.code-industry.masterpdfeditor4" title="Bookmark Properties"] floating enable
+for_window [class="PacketTracer"] floating enable
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id="terminal_scratchpad"] move scratchpad
 for_window [app_id="popup_terminal"] floating enable, border pixel 1
