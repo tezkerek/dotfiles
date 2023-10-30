@@ -53,7 +53,7 @@ case $1 in
         ;;
     show_file_finder)
         # Pass --all to search all files
-        cmd="fzo doc/ downloads/ pics/ vid/ data/movies/"
+        cmd="fzo doc/ uni/ downloads/ pics/ vid/ data/movies/"
         if [[ $# -ge 2 && $2 == "--all" ]]; then
             cmd="fzo"
         fi
