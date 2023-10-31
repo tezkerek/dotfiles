@@ -35,7 +35,7 @@ exec swayrd
 #
 input "1133:49970:Logitech_Gaming_Mouse_G502" {
     accel_profile flat
-    scroll_factor 1.75
+    scroll_factor 1.5
 }
 input type:keyboard xkb_layout "us,ro,us"
 input type:keyboard xkb_variant ",std,colemak"
