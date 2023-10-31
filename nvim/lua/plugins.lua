@@ -30,10 +30,8 @@ return require('packer').startup(function(use)
     use {
         'lukas-reineke/indent-blankline.nvim',
         config = function()
-            require('indent_blankline').setup {
-                filetype_exclude = {"NvimTree", "help", "startify"},
-                char = '│',
-                show_trailing_blankline_indent = false
+            require('ibl').setup {
+                exclude = {filetypes = {"NvimTree", "help", "startify"}},
             }
         end
     }
@@ -68,9 +66,7 @@ return require('packer').startup(function(use)
     use {
         'windwp/nvim-autopairs',
         after = {'nvim-cmp'},
-        config = function()
-            require('nvim-autopairs').setup()
-        end
+        config = function() require('nvim-autopairs').setup() end
     }
 
     -- Files
@@ -121,7 +117,8 @@ return require('packer').startup(function(use)
     use {
         'hrsh7th/nvim-cmp',
         requires = {
-            'hrsh7th/cmp-vsnip', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-omni', 'hrsh7th/cmp-buffer'
+            'hrsh7th/cmp-vsnip', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-omni',
+            'hrsh7th/cmp-buffer'
         },
         after = {'vimtex'},
         config = function() require("plugins/cmp") end
