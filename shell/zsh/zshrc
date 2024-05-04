@@ -74,7 +74,7 @@ function __is_binary {
     file --mime-encoding $1 |& grep -q 'binary$'
 }
 
-alias l="exa -l"
+alias l="eza -l"
 alias o="handlr open"
 function v {
     # List directory, preview text file, or open binary file
