@@ -36,6 +36,9 @@ case $1 in
     move_container_to_next_output)
         swaymsg move container to output $(get_next_output | tail -n 1)
         ;;
+    move_workspace_to_next_output)
+        swaymsg move workspace to output $(get_next_output | tail -n 1)
+        ;;
     toggle_terminal_scratchpad)
         app_id="terminal_scratchpad"
 

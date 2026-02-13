@@ -141,6 +141,7 @@ bindsym --to-code {
     # Outputs
     $mod+n exec swayextmsg focus_next_output
     $mod+Shift+n exec swayextmsg move_container_to_next_output
+    $mod+Control+n exec swayextmsg move_workspace_to_next_output
 
     # Layout
     $mod+w layout tabbed
