@@ -1,0 +1,12 @@
+includes = []
+packages = ["default"]
+
+[files]
+
+[variables]
+device = "desktop"
+primary_output = "DP-3"
+secondary_output = "DP-2"
+bar_height = 22
+bar_font_size = "12px"
+terminal_font_size = 11

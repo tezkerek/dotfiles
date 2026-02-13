@@ -1,7 +1,15 @@
+
+# Setup
+```
+cd 
+ln -s desktop.toml .dotter/local.toml
+dotter deploy -v
+```
+
 # Programs
 
     dotter
-    zsh zsh-completions fzf bat exa fd ripgrep git-delta handlr-bin zoxide
+    zsh zsh-completions fzf bat eza fd ripgrep git-delta handlr-bin zoxide
     sway waybar bemenu wofi swayr gammastep grim slurp swappy mako pamixer wl-clipboard wtype polkit-gnome gnome-keyring-daemon
     kitty imv mpv pavucontrol
     keepassxc keepass-diff rclone
