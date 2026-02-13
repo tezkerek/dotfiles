@@ -284,6 +284,8 @@ output $primary {
     background ~/pics/wallpapers/primary fill
 }
 output $secondary {
+    scale 1.2
+    resolution 3840x2160@120Hz
     position 1920 0
     background ~/pics/wallpapers/secondary fill
 }
