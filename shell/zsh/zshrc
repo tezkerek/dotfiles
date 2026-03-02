@@ -178,7 +178,6 @@ F=$XDG_CONFIG_HOME/zsh/p10k.zsh && [[ -f $F ]] && source $F
 # Plugins
 ###############
 
-(( $+commands[pyenv] )) && eval "$(pyenv init -)"
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 (( $+commands[mcfly] )) && eval "$(mcfly init zsh)"
 
