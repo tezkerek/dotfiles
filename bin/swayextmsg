@@ -23,7 +23,55 @@ function get_global_workspace {
     echo $(( $workspace_num + 10*$output_index ))
 }
 
+function spawn_scratchpad {
+    $TERMINAL --detach \
+        --title "Scratchpad" \
+        --class "$1" \
+        --override background_opacity=0.8
+}
+
+function toggle_scratchpad_sway {
+    app_id="terminal_scratchpad"
+
+    if ! swaymsg -t get_tree | grep --quiet "\"app_id\": \"$app_id\""; then
+        # Scratchpad not found, start it
+        spawn_scratchpad $app_id
+        # Wait a bit for sway to know about the window
+        sleep 0.15
+    fi
+    swaymsg "[app_id=\"$app_id\"] scratchpad show, \
+        resize set 100 ppt 100 ppt, move position center"
+}
+
+function toggle_scratchpad_niri {
+    app_id="terminal_scratchpad"
+
+    window_info=$(niri msg --json windows | jq ".[] | select(.app_id == \"$app_id\") | {id, is_focused}")
+    niri_id=$(jq --raw-output '.id' <<< $window_info)
+    is_focused=$(jq --raw-output '.is_focused' <<< $window_info)
+    if [[ -z $niri_id ]]; then
+        # Scratchpad not found, start it
+        spawn_scratchpad $app_id
+    elif [[ $is_focused == "true" ]]; then
+        niri msg action move-window-to-workspace "scratch" --focus=false
+    else
+        focused_output=$(niri msg --json workspaces | jq --raw-output ".[] | select(.is_focused == true) | .output")
+        niri msg action move-window-to-monitor --id $niri_id $focused_output
+        niri msg action focus-window --id $niri_id
+    fi
+}
+
 case $1 in
+    init_workspaces)
+        shift
+        for output_index in {1..${#@}}; do
+            for workspace_num in {1..10}; do
+                offset=$(( 10*($output_index - 1) ))
+                output_name=$@[output_index]
+                swaymsg workspace $(( $offset + $workspace_num )) output $output_name
+            done
+        done
+        ;;
     focus_next_output)
         swaymsg focus output $(get_next_output | tail -n 1)
         ;;
@@ -40,19 +88,14 @@ case $1 in
         swaymsg move workspace to output $(get_next_output | tail -n 1)
         ;;
     toggle_terminal_scratchpad)
-        app_id="terminal_scratchpad"
-
-        if ! swaymsg -t get_tree | grep --quiet "\"app_id\": \"$app_id\""; then
-            # Scratchpad not found, start it
-            $TERMINAL --detach \
-                --title "Scratchpad" \
-                --class "$app_id" \
-                --override background_opacity=0.8
-            # Wait a bit for sway to know about the window
-            sleep 0.15
-        fi
-        swaymsg "[app_id=\"$app_id\"] scratchpad show, \
-            resize set 100 ppt 100 ppt, move position center"
+        case $XDG_CURRENT_DESKTOP in
+            sway)
+                toggle_scratchpad_sway
+                ;;
+            niri)
+                toggle_scratchpad_niri
+                ;;
+        esac
         ;;
     show_file_finder)
         # Pass --all to search all files

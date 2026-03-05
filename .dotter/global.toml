@@ -2,7 +2,7 @@
 
 
 [default]
-depends = ["nvim", "sway", "shell", "apps"]
+depends = ["nvim", "sway", "niri", "shell", "apps"]
 
 
 [programs.variables]
@@ -86,6 +86,13 @@ depends = ["colors"]
 
 [sway.variables]
 device = "unknown"
+
+[niri]
+depends = ["colors"]
+
+[niri.files]
+"niri/" = "$XDG_CONFIG_HOME/niri/"
+"bin/nirirun" = "$XDG_BIN_HOME/nirirun"
 
 
 [apps.files]
