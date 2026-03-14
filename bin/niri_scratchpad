@@ -1,0 +1,29 @@
+#!/bin/zsh
+#
+function spawn_scratchpad {
+    $TERMINAL --detach \
+        --title "Scratchpad" \
+        --class "$1" \
+        --override background_opacity=0.8
+}
+
+function toggle_scratchpad {
+    app_id="terminal_scratchpad"
+
+    window_info=$(niri msg --json windows | jq ".[] | select(.app_id == \"$app_id\") | {id, is_focused}")
+    niri_id=$(jq --raw-output '.id' <<< $window_info)
+    is_focused=$(jq --raw-output '.is_focused' <<< $window_info)
+
+    if [[ -z $niri_id ]]; then
+        # Scratchpad not found, start it
+        spawn_scratchpad $app_id
+    elif [[ $is_focused == "true" ]]; then
+        niri msg action move-window-to-workspace "scratch" --focus=false
+    else
+        focused_output=$(niri msg --json workspaces | jq --raw-output ".[] | select(.is_focused == true) | .output")
+        niri msg action move-window-to-monitor --id $niri_id $focused_output
+        niri msg action focus-window --id $niri_id
+    fi
+}
+
+toggle_scratchpad

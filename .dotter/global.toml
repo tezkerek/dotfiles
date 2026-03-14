@@ -2,7 +2,7 @@
 
 
 [default]
-depends = ["nvim", "sway", "shell", "apps"]
+depends = ["nvim", "sway", "niri", "shell", "apps"]
 
 
 [programs.variables]
@@ -66,12 +66,20 @@ depends = ["programs"]
 "shell/paru.conf"       = "$XDG_CONFIG_HOME/paru/paru.conf"
 
 
-[sway]
+[waybar]
 depends = ["colors"]
+
+[waybar.files]
+"sway/waybar"                 = "$XDG_CONFIG_HOME/waybar"
+"bin/waybar_mpris"            = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
+"bin/waybar_keyboard_layout"  = "$XDG_BIN_HOME/waybar_keyboard_layout"
+
+
+[sway]
+depends = ["colors", "waybar"]
 
 [sway.files]
 "sway/sway"                   = "$XDG_CONFIG_HOME/sway"
-"sway/waybar"                 = "$XDG_CONFIG_HOME/waybar"
 "sway/swaylock"               = "$XDG_CONFIG_HOME/swaylock/config"
 "sway/gammastep.ini"          = "$XDG_CONFIG_HOME/gammastep/config.ini"
 "sway/wofi"                   = "$XDG_CONFIG_HOME/wofi"
@@ -80,12 +88,19 @@ depends = ["colors"]
 "sway/libinput-gestures.conf" = "$XDG_CONFIG_HOME/libinput-gestures.conf"
 "bin/swayrun"                 = "$XDG_BIN_HOME/swayrun"
 "bin/grimshot"                = "$XDG_BIN_HOME/grimshot"
-"bin/waybar_mpris"            = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
-"bin/waybar_keyboard_layout"  = "$XDG_BIN_HOME/waybar_keyboard_layout"
 "bin/swayextmsg"              = "$XDG_BIN_HOME/swayextmsg"
 
 [sway.variables]
 device = "unknown"
+
+
+[niri]
+depends = ["colors", "waybar"]
+
+[niri.files]
+"niri/" = "$XDG_CONFIG_HOME/niri/"
+"bin/nirirun" = "$XDG_BIN_HOME/nirirun"
+"bin/niri_scratchpad"         = "$XDG_BIN_HOME/niri_scratchpad"
 
 
 [apps.files]

@@ -2,7 +2,7 @@
     "layer": "bottom",
     "position": "bottom",
     "height": {{bar_height}},
-    "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/window", "niri/workspaces"],
     "modules-center": ["custom/mpris"],
     "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery", "custom/keyboard_layout", "clock", "tray"],
     "sway/window": {
