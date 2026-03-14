@@ -1,0 +1,27 @@
+#!/usr/bin/env zsh
+
+export QT_QPA_PLATFORM=wayland
+export QT_QPA_PLATFORMTHEME=qt5ct
+export GTK_THEME=Adwaita:dark
+export XDG_CURRENT_DESKTOP=niri
+export XDG_SESSION_TYPE=wayland
+
+export _JAVA_AWT_WM_NONREPARENTING=1
+export FORGIT_COPY_CMD="wl-copy"
+
+# Start gnome keyring
+eval $(gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
+
+XDG_MENU_PREFIX=arch- kbuildsycoca6 &
+
+if [[ $# -eq 0 ]]
+then
+    niri
+else
+    case "$1" in
+        debug)
+            niri > niri.log 2>&1
+            ;;
+    esac
+fi
