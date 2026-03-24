@@ -28,6 +28,14 @@ return require('packer').startup(function(use)
     use 'embear/vim-localvimrc'
     use 'liuchengxu/vim-which-key'
     use {
+        'folke/which-key.nvim',
+        config = function()
+            vim.keymap.set('n', '<leader>?', function()
+                require('which-key').show({global = true})
+            end)
+        end
+    }
+    use {
         'lukas-reineke/indent-blankline.nvim',
         config = function()
             require('ibl').setup {
@@ -104,6 +112,14 @@ return require('packer').startup(function(use)
             require('nvim-treesitter.configs').setup {
                 highlight = {enable = true},
                 indent = {enable = false}
+            }
+        end
+    }
+    use {
+        'nvim-treesitter/nvim-treesitter-context',
+        config = function()
+            require('treesitter-context').setup {
+                multiwindow = true,
             }
         end
     }

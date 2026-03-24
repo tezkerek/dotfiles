@@ -1,101 +1,74 @@
-local is_lspconfig_present, lspconfig = pcall(require, "lspconfig")
-if not is_lspconfig_present then
-    return
-end
-
-local borders = {
-    {"╭", "FloatBorder"},
-    {"─", "FloatBorder"},
-    {"╮", "FloatBorder"},
-    {"│", "FloatBorder"},
-    {"╯", "FloatBorder"},
-    {"─", "FloatBorder"},
-    {"╰", "FloatBorder"},
-    {"│", "FloatBorder"},
-}
-
-local function on_attach(client, bufnr)
-    -- Set borders
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = borders})
-    vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, {border = borders})
-
-    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+local function global_on_attach(client, bufnr)
+    vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
     local opts = {noremap = true, silent = true}
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', '<M-k>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('n', '<M-CR>', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wl', function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+    vim.keymap.set('n', '[d', function() vim.diagnostic.jump({count = -1}) end,
+                   opts)
+    vim.keymap.set('n', ']d', function() vim.diagnostic.jump(({count = 1})) end,
+                   opts)
+    vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
-    local function buf_set_keymap(...)
-        vim.api.nvim_buf_set_keymap(bufnr, ...)
-    end
-
-    -- Mappings.
-    buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-    buf_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-    buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-    buf_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-    buf_set_keymap("n", "<M-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-    buf_set_keymap("n", "<M-CR>", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-    buf_set_keymap("n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
-    buf_set_keymap("n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-    buf_set_keymap("n", "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
-    buf_set_keymap("n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-    buf_set_keymap("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-    buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-    buf_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float({scope = \"line\"})<CR>", opts)
-    buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
-    buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
-    buf_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>", opts)
-
-    -- Set some keybinds conditional on server capabilities
     if client.server_capabilities.documentFormattingProvider then
-        buf_set_keymap("n", "<space>cF", "<cmd>lua vim.lsp.buf.format({async = true})<CR>", opts)
+        vim.keymap.set('n', '<space>cF',
+                       function() vim.lsp.buf.format({async = true}) end, opts)
     elseif client.server_capabilities.documentRangeFormattingProvider then
-        buf_set_keymap("n", "<space>cF", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+        vim.keymap.set('n', '<space>cF', vim.lsp.buf.range_formatting, opts)
     end
 
-
-    require("lsp_signature").on_attach()
+    require('lsp_signature').on_attach()
 end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-local function setup_servers()
-    local servers = {"pyright", "rust_analyzer", "tsserver", "clangd", "hls"}
-    for _, lsp in ipairs(servers) do
-        lspconfig[lsp].setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-            -- root_dir = vim.loop.cwd,
-            -- flags = {
-            --     debounce_text_changes = 150,
-            -- }
-        }
-    end
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        global_on_attach(client, args.buf)
+    end,
+})
 
-    lspconfig.lua_ls.setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        cmd = { "lua-language-server" },
-        settings = {
-            Lua = {
-                runtime = {
-                    version = "LuaJIT",
-                },
-                diagnostics = {
-                    globals = { "vim" },
-                },
-                workspace = {
-                    -- Make the server aware of Neovim runtime files
-                    library = vim.api.nvim_get_runtime_file('', true),
-                },
+vim.lsp.config('*', {capabilities = capabilities})
+
+vim.lsp.config('lua_ls', {
+    settings = {
+        Lua = {
+            runtime = {
+                version = 'LuaJIT',
+                path = {'lua/?.lua', 'lua/?/init.lua'},
+            },
+            diagnostics = {globals = {'vim'}},
+            workspace = {
+                checkThirdParty = false,
+                library = {vim.env.VIMRUNTIME},
             },
         },
-    }
+    },
+})
 
-    lspconfig.cssls.setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        cmd = {"vscode-css-languageserver", "--stdio"},
-    }
-end
+vim.lsp.config('cssls', {cmd = {'vscode-css-languageserver', '--stdio'}})
 
-setup_servers()
+local servers = {
+    'pyright',
+    'rust_analyzer',
+    'ts_ls',
+    'clangd',
+    'hls',
+    'lua_ls',
+    'cssls',
+}
+for _, lsp in ipairs(servers) do vim.lsp.enable(lsp) end

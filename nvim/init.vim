@@ -13,9 +13,10 @@ scriptencoding utf-8
   set foldmethod=indent foldlevelstart=100
   set number relativenumber signcolumn=yes
   set updatetime=300 " For highlighting text under cursor faster
-  set ignorecase smartcase inccommand="nosplit"
+  set ignorecase smartcase inccommand=nosplit
   set splitright
   set completeopt=menu,menuone,noselect
+  set winborder=rounded
 
   set guifont=monospace:h11
 
@@ -26,7 +27,7 @@ scriptencoding utf-8
 " ==================
 "  Plugins
 " ==================
-  lua vim.lsp.set_log_level("debug")
+  lua vim.lsp.set_log_level("warn")
   lua require('plugins')
 
   let g:startify_change_to_dir = 0
@@ -37,7 +38,7 @@ scriptencoding utf-8
 
   let g:fzf_layout =
   \ { 'window':
-  \   { 'width': 1
+  \   { 'width': 0.9
   \   , 'height': 0.8
   \   , 'yoffset': 0.01
   \   , 'highlight': 'GruvboxGreen' } }
@@ -60,6 +61,8 @@ scriptencoding utf-8
   let g:gruvbox_material_background='hard'
   let g:onedark_style = 'darker'
   colorscheme tokyonight
+
+  lua require('colors')
 
 " ==================
 "  Autocmd
@@ -111,7 +114,7 @@ augroup end
   inoremap <C-H> <C-W>
 
   " Quickly disable hlsearch
-  nnoremap <silent> <Esc> :nohlsearch<CR>
+  nnoremap <silent> <Esc> :nohlsearch<CR>:cclose<CR>
 
   " Substitute word under cursor
   nnoremap <leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
