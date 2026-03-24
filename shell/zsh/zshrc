@@ -172,9 +172,6 @@ F=$XDG_CONFIG_HOME/zsh/p10k.zsh && [[ -f $F ]] && source $F
 # Plugins
 ###############
 
-(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
-(( $+commands[mcfly] )) && eval "$(mcfly init zsh)"
-
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
@@ -189,3 +186,9 @@ zinit ice as=program pick="bin/git-fuzzy"
 zinit light bigH/git-fuzzy
 
 compinit
+
+# zinit's zi alias conflicts with zoxide
+(( ${+aliases[zi]} )) && unalias zi
+
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+(( $+commands[mcfly] )) && eval "$(mcfly init zsh)"
