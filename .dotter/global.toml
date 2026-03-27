@@ -1,13 +1,19 @@
 [helpers]
 
 
-[default]
-depends = ["nvim", "sway", "niri", "shell", "apps"]
+[linux]
+depends = ["nvim", "sway", "niri", "shell", "dev", "apps"]
+
+[linux.files]
+"shell/paru.conf" = "$XDG_CONFIG_HOME/paru/paru.conf"
+"fonts.conf"      = "$XDG_CONFIG_HOME/fontconfig/fonts.conf"
+"bin/synckdbx"    = "$XDG_BIN_HOME/synckdbx"
 
 
 [programs.variables]
 terminal = "kitty"
 browser  = "firefox-developer-edition"
+
 
 [colors.variables.colors]
 # tokyonight
@@ -29,24 +35,6 @@ cyan       = "7dcfff"
 white      = "a9b1d6"
 gray       = "414868"
 
-# gruvbox-material
-# background = "1d2021"
-# foreground = "d4be98"
-# cursor     = "a89984"
-# accent     = "a9b665"
-# highlight  = "313739"
-# # 16-bit colors
-# black      = "665c54"
-# red        = "ea6962"
-# green      = "a9b665"
-# orange     = "e78a4e"
-# yellow     = "d8a657"
-# blue       = "7daea3"
-# purple     = "d3869b"
-# cyan       = "89b482"
-# white      = "d4be98" -- original
-# white      = "ffffff"
-# gray       = "928374"
 
 [nvim.files]
 nvim = "$XDG_CONFIG_HOME/nvim"
@@ -63,20 +51,19 @@ depends = ["programs"]
 "shell/gitconfig"       = "$XDG_CONFIG_HOME/git/config"
 "shell/tigconfig"       = "$XDG_CONFIG_HOME/tig/config"
 "shell/gitui"           = "$XDG_CONFIG_HOME/gitui"
-"shell/paru.conf"       = "$XDG_CONFIG_HOME/paru/paru.conf"
 
 
 [waybar]
 depends = ["colors"]
 
 [waybar.files]
-"sway/waybar"                 = "$XDG_CONFIG_HOME/waybar"
-"bin/waybar_mpris"            = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
-"bin/waybar_keyboard_layout"  = "$XDG_BIN_HOME/waybar_keyboard_layout"
+"sway/waybar"                = "$XDG_CONFIG_HOME/waybar"
+"bin/waybar_mpris"           = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
+"bin/waybar_keyboard_layout" = "$XDG_BIN_HOME/waybar_keyboard_layout"
 
 
 [sway]
-depends = ["colors", "waybar"]
+depends = ["colors", "programs", "waybar"]
 
 [sway.files]
 "sway/sway"                   = "$XDG_CONFIG_HOME/sway"
@@ -98,16 +85,20 @@ device = "unknown"
 depends = ["colors", "waybar"]
 
 [niri.files]
-"niri/" = "$XDG_CONFIG_HOME/niri/"
-"bin/nirirun" = "$XDG_BIN_HOME/nirirun"
-"bin/niri_scratchpad"         = "$XDG_BIN_HOME/niri_scratchpad"
+"niri/"               = "$XDG_CONFIG_HOME/niri/"
+"bin/nirirun"         = "$XDG_BIN_HOME/nirirun"
+"bin/niri_scratchpad" = "$XDG_BIN_HOME/niri_scratchpad"
 
 
-[apps.files]
+[dev]
+depends = ["colors"]
+
+[dev.files]
 "apps/alacritty.yml" = "$XDG_CONFIG_HOME/alacritty/alacritty.yml"
 "apps/ideavimrc"     = "$HOME/.ideavimrc"
 "apps/kitty.conf"    = "$XDG_CONFIG_HOME/kitty/kitty.conf"
+
+
+[apps.files]
 "apps/mpv.conf"      = "$XDG_CONFIG_HOME/mpv/mpv.conf"
 "apps/zathurarc"     = "$XDG_CONFIG_HOME/zathura/zathurarc"
-"fonts.conf"         = "$XDG_CONFIG_HOME/fontconfig/fonts.conf"
-"bin/synckdbx"       = "$XDG_BIN_HOME/synckdbx"

@@ -1,7 +1,5 @@
 includes = []
-packages = ["default"]
-
-[files]
+packages = ["linux"]
 
 [variables]
 device = "desktop"

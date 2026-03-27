@@ -1,0 +1,5 @@
+includes = []
+packages = ["nvim", "shell", "dev"]
+
+[variables]
+browser = "edge"
