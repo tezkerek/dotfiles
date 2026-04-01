@@ -23,8 +23,8 @@
     },
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": " {:%H:%M}",
-        "format": " {:%Y-%m-%d %H:%M}"
+        "format-alt": "󰅐 {:%H:%M}",
+        "format": "󱛡 {:%Y-%m-%d %H:%M}"
     },
     "cpu": {
         "format": " {usage}%",
@@ -57,29 +57,28 @@
         "bat": "BAT2"
     },
     "network": {
-        //"interface": "wlp0*", // (Optional) To force the use of this interface
         "format-wifi": " {essid} ({signalStrength}%)",
-        "format-ethernet": "<tt> {ipaddr}/{cidr}</tt>",
+        "format-ethernet": "<tt>󰈀 {ipaddr}/{cidr}</tt>",
         "format-linked": " {ifname} (No IP)",
-        "format-disconnected": "睊 disconnected",
+        "format-disconnected": "󰖪 disconnected",
         "format-alt": "{ifname}: <tt>{ipaddr}/{cidr}</tt>",
         "tooltip": false
     },
     "pulseaudio": {
         "format": "{icon} {volume} ｜ {format_source}",
         "format-bluetooth": "{icon} {volume} {format_source}",
-        "format-bluetooth-muted": "{icon}  {volume} {format_source}",
-        "format-muted": " {volume} ｜ {format_source}",
-        "format-source": " {volume}",
-        "format-source-muted": " {volume}",
+        "format-bluetooth-muted": "{icon} 󰝟 {volume} {format_source}",
+        "format-muted": "󰝟 {volume} ｜ {format_source}",
+        "format-source": "󰍬 {volume}",
+        "format-source-muted": "󰍭 {volume}",
         "format-icons": {
             "headphone": "",
-            "hands-free": "",
-            "headset": "",
+            "hands-free": "󱡏",
+            "headset": "󰋎",
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["奄", "奔", "墳"]
+            "default": ["󰕿", "󰖀", "󰕾"]
         },
         "on-click": "pavucontrol"
     },
