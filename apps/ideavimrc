@@ -1,12 +1,17 @@
 let mapleader=" "
 
 set ideajoin
+set ignorecase smartcase
 set incsearch
 set surround
 set easymotion
 set exchange
+set scrolloff=5
 
 nnoremap <C-H> :action PreviousTab<CR>
 nnoremap <C-L> :action NextTab<CR>
 
 nnoremap + o<Esc>k
+
+nnoremap ]c :action VcsShowNextChangeMarker<CR>
+nnoremap [c :action VcsShowPrevChangeMarker<CR>

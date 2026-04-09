@@ -3,3 +3,4 @@ packages = ["nvim", "shell", "dev"]
 
 [variables]
 browser = "edge"
+terminal_font_size = 12

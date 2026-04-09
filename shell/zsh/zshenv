@@ -20,3 +20,6 @@ export _JAVA_OPTIONS="$_JAVA_OPTIONS -Dawt.useSystemAAFontSettings=on -Dswing.aa
 
 typeset -U PATH path
 path=($XDG_BIN_HOME $path)
+
+# Rancher docker shims
+[[ -d $HOME/.rd/bin ]] && path=($HOME/.rd/bin $path)

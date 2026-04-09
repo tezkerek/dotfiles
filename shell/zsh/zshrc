@@ -154,6 +154,11 @@ autoload run-help
 
 # Completion
 fpath=($ZDOTDIR/completions $fpath)
+
+# Homebrew completions
+if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+fi
 autoload -Uz compinit
 
 # Fuzzy completion from https://superuser.com/a/815317
