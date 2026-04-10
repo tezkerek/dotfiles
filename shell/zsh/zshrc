@@ -192,3 +192,4 @@ compinit
 
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 (( $+commands[mcfly] )) && eval "$(mcfly init zsh)"
+(( $+commands[jj] )) && source <(jj util completion zsh)
