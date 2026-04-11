@@ -9,7 +9,11 @@ end
 
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function(use)
+local packer = require('packer')
+
+packer.init({max_jobs = 16})
+
+return packer.startup(function(use)
     use 'wbthomason/packer.nvim'
 
     -- QOL
@@ -19,9 +23,17 @@ return require('packer').startup(function(use)
         config = function()
             require('lualine').setup {
                 options = {theme = 'tokyonight', icons_enabled = true},
-                extensions = {'fzf', 'fugitive', 'nerdtree'}
+                sections = {
+                    lualine_x = {
+                        'lsp_status',
+                        'encoding',
+                        'fileformat',
+                        'filetype',
+                    },
+                },
+                extensions = {'fzf', 'fugitive', 'nerdtree'},
             }
-        end
+        end,
     }
     use 'mhinz/vim-startify'
     use 'moll/vim-bbye'
@@ -33,7 +45,7 @@ return require('packer').startup(function(use)
             vim.keymap.set('n', '<leader>?', function()
                 require('which-key').show({global = true})
             end)
-        end
+        end,
     }
     use {
         'lukas-reineke/indent-blankline.nvim',
@@ -41,7 +53,7 @@ return require('packer').startup(function(use)
             require('ibl').setup {
                 exclude = {filetypes = {"NvimTree", "help", "startify"}},
             }
-        end
+        end,
     }
 
     -- Integration
@@ -51,11 +63,11 @@ return require('packer').startup(function(use)
     use {
         'lewis6991/gitsigns.nvim',
         requires = 'nvim-lua/plenary.nvim',
-        config = function() require('plugins/gitsigns') end
+        config = function() require('plugins/gitsigns') end,
     }
     use {
         'glacambre/firenvim',
-        run = function() vim.fn['firenvim#install'](0) end
+        run = function() vim.fn['firenvim#install'](0) end,
     }
 
     -- Text editing
@@ -74,7 +86,7 @@ return require('packer').startup(function(use)
     use {
         'windwp/nvim-autopairs',
         after = {'nvim-cmp'},
-        config = function() require('nvim-autopairs').setup() end
+        config = function() require('nvim-autopairs').setup() end,
     }
 
     -- Files
@@ -98,46 +110,46 @@ return require('packer').startup(function(use)
             vim.g.vimtex_compiler_method = 'latexrun'
             vim.g.vimtex_compiler_latexrun = {
                 build_dir = 'latex.out',
-                options = {'--verbose-cmds', '--latex-args="-synctex=1"'}
+                options = {'--verbose-cmds', '--latex-args="-synctex=1"'},
             }
-        end
+        end,
     }
     use 'vim-pandoc/vim-pandoc'
     use 'vim-pandoc/vim-pandoc-syntax'
-    use 'OmniSharp/omnisharp-vim'
     use {
         'nvim-treesitter/nvim-treesitter',
+        branch = 'main',
         run = ':TSUpdate',
         config = function()
-            require('nvim-treesitter.configs').setup {
+            require('nvim-treesitter').setup {
                 highlight = {enable = true},
-                indent = {enable = false}
+                indent = {enable = true},
             }
-        end
+        end,
     }
     use {
         'nvim-treesitter/nvim-treesitter-context',
         config = function()
-            require('treesitter-context').setup {
-                multiwindow = true,
-            }
-        end
+            require('treesitter-context').setup {multiwindow = true}
+        end,
     }
 
     -- Completion
     use {
         'neovim/nvim-lspconfig',
         event = "BufEnter",
-        config = function() require("plugins/lspconfig") end
+        config = function() require("plugins/lspconfig") end,
     }
     use {
         'hrsh7th/nvim-cmp',
         requires = {
-            'hrsh7th/cmp-vsnip', 'hrsh7th/cmp-nvim-lsp', 'hrsh7th/cmp-omni',
-            'hrsh7th/cmp-buffer'
+            'hrsh7th/cmp-vsnip',
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-omni',
+            'hrsh7th/cmp-buffer',
         },
         after = {'vimtex'},
-        config = function() require("plugins/cmp") end
+        config = function() require("plugins/cmp") end,
     }
     use {
         'ray-x/lsp_signature.nvim',
@@ -145,16 +157,13 @@ return require('packer').startup(function(use)
             require('lsp_signature').setup {
                 bind = true,
                 handler_opts = {border = 'rounded'},
-                toggle_key = '<M-p>'
+                toggle_key = '<M-p>',
             }
-        end
+        end,
     }
     use 'honza/vim-snippets'
     use 'hrsh7th/vim-vsnip'
 
     -- Colorschemes
-    use 'gruvbox-community/gruvbox'
-    use 'sainnhe/gruvbox-material'
-    use 'navarasu/onedark.nvim'
     use 'folke/tokyonight.nvim'
 end)

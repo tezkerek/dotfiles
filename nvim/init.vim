@@ -27,7 +27,7 @@ scriptencoding utf-8
 " ==================
 "  Plugins
 " ==================
-  lua vim.lsp.set_log_level("warn")
+  lua vim.lsp.log.set_level("warn")
   lua require('plugins')
 
   let g:startify_change_to_dir = 0
@@ -67,15 +67,6 @@ scriptencoding utf-8
 " ==================
 "  Autocmd
 " ==================
-augroup omnisharp
-  autocmd!
-
-  autocmd CursorHold *.cs OmniSharpTypeLookup
-
-  autocmd FileType cs nmap <silent> <buffer> K <Plug>(omnisharp_documentation)
-  autocmd FileType cs nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
-  autocmd FileType cs nmap <silent> <buffer> <leader>ca <Plug>(omnisharp_code_actions)
-augroup end
 augroup langindent
   autocmd!
   autocmd FileType haskell setlocal shiftwidth=2 softtabstop=2 expandtab
@@ -160,6 +151,7 @@ augroup end
   nnoremap <C-L> <C-W>l
 
   " Tab navigation
+  
   nnoremap <M-1> 1gt
   nnoremap <M-2> 2gt
   nnoremap <M-3> 3gt
@@ -179,11 +171,15 @@ augroup end
 " ---------
   nnoremap <silent> <leader>fw :w<CR>
   nnoremap <silent> <leader>ff :Files<CR>
+  nnoremap <silent> <leader>fh :History<CR>
+  nnoremap <silent> <leader>fj :Jumps<CR>
   nnoremap <silent> <leader>ft :NERDTreeToggle<CR>
   " Browse buffers
   nnoremap <silent> <leader>, :Buffers<CR>
   " Jump to window if possible
   let g:fzf_buffers_jump = 1
+
+  nnoremap <silent> <leader>bd :Bdelete<CR>
 
   " Search with rg
   nnoremap <silent> <leader>fg :Rg<CR>
