@@ -26,6 +26,10 @@ output "DP-2" {
     mode "3840x2160@165.000"
 }
 
+output "eDP-1" {
+    scale 1
+}
+
 layout {
     gaps 6
 
