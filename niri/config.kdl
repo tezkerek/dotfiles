@@ -27,7 +27,7 @@ output "DP-2" {
 }
 
 layout {
-    gaps 8
+    gaps 6
 
     center-focused-column "never"
 
@@ -40,14 +40,10 @@ layout {
     default-column-width { proportion 0.5; }
 
     focus-ring {
-        width 5
-
-        active-color "#{{colors.red}}"
-
-        // Color of the ring on inactive monitors.
-        inactive-color "#{{colors.highlight}}"
-
+        width 4
         active-gradient from="#{{colors.orange}}" to="#{{colors.red}}" angle=45
+        // Color of the ring on inactive monitors.
+        inactive-gradient from="#{{colors.white}}" to="#{{colors.purple}}" angle=45
     }
 
     border {
@@ -68,15 +64,15 @@ layout {
     }
 
     struts {
-        left 32
-        right 32
+        left 10
+        right 10
     }
 }
 
 
 spawn-at-startup "waybar"
-spawn-sh-at-startup "swaybg --image ~/pics/wallpapers/secondary --output DP-2"
 spawn-at-startup "gammastep-indicator"
+spawn-sh-at-startup "swaybg --image ~/pics/wallpapers/secondary --output DP-2"
 
 hotkey-overlay {
     skip-at-startup
@@ -105,7 +101,7 @@ window-rule {
 
 binds {
     Mod+Shift+Slash           { show-hotkey-overlay; }
-    Super+Ctrl+Q repeat=false { spawn "swaylock"; }
+    Mod+Ctrl+Q repeat=false   { spawn "swaylock"; }
     Mod+Shift+O  repeat=false { toggle-overview; }
 
     Mod+Shift+Return { spawn "kitty"; }
@@ -203,7 +199,10 @@ binds {
     Mod+Equal       { set-column-width "+10%"; }
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
-    Mod+Z           { spawn-sh "niri msg action set-column-width '50%' && niri msg action set-window-height '70%'"; }
+    Mod+Z           {
+        spawn-sh "niri msg action set-column-width '50%' &&
+            niri msg action set-window-height '70%'";
+    }
 
     Mod+Y       { toggle-window-floating; }
     Mod+Shift+Y { switch-focus-between-floating-and-tiling; }
