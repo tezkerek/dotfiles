@@ -52,6 +52,7 @@ depends = ["programs"]
 "shell/gitconfig"       = "$XDG_CONFIG_HOME/git/config"
 "shell/tigconfig"       = "$XDG_CONFIG_HOME/tig/config"
 "shell/gitui"           = "$XDG_CONFIG_HOME/gitui"
+"shell/jj"              = "$XDG_CONFIG_HOME/jj"
 
 
 [waybar]
