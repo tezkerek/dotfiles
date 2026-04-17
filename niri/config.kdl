@@ -190,7 +190,9 @@ binds {
     Mod+Period { expel-window-from-column; }
 
     Mod+R       { switch-preset-column-width; }
+    Mod+W       { switch-preset-column-width-back; }
     Mod+Shift+R { switch-preset-window-height; }
+    Mod+Shift+W { switch-preset-window-height-back; }
     Mod+Ctrl+R  { reset-window-height; }
     Mod+F       { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
