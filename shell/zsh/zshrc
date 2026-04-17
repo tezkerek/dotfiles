@@ -149,6 +149,23 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey "^E" edit-command-line
 
+# Fzf file completion
+function fzf-select-files {
+    local selected=$(fd . | fzf --multi \
+        --preview '
+            if [ -d {} ]; then
+                eza -l --color=always --git --icons {}
+            else
+                bat --style=numbers --color=always {}
+            fi
+        ' \
+        --header "Tab to select") || return 0
+    local escaped=$(printf '%q ' ${(f)selected})
+    LBUFFER+="$escaped"
+}
+zle -N fzf-select-files
+bindkey "^F" fzf-select-files
+
 # Help
 unalias run-help
 autoload run-help
