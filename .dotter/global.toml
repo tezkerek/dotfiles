@@ -48,6 +48,7 @@ depends = ["programs"]
 "shell/zsh/zshrc"       = "$XDG_CONFIG_HOME/zsh/.zshrc"
 "shell/zsh/p10k.zsh"    = "$XDG_CONFIG_HOME/zsh/p10k.zsh"
 "shell/zsh/completions" = "$XDG_CONFIG_HOME/zsh/completions"
+"shell/tmux.conf"       = "$XDG_CONFIG_HOME/tmux/tmux.conf"
 "shell/gitconfig"       = "$XDG_CONFIG_HOME/git/config"
 "shell/tigconfig"       = "$XDG_CONFIG_HOME/tig/config"
 "shell/gitui"           = "$XDG_CONFIG_HOME/gitui"
