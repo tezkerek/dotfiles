@@ -35,6 +35,7 @@
     # os_icon               # os identifier
     dir                     # current directory
     vcs                     # git status
+    jj                      # jj status
     # =========================[ Line #2 ]=========================
     newline                 # \n
     prompt_char             # prompt symbol
@@ -358,7 +359,13 @@
   # VCS_STATUS_* parameters are set by gitstatus plugin. See reference:
   # https://github.com/romkatv/gitstatus/blob/master/gitstatus.plugin.zsh.
   function my_git_formatter() {
-    emulate -L zsh
+    emulate -L zsh -o extended_glob
+
+    local jj_glob="./(../)#(.jj)(#qN/)"
+    if [[ -n $~jj_glob ]]; then
+      typeset -g my_git_format=""
+      return
+    fi
 
     if [[ -n $P9K_CONTENT ]]; then
       # If P9K_CONTENT is not empty, use it. It's either "loading" or from vcs_info (not from
@@ -1571,6 +1578,8 @@
   # can slow down prompt by 1-2 milliseconds, so it's better to keep it turned off unless you
   # really need it.
   typeset -g POWERLEVEL9K_DISABLE_HOT_RELOAD=true
+
+  source $ZDOTDIR/p10k/jj.zsh
 
   # If p10k is already loaded, reload configuration.
   # This works even with POWERLEVEL9K_DISABLE_HOT_RELOAD=true.
