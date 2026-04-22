@@ -122,6 +122,11 @@ function fzo {
 function cppass {
     keepassxc-cli clip $HOME/doc/phone/passwords.kdbx $1 10
 }
+function colors256 {
+    for i in {0..255}; do
+        print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}
+    done
+}
 alias labs='curl --silent http://liis.ro/hosted/activitati/2013/laboratoare/labs.pdf | zathura -'
 
 
@@ -180,28 +185,44 @@ zstyle ':completion:*' matcher-list '' \
     'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
     'r:|?=** m:{a-z\-}={A-Z\_}'
 
-# Prompt
-export PS1="%F{yellow} %~  %f"
-export RPS1="%(?..%F{red}[%?])"
-F=$XDG_CONFIG_HOME/zsh/p10k.zsh && [[ -f $F ]] && source $F
-
-
 ###############
 # Plugins
 ###############
 
+ZINIT_COMMIT="6c9ac1c4bc9bcaede64cb473759ac2c5b9187f98"
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh"
+if [[ ! -d $ZINIT_HOME/.git ]]; then
+    read "answer?zinit not found. Install zinit? [y/N] "
+    if [[ $answer =~ ^[Yy]$ ]]; then
+        mkdir -p "$(dirname $ZINIT_HOME)"
+        git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+        (
+            cd "$ZINIT_HOME"
+            git init
+            git remote add origin https://github.com/zdharma-continuum/zinit.git
+            git fetch --depth 1 origin "$ZINIT_COMMIT"
+            git reset --hard FETCH_HEAD
+        )
+    else
+        echo "zinit installation skipped."
+    fi
+fi
 
-zinit ice depth=1
-zinit light romkatv/powerlevel10k
+if [[ -f "$ZINIT_HOME/zinit.zsh" ]]; then
+    source "${ZINIT_HOME}/zinit.zsh"
 
-zinit load wfxr/forgit
+    zinit ice depth=1
+    zinit light romkatv/powerlevel10k
 
-zinit ice as=program pick="bin/git-fuzzy"
-zinit light bigH/git-fuzzy
+    zinit ice pick="async.zsh"
+    zinit load mafredri/zsh-async
+
+    zinit load wfxr/forgit
+
+    zinit ice as=program pick="bin/git-fuzzy"
+    zinit light bigH/git-fuzzy
+fi
 
 compinit
 
@@ -211,3 +232,8 @@ compinit
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
 (( $+commands[mcfly] )) && eval "$(mcfly init zsh)"
 (( $+commands[jj] )) && source <(COMPLETE=zsh jj)
+
+# Prompt
+export PS1="%F{yellow} %~  %f"
+export RPS1="%(?..%F{red}[%?])"
+F=$XDG_CONFIG_HOME/zsh/p10k.zsh && [[ -f $F ]] && source $F
