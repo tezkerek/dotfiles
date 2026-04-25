@@ -3,3 +3,26 @@
 [user]
 name = "{{username}}"
 email = "{{email}}"
+
+[ui]
+default-command = "log"
+
+[revset-aliases]
+'closest_bookmark(to)' = 'latest(::to & bookmarks())'
+'closest_pushable(to)' = 'latest(::to & ~description(exact:"") & (~empty() | merges()))'
+
+[aliases]
+difft = ["diff", "--tool", "difft"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+lgdiv = ["util", "exec", "--", "zsh", "-c", """
+    local input="${1:-$( \
+        jj log --no-graph -n1 -r 'closest_bookmark(@)' \
+        -T 'bookmarks.map(|b| b.name()).join(" ")' --color=never \
+    )}"
+    local bookmarks=(${(z)input})
+    local bmk=$bookmarks[1]
+
+    [[ -z $bmk ]] && { echo "No bookmark found"; return 1 }
+
+    jj log -r "fork_point($bmk | $bmk@origin)::($bmk | $bmk@origin)"
+""", ""]
