@@ -93,6 +93,7 @@ animations {
 window-rule {
     match app-id=r#"firefox"# title="^Picture-in-Picture$"
     match app-id=r#"^steam$"# title="^Friends List$"
+    match app-id=r#"^com.github.hluk.copyq$"# title="CopyQ$"
     open-floating true
 }
 
@@ -112,6 +113,7 @@ binds {
     Mod+Return       { spawn "niri_scratchpad"; }
     Mod+I            { spawn-sh "wofi --show=drun"; }
     Mod+O            { spawn-sh "bemenu-run --no-overlap --monitor=all --prompt='|>'"; }
+    Mod+V            { spawn-sh "copyq toggle"; }
 
     XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
