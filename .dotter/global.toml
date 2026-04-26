@@ -2,7 +2,7 @@
 
 
 [linux]
-depends = ["nvim", "sway", "niri", "shell", "dev", "apps"]
+depends = ["nvim", "sway", "niri", "shell", "dev", "kanata", "apps"]
 
 [linux.files]
 "shell/paru.conf" = "$XDG_CONFIG_HOME/paru/paru.conf"
@@ -100,6 +100,10 @@ depends = ["colors"]
 "apps/alacritty.yml" = "$XDG_CONFIG_HOME/alacritty/alacritty.yml"
 "apps/ideavimrc"     = "$HOME/.ideavimrc"
 "apps/kitty.conf"    = "$XDG_CONFIG_HOME/kitty/kitty.conf"
+
+
+[kanata.files]
+"kanata" = "$XDG_CONFIG_HOME/kanata"
 
 
 [apps.files]

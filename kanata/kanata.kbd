@@ -1,0 +1,49 @@
+;; Version 1.11.0 does not have tap-hold-require-prior-idle yet. Requires building from main branch.
+(defcfg
+    process-unmapped-keys yes
+    tap-hold-require-prior-idle 150
+)
+
+(defsrc
+    caps a s d f g h j k l ;
+)
+
+(defalias
+    caps (tap-hold 125 125 esc (layer-toggle movement))
+    a (tap-hold 125 125 a lmet)
+    s (tap-hold 125 125 s lalt)
+    d (tap-hold 125 125 d lsft)
+    f (tap-hold 125 125 f lctl)
+
+    j (tap-hold 125 125 j rctl)
+    k (tap-hold 125 125 k rsft)
+    l (tap-hold 125 125 l lalt)
+    ; (tap-hold 125 125 ; rmet)
+)
+
+(deflayer default
+    @caps @a @s @d @f _ _ @j @k @l @;
+)
+
+(deflayer movement
+    _ _ _ _ _ _ left down up right _
+)
+
+(defhands
+  (left  q w e r t a s d f g z x c v b)
+  (right y u i o p h j k l ; n m , . /)
+)
+
+;; tap-hold-opposite-hand-release has a bug where the tap key is sent if I don't press another key before the hold timeout expires.
+;; (defalias
+;;     a (tap-hold-opposite-hand-release 150 a lmet)
+;;     s (tap-hold-opposite-hand-release 150 s lalt)
+;;     d (tap-hold-opposite-hand-release 150 d lsft)
+;;     f (tap-hold-opposite-hand-release 150 f lctl)
+
+;;     j (tap-hold-opposite-hand-release 150 j rctl)
+;;     k (tap-hold-opposite-hand-release 150 k rsft)
+;;     l (tap-hold-opposite-hand-release 150 l lalt)
+;;     ; (tap-hold-opposite-hand-release 150 ; rmet)
+;; )
+
