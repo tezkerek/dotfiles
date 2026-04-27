@@ -1,5 +1,5 @@
 #:schema https://docs.jj-vcs.dev/latest/config-schema.json
 
 [user]
-name = "tezkerek"
-email = "andrei.ancuta@gmail.com"
+name = "{{username}}"
+email = "{{email}}"

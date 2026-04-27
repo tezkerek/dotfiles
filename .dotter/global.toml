@@ -44,6 +44,10 @@ nvim = "$XDG_CONFIG_HOME/nvim"
 [shell]
 depends = ["programs"]
 
+[shell.variables]
+email = "andrei.ancuta@gmail.com"
+username = "tezkerek"
+
 [shell.files]
 "shell/zsh/zshenv"      = "$HOME/.zshenv"
 "shell/zsh/zshrc"       = "$XDG_CONFIG_HOME/zsh/.zshrc"

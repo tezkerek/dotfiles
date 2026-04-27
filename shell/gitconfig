@@ -1,6 +1,6 @@
 [user]
-	email = andrei.ancuta@gmail.com
-	name = tezkerek
+	email = {{email}}
+	name = {{username}}
 
 [include]
 	path = /etc/gitconfig.delta
