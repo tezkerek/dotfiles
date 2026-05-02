@@ -8,25 +8,48 @@
     caps a s d f g h j k l ;
 )
 
-(defalias
-    caps (tap-hold 125 125 esc (layer-toggle movement))
-    a (tap-hold 125 125 a lmet)
-    s (tap-hold 125 125 s lalt)
-    d (tap-hold 125 125 d lsft)
-    f (tap-hold 125 125 f lctl)
+(defvar
+    tap-hold 100
+    hold-timeout 150
+)
 
-    j (tap-hold 125 125 j rctl)
-    k (tap-hold 125 125 k rsft)
-    l (tap-hold 125 125 l lalt)
-    ; (tap-hold 125 125 ; rmet)
+(deftemplate
+    hrmod (key hold-action prior-idle) (
+        tap-hold-release $tap-hold $hold-timeout $key $hold-action (
+            require-prior-idle $prior-idle
+        )
+    )
+)
+(deftemplate
+    hrmod-repeat (key hold-action prior-idle) (
+        tap-dance 100 ((t! hrmod $key $hold-action $prior-idle) (multi $key))
+    )
+)
+
+(defalias
+    caps (t! hrmod esc (layer-toggle movement) 150)
+    a (t! hrmod a lmet 150)
+    s (t! hrmod s lalt 150)
+    d (t! hrmod d lsft 50)
+    f (t! hrmod f lctl 150)
+
+    j (t! hrmod j rctl 150)
+    k (t! hrmod k rsft 50)
+    l (t! hrmod l lalt 150)
+    ; (t! hrmod ; rmet 150)
 )
 
 (deflayer default
     @caps @a @s @d @f _ _ @j @k @l @;
 )
 
-(deflayer movement
-    _ _ _ _ _ _ left down up right _
+(deflayermap movement
+    u PageUp
+    d PageDown
+    h left
+    j down
+    k up
+    l right
 )
 
 (defhands
