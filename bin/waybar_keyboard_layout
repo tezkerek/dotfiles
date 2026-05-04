@@ -1,4 +1,4 @@
-#! /usr/bin/zsh
+#!/usr/bin/env zsh
 
 # Print initial layout
 swaymsg -rt get_inputs | jq -r 'map(select(.type == "keyboard"))[0] | .xkb_active_layout_name'

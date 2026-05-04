@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "%{c} $(~/.config/lemonbar/volume | tr ' ' ' \n')" | lemonbar -pd \
 	-g 400x400+1080+600 \

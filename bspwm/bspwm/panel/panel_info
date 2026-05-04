@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 [ -e $PANEL_FIFO ] && rm $PANEL_FIFO
 mkfifo "$PANEL_FIFO"

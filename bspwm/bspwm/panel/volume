@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function headphones_plugged() {
     grep -A 3 'Pin Default 0x01014010' '/proc/asound/card1/codec#0' | grep -qo 'Pin-ctls: 0x00:'

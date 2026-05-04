@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 if pgrep -x mpd > /dev/null; then
 	[[ $(mpc status | grep -Po "\[(playing|paused)\]") == "[playing]" ]] && ICON="" || ICON=""
 	echo "%{R} $ICON $(mpc current) %{R}"

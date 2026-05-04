@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # Start sxhkd if not running
 if [ ! $(pgrep sxhkd) != "" ]; then

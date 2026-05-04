@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 CHARGING=$(cat /sys/class/power_supply/ACAD/online)
 BATTERY=$(cat /sys/class/power_supply/BAT1/capacity)

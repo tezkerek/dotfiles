@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 local localfile="$HOME/passwords.kdbx"
 local remotefile="dropbox:passwords.kdbx"

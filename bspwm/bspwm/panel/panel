@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 < $PANEL_FIFO $PANEL_DIR/panel_print | lemonbar \
     -g         "x30" \
