@@ -195,15 +195,18 @@ fi
 if [[ -f "$ZINIT_HOME/zinit.zsh" ]]; then
     source "${ZINIT_HOME}/zinit.zsh"
 
-    zinit ice depth=1
+    zinit ice depth=1 ver="604f19a9eaa18e76db2e60b8d446d5f879065f90"
     zinit light romkatv/powerlevel10k
 
-    zinit ice pick="async.zsh"
+    zinit ice depth=1 ver="ee1d11b68c38dec24c22b1c51a45e8a815a79756" \
+        pick="async.zsh"
     zinit load mafredri/zsh-async
 
+    zinit ice depth=1 ver="7a37fadf921e89edac941dcc615342009149b07e"
     zinit load wfxr/forgit
 
-    zinit ice as=program pick="bin/git-fuzzy"
+    zinit ice depth=1 ver="f5c4a57b49c03136ca2dc5e2534ef62a39904f64" \
+        as=program pick="bin/git-fuzzy"
     zinit light bigH/git-fuzzy
 fi
 
