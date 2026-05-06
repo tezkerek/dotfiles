@@ -26,3 +26,14 @@ lgdiv = ["util", "exec", "--", "zsh", "-c", """
 
     jj log -r "fork_point($bmk | $bmk@origin)::($bmk | $bmk@origin)"
 """, ""]
+
+[template-aliases]
+'format_short_signature(signature)' = '''
+coalesce(signature.name(), signature.email(), email_placeholder)
+'''
+'format_timestamp(timestamp)' = '''
+if(timestamp.before("this january"),
+  timestamp.format("%Y-%m-%d %H:%M"),
+  timestamp.format("%d %b %H:%M")
+)
+'''
