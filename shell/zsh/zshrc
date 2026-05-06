@@ -1,271 +1,273 @@
-###############
-# Zsh options
-###############
+function {
+    ###############
+    # Zsh options
+    ###############
 
-SAVEHIST=50000
-HISTFILE="$XDG_DATA_HOME/zsh/history"
-[[ ! -d "$XDG_DATA_HOME/zsh" ]] && mkdir -p "$XDG_DATA_HOME/zsh"
-HISTSIZE=50000
-HISTORY_IGNORE='(l|ls|cd|exit|q|exec zsh|nvim|htop)'
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-setopt INC_APPEND_HISTORY
-setopt EXTENDED_HISTORY
+    SAVEHIST=50000
+    HISTFILE="$XDG_DATA_HOME/zsh/history"
+    [[ ! -d "$XDG_DATA_HOME/zsh" ]] && mkdir -p "$XDG_DATA_HOME/zsh"
+    HISTSIZE=50000
+    HISTORY_IGNORE='(l|ls|cd|exit|q|exec zsh|nvim|htop)'
+    setopt HIST_IGNORE_DUPS
+    setopt HIST_IGNORE_SPACE
+    setopt INC_APPEND_HISTORY
+    setopt EXTENDED_HISTORY
 
-setopt INTERACTIVE_COMMENTS
-setopt AUTO_CD
+    setopt INTERACTIVE_COMMENTS
+    setopt AUTO_CD
 
 
-###############
-# Interactive options
-###############
+    ###############
+    # Interactive options
+    ###############
 
-export LS_COLORS=$LS_COLORS:"di=1;33:ex=1;31:ln=4;36:*.mkv=35"
-export CHEATCOLORS=true
-export BAT_THEME="gruvbox-dark"
-export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!\.git'"
-local fzf_bindings="alt-j:preview-down,alt-k:preview-up,\
+    export LS_COLORS=$LS_COLORS:"di=1;33:ex=1;31:ln=4;36:*.mkv=35"
+    export CHEATCOLORS=true
+    export BAT_THEME="gruvbox-dark"
+    export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!\.git'"
+    local fzf_bindings="alt-j:preview-down,alt-k:preview-up,\
 ctrl-alt-d:preview-half-page-down,ctrl-alt-u:preview-half-page-up,\
 alt-p:toggle-preview,alt-w:toggle-preview-wrap-word"
-export FZF_DEFAULT_OPTS="--bind=$fzf_bindings"
-export MCFLY_KEY_SCHEME=vim
-export MCFLY_FUZZY=true
+    export FZF_DEFAULT_OPTS="--bind=$fzf_bindings"
+    export MCFLY_KEY_SCHEME=vim
+    export MCFLY_FUZZY=true
 
 
-###############
-# Functions and aliases
-###############
+    ###############
+    # Functions and aliases
+    ###############
 
-function man {
-    # Enable colors for manpages
-    LESS_TERMCAP_md=$'\e[01;31m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[0;44;39m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[01;32m' \
-    command man "$@"
-}
+    function man {
+        # Enable colors for manpages
+        LESS_TERMCAP_md=$'\e[01;31m' \
+        LESS_TERMCAP_me=$'\e[0m' \
+        LESS_TERMCAP_se=$'\e[0m' \
+        LESS_TERMCAP_so=$'\e[0;44;39m' \
+        LESS_TERMCAP_ue=$'\e[0m' \
+        LESS_TERMCAP_us=$'\e[01;32m' \
+        command man "$@"
+    }
 
-function md {
-    # Faster creation of directories
-    mkdir --parents $1 && cd $1
-}
+    function md {
+        # Faster creation of directories
+        mkdir --parents $1 && cd $1
+    }
 
-function cpprun {
-    local executable=${1%.cpp}
-    g++ -std=c++20 -Wall -Wextra -g $1 -o $executable && ./$executable
-}
+    function cpprun {
+        local executable=${1%.cpp}
+        g++ -std=c++20 -Wall -Wextra -g $1 -o $executable && ./$executable
+    }
 
-function crun {
-    local executable=${1%.c}
-    gcc -Wall -Wextra -g $1 -o $executable && ./$executable && rm ./$executable
-}
+    function crun {
+        local executable=${1%.c}
+        gcc -Wall -Wextra -g $1 -o $executable && ./$executable && rm ./$executable
+    }
 
-function dirsize {
-    # View disk usage of a directory
-    du --all --total --human-readable --max-depth=1 $1 | sort -hr | less
-}
+    function dirsize {
+        # View disk usage of a directory
+        du --all --total --human-readable --max-depth=1 $1 | sort -hr | less
+    }
 
-function __is_binary {
-    file --mime-encoding $1 |& grep -q 'binary$'
-}
+    function __is_binary {
+        file --mime-encoding $1 |& grep -q 'binary$'
+    }
 
-alias l="eza -l"
-alias lr="eza -l --sort=modified"
-alias o="handlr open"
-function v {
-    # List directory, preview text file, or open binary file
-    if [[ -d $1 ]]; then
-        l $1
-    elif [[ -f $1 ]]; then
-        if __is_binary $1; then
-            o $1
-        else
-            bat $1
-        fi
-    else
-        printf "Could not handle %s" $(file $1)
-    fi
-}
-alias q="exit"
-alias zreload="source $HOME/.zshrc"
-alias sudo="sudo "
-
-alias ls="ls --color=auto"
-alias sysu="systemctl --user"
-alias adb="$XDG_DATA_HOME/android/sdk/platform-tools/adb"
-
-alias fvim='nvim $(fd --hidden | fzf)'
-alias fcd='cd $(fd --hidden --type d | fzf)'
-function fzo {
-    # Enter to open file
-    # CTRL-F to open its directory
-    # CTRL-O to cd to its directory
-    local fzf_header="CTRL-F: open dir    CTRL-O: cd dir
-
-"
-    local result=$(fd --follow --type f . $@ | fzf --reverse --expect=ctrl-o,ctrl-f --header $fzf_header)
-    local file=$(tail -n1 <<< $result)
-    local cmd=$(head -n1 <<< $result)
-    case $cmd in
-        ctrl-o)
-            zsh -c "cd $(dirname $file); zsh -i"
-            ;;
-        ctrl-f)
-            (o $(dirname $file) & disown) > /dev/null 2>&1
-            ;;
-        *)
-            (o $file & disown) > /dev/null 2>&1
-            ;;
-    esac
-}
-
-function cppass {
-    keepassxc-cli clip $HOME/doc/phone/passwords.kdbx $1 10
-}
-function colors256 {
-    for i in {0..255}; do
-        print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}
-    done
-}
-alias labs='curl --silent http://liis.ro/hosted/activitati/2013/laboratoare/labs.pdf | zathura -'
-
-
-###############
-# Bindings
-###############
-
-# Vi mode
-bindkey -v
-export KEYTIMEOUT=1
-
-autoload history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-
-bindkey "^P"   history-beginning-search-backward-end
-bindkey "^N"   history-beginning-search-forward-end
-bindkey "^[[A" up-line-or-history
-bindkey "^[[B" down-line-or-history
-
-bindkey "^?"   backward-delete-char
-bindkey "^H"   backward-kill-word
-
-autoload edit-command-line
-zle -N edit-command-line
-bindkey "^E" edit-command-line
-
-# Fzf file completion
-function fzf-select-files {
-    local selected=$(fd . | fzf --multi \
-        --preview '
-            if [ -d {} ]; then
-                eza -l --color=always --git --icons {}
+    alias l="eza -l"
+    alias lr="eza -l --sort=modified"
+    alias o="handlr open"
+    function v {
+        # List directory, preview text file, or open binary file
+        if [[ -d $1 ]]; then
+            l $1
+        elif [[ -f $1 ]]; then
+            if __is_binary $1; then
+                o $1
             else
-                bat --style=numbers --color=always {}
+                bat $1
             fi
-        ' \
-        --header "Tab to select") || return 0
-    local escaped=$(printf '%q ' ${(f)selected})
-    LBUFFER+="$escaped"
-}
-zle -N fzf-select-files
-bindkey "^F" fzf-select-files
-
-# Help
-unalias run-help
-autoload run-help
-
-# Completion
-fpath=($ZDOTDIR/completions $fpath)
-autoload -Uz compinit
-
-# Fuzzy completion from https://superuser.com/a/815317
-zstyle ':completion:*' matcher-list '' \
-    'm:{a-z\-}={A-Z\_}' \
-    'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
-    'r:|?=** m:{a-z\-}={A-Z\_}'
-
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' menu no
-zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':fzf-tab:*' fzf-flags --preview-window=wrap-word --bind=$fzf_bindings
-zstyle ':fzf-tab:complete:*' fzf-preview '
-    if [ -z "$realpath" ]; then
-        echo "$desc" | sed "s/\s\s\+/ /g"
-    elif [ -d "$realpath" ]; then
-        eza -l --no-permissions --no-user --color=always --git --icons "$realpath"
-    else
-        local type=$(file --brief --dereference --mime -- "$realpath")
-        if [[ "$type" =~ image/ ]]; then
-            kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no \
-                --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" \
-                "$realpath"
         else
-            bat --style=numbers --color=always "$realpath"
+            printf "Could not handle %s" $(file $1)
         fi
-    fi
-'
+    }
+    alias q="exit"
+    alias zreload="source $HOME/.zshrc"
+    alias sudo="sudo "
 
-###############
-# Plugins
-###############
+    alias ls="ls --color=auto"
+    alias sysu="systemctl --user"
+    alias adb="$XDG_DATA_HOME/android/sdk/platform-tools/adb"
 
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+    alias fvim='nvim $(fd --hidden | fzf)'
+    alias fcd='cd $(fd --hidden --type d | fzf)'
+    function fzo {
+        # Enter to open file
+        # CTRL-F to open its directory
+        # CTRL-O to cd to its directory
+        local fzf_header="CTRL-F: open dir    CTRL-O: cd dir
 
-function {
-    local zinit_commit="6c9ac1c4bc9bcaede64cb473759ac2c5b9187f98"
-    [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-    if [[ ! -d $ZINIT_HOME/.git ]]; then
-        read "answer?zinit not found. Install zinit? [y/N] "
-        if [[ $answer =~ ^[Yy]$ ]]; then
-            mkdir -p "$(dirname $ZINIT_HOME)"
-            git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-            (
-                cd "$ZINIT_HOME"
-                git init
-                git remote add origin https://github.com/zdharma-continuum/zinit.git
-                git fetch --depth 1 origin "$zinit_commit"
-                git reset --hard FETCH_HEAD
-            )
+    "
+        local result=$(fd --follow --type f . $@ | fzf --reverse --expect=ctrl-o,ctrl-f --header $fzf_header)
+        local file=$(tail -n1 <<< $result)
+        local cmd=$(head -n1 <<< $result)
+        case $cmd in
+            ctrl-o)
+                zsh -c "cd $(dirname $file); zsh -i"
+                ;;
+            ctrl-f)
+                (o $(dirname $file) & disown) > /dev/null 2>&1
+                ;;
+            *)
+                (o $file & disown) > /dev/null 2>&1
+                ;;
+        esac
+    }
+
+    function cppass {
+        keepassxc-cli clip $HOME/doc/phone/passwords.kdbx $1 10
+    }
+    function colors256 {
+        for i in {0..255}; do
+            print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}
+        done
+    }
+    alias labs='curl --silent http://liis.ro/hosted/activitati/2013/laboratoare/labs.pdf | zathura -'
+
+
+    ###############
+    # Bindings
+    ###############
+
+    # Vi mode
+    bindkey -v
+    export KEYTIMEOUT=1
+
+    autoload history-search-end
+    zle -N history-beginning-search-backward-end history-search-end
+    zle -N history-beginning-search-forward-end history-search-end
+
+    bindkey "^P"   history-beginning-search-backward-end
+    bindkey "^N"   history-beginning-search-forward-end
+    bindkey "^[[A" up-line-or-history
+    bindkey "^[[B" down-line-or-history
+
+    bindkey "^?"   backward-delete-char
+    bindkey "^H"   backward-kill-word
+
+    autoload edit-command-line
+    zle -N edit-command-line
+    bindkey "^E" edit-command-line
+
+    # Fzf file completion
+    function fzf-select-files {
+        local selected=$(fd . | fzf --multi \
+            --preview '
+                if [ -d {} ]; then
+                    eza -l --color=always --git --icons {}
+                else
+                    bat --style=numbers --color=always {}
+                fi
+            ' \
+            --header "Tab to select") || return 0
+        local escaped=$(printf '%q ' ${(f)selected})
+        LBUFFER+="$escaped"
+    }
+    zle -N fzf-select-files
+    bindkey "^F" fzf-select-files
+
+    # Help
+    unalias run-help
+    autoload run-help
+
+    # Completion
+    fpath=($ZDOTDIR/completions $fpath)
+    autoload -Uz compinit
+
+    # Fuzzy completion from https://superuser.com/a/815317
+    zstyle ':completion:*' matcher-list '' \
+        'm:{a-z\-}={A-Z\_}' \
+        'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+        'r:|?=** m:{a-z\-}={A-Z\_}'
+
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+    zstyle ':completion:*' menu no
+    zstyle ':completion:*:descriptions' format '[%d]'
+    zstyle ':fzf-tab:*' fzf-flags --preview-window=wrap-word --bind=$fzf_bindings
+    zstyle ':fzf-tab:complete:*' fzf-preview '
+        if [ -z "$realpath" ]; then
+            echo "$desc" | sed "s/\s\s\+/ /g"
+        elif [ -d "$realpath" ]; then
+            eza -l --no-permissions --no-user --color=always --git --icons "$realpath"
         else
-            echo "zinit installation skipped."
+            local type=$(file --brief --dereference --mime -- "$realpath")
+            if [[ "$type" =~ image/ ]]; then
+                kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no \
+                    --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" \
+                    "$realpath"
+            else
+                bat --style=numbers --color=always "$realpath"
+            fi
         fi
+    '
+
+    ###############
+    # Plugins
+    ###############
+
+    ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+    function {
+        local zinit_commit="6c9ac1c4bc9bcaede64cb473759ac2c5b9187f98"
+        [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+        if [[ ! -d $ZINIT_HOME/.git ]]; then
+            read "answer?zinit not found. Install zinit? [y/N] "
+            if [[ $answer =~ ^[Yy]$ ]]; then
+                mkdir -p "$(dirname $ZINIT_HOME)"
+                git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+                (
+                    cd "$ZINIT_HOME"
+                    git init
+                    git remote add origin https://github.com/zdharma-continuum/zinit.git
+                    git fetch --depth 1 origin "$zinit_commit"
+                    git reset --hard FETCH_HEAD
+                )
+            else
+                echo "zinit installation skipped."
+            fi
+        fi
+    }
+
+    if [[ -f "$ZINIT_HOME/zinit.zsh" ]]; then
+        source "${ZINIT_HOME}/zinit.zsh"
+
+        zinit ice depth=1 ver="604f19a9eaa18e76db2e60b8d446d5f879065f90"
+        zinit light romkatv/powerlevel10k
+
+        zinit ice depth=1 ver="ee1d11b68c38dec24c22b1c51a45e8a815a79756" \
+            pick="async.zsh"
+        zinit load mafredri/zsh-async
+
+        zinit ice depth=1 ver="7a37fadf921e89edac941dcc615342009149b07e"
+        zinit load wfxr/forgit
+
+        zinit ice depth=1 ver="f5c4a57b49c03136ca2dc5e2534ef62a39904f64" \
+            as=program pick="bin/git-fuzzy"
+        zinit light bigH/git-fuzzy
+
+        zinit ice depth=1 ver="0983009f8666f11e91a2ee1f88cfdb748d14f656"
+        zinit light Aloxaf/fzf-tab
     fi
+
+    compinit
+
+    # zinit's zi alias conflicts with zoxide
+    (( ${+aliases[zi]} )) && unalias zi
+
+    (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+    (( $+commands[mcfly] )) && eval "$(mcfly init zsh)"
+    (( $+commands[jj] )) && source <(COMPLETE=zsh jj)
+
+    # Prompt
+    export PS1="%F{yellow} %~  %f"
+    export RPS1="%(?..%F{red}[%?])"
+    F=$XDG_CONFIG_HOME/zsh/p10k.zsh && [[ -f $F ]] && source $F
 }
-
-if [[ -f "$ZINIT_HOME/zinit.zsh" ]]; then
-    source "${ZINIT_HOME}/zinit.zsh"
-
-    zinit ice depth=1 ver="604f19a9eaa18e76db2e60b8d446d5f879065f90"
-    zinit light romkatv/powerlevel10k
-
-    zinit ice depth=1 ver="ee1d11b68c38dec24c22b1c51a45e8a815a79756" \
-        pick="async.zsh"
-    zinit load mafredri/zsh-async
-
-    zinit ice depth=1 ver="7a37fadf921e89edac941dcc615342009149b07e"
-    zinit load wfxr/forgit
-
-    zinit ice depth=1 ver="f5c4a57b49c03136ca2dc5e2534ef62a39904f64" \
-        as=program pick="bin/git-fuzzy"
-    zinit light bigH/git-fuzzy
-
-    zinit ice depth=1 ver="0983009f8666f11e91a2ee1f88cfdb748d14f656"
-    zinit light Aloxaf/fzf-tab
-fi
-
-compinit
-
-# zinit's zi alias conflicts with zoxide
-(( ${+aliases[zi]} )) && unalias zi
-
-(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
-(( $+commands[mcfly] )) && eval "$(mcfly init zsh)"
-(( $+commands[jj] )) && source <(COMPLETE=zsh jj)
-
-# Prompt
-export PS1="%F{yellow} %~  %f"
-export RPS1="%(?..%F{red}[%?])"
-F=$XDG_CONFIG_HOME/zsh/p10k.zsh && [[ -f $F ]] && source $F
