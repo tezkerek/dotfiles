@@ -6,7 +6,7 @@ SAVEHIST=50000
 HISTFILE="$XDG_DATA_HOME/zsh/history"
 [[ ! -d "$XDG_DATA_HOME/zsh" ]] && mkdir -p "$XDG_DATA_HOME/zsh"
 HISTSIZE=50000
-HISTORY_IGNORE='(l|ls|cd|exit|q|nvim|htop)'
+HISTORY_IGNORE='(l|ls|cd|exit|q|exec zsh|nvim|htop)'
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 setopt INC_APPEND_HISTORY
@@ -24,8 +24,10 @@ export LS_COLORS=$LS_COLORS:"di=1;33:ex=1;31:ln=4;36:*.mkv=35"
 export CHEATCOLORS=true
 export BAT_THEME="gruvbox-dark"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!\.git'"
-export FZF_DEFAULT_OPTS="--bind=alt-j:preview-down,alt-k:preview-up,\
-ctrl-alt-d:preview-half-page-down,ctrl-alt-u:preview-half-page-up"
+local fzf_bindings="alt-j:preview-down,alt-k:preview-up,\
+ctrl-alt-d:preview-half-page-down,ctrl-alt-u:preview-half-page-up,\
+alt-p:toggle-preview,alt-w:toggle-preview-wrap-word"
+export FZF_DEFAULT_OPTS="--bind=$fzf_bindings"
 export MCFLY_KEY_SCHEME=vim
 export MCFLY_FUZZY=true
 
@@ -154,6 +156,23 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey "^E" edit-command-line
 
+# Fzf file completion
+function fzf-select-files {
+    local selected=$(fd . | fzf --multi \
+        --preview '
+            if [ -d {} ]; then
+                eza -l --color=always --git --icons {}
+            else
+                bat --style=numbers --color=always {}
+            fi
+        ' \
+        --header "Tab to select") || return 0
+    local escaped=$(printf '%q ' ${(f)selected})
+    LBUFFER+="$escaped"
+}
+zle -N fzf-select-files
+bindkey "^F" fzf-select-files
+
 # Help
 unalias run-help
 autoload run-help
@@ -167,6 +186,27 @@ zstyle ':completion:*' matcher-list '' \
     'm:{a-z\-}={A-Z\_}' \
     'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
     'r:|?=** m:{a-z\-}={A-Z\_}'
+
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' menu no
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':fzf-tab:*' fzf-flags --preview-window=wrap-word --bind=$fzf_bindings
+zstyle ':fzf-tab:complete:*' fzf-preview '
+    if [ -z "$realpath" ]; then
+        echo "$desc" | sed "s/\s\s\+/ /g"
+    elif [ -d "$realpath" ]; then
+        eza -l --no-permissions --no-user --color=always --git --icons "$realpath"
+    else
+        local type=$(file --brief --dereference --mime -- "$realpath")
+        if [[ "$type" =~ image/ ]]; then
+            kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no \
+                --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" \
+                "$realpath"
+        else
+            bat --style=numbers --color=always "$realpath"
+        fi
+    fi
+'
 
 ###############
 # Plugins
@@ -208,6 +248,9 @@ if [[ -f "$ZINIT_HOME/zinit.zsh" ]]; then
     zinit ice depth=1 ver="f5c4a57b49c03136ca2dc5e2534ef62a39904f64" \
         as=program pick="bin/git-fuzzy"
     zinit light bigH/git-fuzzy
+
+    zinit ice depth=1 ver="0983009f8666f11e91a2ee1f88cfdb748d14f656"
+    zinit light Aloxaf/fzf-tab
 fi
 
 compinit
