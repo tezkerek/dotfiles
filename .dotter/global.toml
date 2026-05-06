@@ -51,6 +51,7 @@ username = "tezkerek"
 [shell.files]
 "shell/zsh/zshenv"      = "$HOME/.zshenv"
 "shell/zsh/zshrc"       = "$XDG_CONFIG_HOME/zsh/.zshrc"
+"shell/zsh/fzf.zsh"     = "$XDG_CONFIG_HOME/zsh/fzf.zsh"
 "shell/zsh/p10k.zsh"    = "$XDG_CONFIG_HOME/zsh/p10k.zsh"
 "shell/zsh/p10k"        = "$XDG_CONFIG_HOME/zsh/p10k"
 "shell/zsh/completions" = "$XDG_CONFIG_HOME/zsh/completions"
