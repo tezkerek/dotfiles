@@ -193,18 +193,28 @@ alt-p:toggle-preview,alt-w:toggle-preview-wrap-word"
     zstyle ':completion:*:descriptions' format '[%d]'
     zstyle ':fzf-tab:*' fzf-flags --preview-window=wrap-word --bind=$fzf_bindings
     zstyle ':fzf-tab:complete:*' fzf-preview '
-        if [ -z "$realpath" ]; then
-            echo "$desc" | sed "s/\s\s\+/ /g"
-        elif [ -d "$realpath" ]; then
-            eza -l --no-permissions --no-user --color=always --git --icons "$realpath"
+        local resolvedpath="$realpath"
+        if [[ -z "$resolvedpath" ]]; then
+            # Completions can mix paths and arguments
+            # Try parsing the completion as a path
+            if [[ -a "$desc" ]]; then
+                resolvedpath="$desc"
+            else
+                echo "$desc" | sed "s/\s\s\+/ /g"
+                return
+            fi
+        fi
+
+        if [[ -d "$resolvedpath" ]]; then
+            eza -l --no-permissions --no-user --color=always --git --icons "$resolvedpath"
         else
-            local type=$(file --brief --dereference --mime -- "$realpath")
+            local type=$(file --brief --dereference --mime -- "$resolvedpath")
             if [[ "$type" =~ image/ ]]; then
                 kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no \
                     --place="${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0" \
-                    "$realpath"
+                    "$resolvedpath"
             else
-                bat --style=numbers --color=always "$realpath"
+                bat --style=numbers --color=always "$resolvedpath"
             fi
         fi
     '
