@@ -212,25 +212,28 @@ zstyle ':fzf-tab:complete:*' fzf-preview '
 # Plugins
 ###############
 
-ZINIT_COMMIT="6c9ac1c4bc9bcaede64cb473759ac2c5b9187f98"
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-if [[ ! -d $ZINIT_HOME/.git ]]; then
-    read "answer?zinit not found. Install zinit? [y/N] "
-    if [[ $answer =~ ^[Yy]$ ]]; then
-        mkdir -p "$(dirname $ZINIT_HOME)"
-        git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-        (
-            cd "$ZINIT_HOME"
-            git init
-            git remote add origin https://github.com/zdharma-continuum/zinit.git
-            git fetch --depth 1 origin "$ZINIT_COMMIT"
-            git reset --hard FETCH_HEAD
-        )
-    else
-        echo "zinit installation skipped."
+
+function {
+    local zinit_commit="6c9ac1c4bc9bcaede64cb473759ac2c5b9187f98"
+    [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+    if [[ ! -d $ZINIT_HOME/.git ]]; then
+        read "answer?zinit not found. Install zinit? [y/N] "
+        if [[ $answer =~ ^[Yy]$ ]]; then
+            mkdir -p "$(dirname $ZINIT_HOME)"
+            git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+            (
+                cd "$ZINIT_HOME"
+                git init
+                git remote add origin https://github.com/zdharma-continuum/zinit.git
+                git fetch --depth 1 origin "$zinit_commit"
+                git reset --hard FETCH_HEAD
+            )
+        else
+            echo "zinit installation skipped."
+        fi
     fi
-fi
+}
 
 if [[ -f "$ZINIT_HOME/zinit.zsh" ]]; then
     source "${ZINIT_HOME}/zinit.zsh"
