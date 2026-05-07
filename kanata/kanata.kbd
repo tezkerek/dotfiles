@@ -1,7 +1,6 @@
 ;; Version 1.11.0 does not have tap-hold-require-prior-idle yet. Requires building from main branch.
 (defcfg
     process-unmapped-keys yes
-    tap-hold-require-prior-idle 150
 )
 
 (defsrc
@@ -50,23 +49,5 @@
     j down
     k up
     l right
+    rsft (caps-word-toggle 5000)
 )
-
-(defhands
-  (left  q w e r t a s d f g z x c v b)
-  (right y u i o p h j k l ; n m , . /)
-)
-
-;; tap-hold-opposite-hand-release has a bug where the tap key is sent if I don't press another key before the hold timeout expires.
-;; (defalias
-;;     a (tap-hold-opposite-hand-release 150 a lmet)
-;;     s (tap-hold-opposite-hand-release 150 s lalt)
-;;     d (tap-hold-opposite-hand-release 150 d lsft)
-;;     f (tap-hold-opposite-hand-release 150 f lctl)
-
-;;     j (tap-hold-opposite-hand-release 150 j rctl)
-;;     k (tap-hold-opposite-hand-release 150 k rsft)
-;;     l (tap-hold-opposite-hand-release 150 l lalt)
-;;     ; (tap-hold-opposite-hand-release 150 ; rmet)
-;; )
-
