@@ -166,6 +166,8 @@ augroup end
   nnoremap <M-i> <C-I>
   nnoremap <M-o> <C-O>
 
+  lua require('keymaps')
+
 " ---------
 " Files
 " ---------
