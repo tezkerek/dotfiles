@@ -97,7 +97,7 @@ augroup end
   nnoremap gk k
 
   " Delete word with ctrl+backspace
-  inoremap <C-H> <C-W>
+  inoremap <C-BS> <C-W>
 
   " Quickly disable hlsearch
   nnoremap <silent> <Esc> :nohlsearch<CR>:cclose<CR>

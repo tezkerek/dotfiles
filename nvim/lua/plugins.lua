@@ -42,9 +42,19 @@ return packer.startup(function(use)
     use {
         'folke/which-key.nvim',
         config = function()
-            vim.keymap.set('n', '<leader>?', function()
+            local wk = require('which-key')
+            wk.add {
+                { '<Space>f', group = 'files' },
+                { '<Space>b', group = 'buffers', icon = '' },
+                { '<Space>c', group = 'code_commands' },
+                { '<Space>l', group = 'lsp', icon = '' },
+                { '<Space>w', group = 'window', proxy = '<C-w>' },
+                { '<Space>h', group = 'hunk', icon = '' },
+                { '<Space>t', group = 'table' },
+            }
+            vim.keymap.set('n', '<Space>?', function()
                 require('which-key').show { global = true }
-            end)
+            end, { desc = 'Help' })
         end,
     }
     use {
@@ -123,7 +133,7 @@ return packer.startup(function(use)
                     cwd_only = true,
                     include_current_session = true,
                 }
-            end, {desc = "Recent files"})
+            end, { desc = 'Recent files' })
             -- stylua: ignore start
             vim.keymap.set('n', '<C-p>',     function() fzf.global()          end, { desc = "All files" })
             vim.keymap.set('n', '<Space>,',  function() fzf.buffers()         end, { desc = "Buffers" })

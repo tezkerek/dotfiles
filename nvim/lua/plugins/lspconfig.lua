@@ -1,36 +1,43 @@
 local function global_on_attach(client, bufnr)
-    vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    local function map(modes, lhs, rhs, desc)
+        vim.keymap.set(modes, lhs, rhs, {
+            silent = true,
+            buf = bufnr,
+            desc = desc,
+        })
+    end
+    map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration')
+    map('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
+    map({ 'n', 'i' }, '<M-k>', vim.lsp.buf.signature_help, 'Show signature')
+    map('n', '<M-CR>', vim.lsp.buf.code_action, 'Code action')
+    map('n', '<F2>', vim.lsp.buf.rename, 'Rename')
 
-    local opts = { noremap = true, silent = true }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', '<M-k>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', '<M-CR>', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', '<space>lwa', vim.lsp.buf.add_workspace_folder, opts)
-    vim.keymap.set('n', '<space>lwr', vim.lsp.buf.remove_workspace_folder, opts)
-    vim.keymap.set('n', '<space>lwl', function()
-        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
-    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-    vim.keymap.set('n', '[d', function()
+    map('n', '<space>e', vim.diagnostic.open_float, 'Show diagnostic')
+    map('n', '[d', function()
         vim.diagnostic.jump { count = -1 }
-    end, opts)
-    vim.keymap.set('n', ']d', function()
-        vim.diagnostic.jump({ count = 1 })
-    end, opts)
-    vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+    end, 'Prev diagnostic')
+    map('n', ']d', function()
+        vim.diagnostic.jump { count = 1 }
+    end, 'Next diagnostic')
+    map('n', '<space>lq', vim.diagnostic.setloclist, 'Diagnostics in qf')
+
+    map('n', '<Space>lwa', vim.lsp.buf.add_workspace_folder, 'Add workspace')
+    map(
+        'n',
+        '<Space>lwr',
+        vim.lsp.buf.remove_workspace_folder,
+        'Remove workspace'
+    )
+    map('n', '<Space>lwl', function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, 'List workspaces')
 
     if client.server_capabilities.documentFormattingProvider then
-        vim.keymap.set('n', '<space>cF', function()
+        map('n', '<space>cF', function()
             vim.lsp.buf.format { async = true }
-        end, opts)
+        end, 'Format')
     elseif client.server_capabilities.documentRangeFormattingProvider then
-        vim.keymap.set('n', '<space>cF', vim.lsp.buf.range_formatting, opts)
+        map('n', '<space>cF', vim.lsp.buf.range_formatting, 'Format')
     end
 
     require('lsp_signature').on_attach()

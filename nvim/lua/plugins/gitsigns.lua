@@ -16,7 +16,7 @@ require('gitsigns').setup {
                 gitsigns.next_hunk()
             end)
             return '<Ignore>'
-        end, { expr = true })
+        end, { expr = true, desc = 'Next hunk' })
 
         map('n', '[c', function()
             if vim.wo.diff then
@@ -26,10 +26,15 @@ require('gitsigns').setup {
                 gitsigns.prev_hunk()
             end)
             return '<Ignore>'
-        end, { expr = true })
+        end, { expr = true, desc = 'Prev hunk' })
 
-        map('n', '<leader>hp', gitsigns.preview_hunk)
-        map('n', '<leader>hr', gitsigns.reset_hunk)
-        map({ 'o', 'x' }, 'ih', gitsigns.select_hunk)
+        map(
+            'n',
+            '<leader>hp',
+            gitsigns.preview_hunk,
+            { desc = 'Preview hunk' }
+        )
+        map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'Restore hunk' })
+        map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = 'inner hunk' })
     end,
 }

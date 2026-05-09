@@ -61,15 +61,15 @@ local function select_indent_block_wrapper(around)
         select_indent_block(around)
     end
 end
-vim.keymap.set('x', 'ig', select_indent_block_wrapper(false))
-vim.keymap.set('x', 'ag', select_indent_block_wrapper(true))
-vim.keymap.set('o', 'ig', ':<C-U>normal vig<CR>', { silent = true })
-vim.keymap.set('o', 'ag', ':<C-U>normal vag<CR>', { silent = true })
+vim.keymap.set('x', 'ig', select_indent_block_wrapper(false), { desc = "inner indent group" })
+vim.keymap.set('x', 'ag', select_indent_block_wrapper(true), { desc = "indent group" })
+vim.keymap.set('o', 'ig', ':<C-U>normal vig<CR>', { silent = true, desc = "inner indent group" })
+vim.keymap.set('o', 'ag', ':<C-U>normal vag<CR>', { silent = true, desc = "indent group" })
 
 vim.keymap.set('n', 'gs', function()
     set_opfunc(function()
         vim.cmd("'[,']sort")
     end)
     return 'g@'
-end, { expr = true })
-vim.keymap.set('v', 'gs', ":'<,'>sort<CR>", { silent = true })
+end, { expr = true, desc = "Sort" })
+vim.keymap.set('v', 'gs', ":'<,'>sort<CR>", { silent = true, desc = "Sort range" })
