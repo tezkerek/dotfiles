@@ -172,21 +172,9 @@ augroup end
 " Files
 " ---------
   nnoremap <silent> <leader>fw :w<CR>
-  nnoremap <silent> <leader>ff :Files<CR>
-  nnoremap <silent> <leader>fh :History<CR>
-  nnoremap <silent> <leader>fj :Jumps<CR>
   nnoremap <silent> <leader>ft :NERDTreeToggle<CR>
-  " Browse buffers
-  nnoremap <silent> <leader>, :Buffers<CR>
-  " Jump to window if possible
-  let g:fzf_buffers_jump = 1
 
   nnoremap <silent> <leader>bd :Bdelete<CR>
-
-  " Search with rg
-  nnoremap <silent> <leader>fg :Rg<CR>
-  " Search in current buffer
-  nnoremap <silent> <leader>/ :BLines<CR>
 
 " ---------
 " vim-easy-align
