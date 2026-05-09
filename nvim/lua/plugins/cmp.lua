@@ -18,24 +18,24 @@ cmp.setup {
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
         ['<CR>'] = cmp.mapping.confirm { select = false },
-        ['<Tab>'] = function(fallback)
+        ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
             elseif vim.fn['vsnip#available'](1) == 1 then
-                vim.fn.feedkeys(t('<Plug>vsnip-expand-or-jump'), 'i')
+                vim.fn.feedkeys(t('<Plug>(vsnip-expand-or-jump)'), '')
             else
                 fallback()
             end
-        end,
-        ['<S-Tab>'] = function(fallback)
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
             elseif vim.fn['vsnip#jumpable'](-1) == 1 then
-                vim.fn.feedkeys(t('<Plug>vsnip-jump-prev'), 'i')
+                vim.fn.feedkeys(t('<Plug>(vsnip-jump-prev)'), '')
             else
                 fallback()
             end
-        end,
+        end, { 'i', 's' }),
     },
     sources = {
         { name = 'nvim_lsp' },
