@@ -4,7 +4,10 @@
 )
 
 (defsrc
-    caps a s d f g h j k l ;
+         q    w    e    r    t    y    u    i    o    p    [    ]
+    caps a    s    d    f    g    h    j    k    l    ;
+         z    x    c    v    b    n    m    ,    .    /
+                             spc
 )
 
 (defvar
@@ -26,7 +29,33 @@
 )
 
 (defalias
-    caps (t! hrmod esc (layer-toggle movement) 150)
+    ~ S-`
+    ! S-1
+    @ S-2
+    # S-3
+    $ S-4
+    % S-5
+    ^ S-6
+    & S-7
+    * S-8
+    lpr S-9
+    rpr S-0
+    _ S--
+    + S-=
+    { S-[
+    } S-]
+    | S-\
+    : S-;
+    dbq S-Quote
+    < S-,
+    > S-.
+    ? S-/
+
+    bw (multi lctl bspc)
+
+    caps (t! hrmod esc (layer-toggle mov) 150)
+    spc  (t! hrmod spc (layer-toggle sym) 50)
+
     a (t! hrmod a lmet 150)
     s (t! hrmod s lalt 150)
     d (t! hrmod d lsft 50)
@@ -39,10 +68,13 @@
 )
 
 (deflayer default
-    @caps @a @s @d @f _ _ @j @k @l @;
+          q    w    e    r    t    y    u    i    o    p    [    ]
+    @caps @a   @s   @d   @f   g    h    @j   @k   @l   @;
+          z    x    c    v    b    n    m    ,    .    /
+                              @spc
 )
 
-(deflayermap movement
+(deflayermap mov
     u PageUp
     d PageDown
     h left
@@ -50,4 +82,15 @@
     k up
     l right
     rsft (caps-word-toggle 5000)
+    p bspc
+    [ @bw
+    ] del
+    bspc del
+)
+
+(deflayer sym
+         @!   @+   -    @*   @|   @&   [    @{   @}   ]    [    ]
+    _    @^   eql  @_   @$   \    /    @dbq @lpr @rpr ;
+         @~   _    @%   `    @@   @#   @:   @<   @>  @?
+                             spc
 )
