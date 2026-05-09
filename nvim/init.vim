@@ -87,11 +87,6 @@ augroup end
   let g:mapleader = "\<Space>"
 
 " ---------
-" which-key
-" ---------
-  nnoremap <silent> <leader> :<C-U>WhichKey '<Space>'<CR>
-
-" ---------
 " Misc
 " ---------
   cnoreabbrev h vert h

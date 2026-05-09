@@ -39,7 +39,6 @@ return packer.startup(function(use)
     use('mhinz/vim-startify')
     use('moll/vim-bbye')
     use('embear/vim-localvimrc')
-    use('liuchengxu/vim-which-key')
     use {
         'folke/which-key.nvim',
         config = function()
