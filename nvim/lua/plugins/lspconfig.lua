@@ -1,4 +1,6 @@
-local function global_on_attach(client, bufnr)
+--- @param client vim.lsp.Client?
+--- @param bufnr integer
+local function on_lsp_attach(client, bufnr)
     local function map(modes, lhs, rhs, desc)
         vim.keymap.set(modes, lhs, rhs, {
             silent = true,
@@ -32,12 +34,14 @@ local function global_on_attach(client, bufnr)
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, 'List workspaces')
 
-    if client.server_capabilities.documentFormattingProvider then
-        map('n', '<space>cF', function()
-            vim.lsp.buf.format { async = true }
-        end, 'Format')
-    elseif client.server_capabilities.documentRangeFormattingProvider then
-        map('n', '<space>cF', vim.lsp.buf.range_formatting, 'Format')
+    if client ~= nil then
+        if client.server_capabilities.documentFormattingProvider then
+            map('n', '<space>cF', function()
+                vim.lsp.buf.format { async = true }
+            end, 'Format')
+        elseif client.server_capabilities.documentRangeFormattingProvider then
+            map('n', '<space>cF', vim.lsp.buf.range_formatting, 'Format')
+        end
     end
 
     require('lsp_signature').on_attach()
@@ -48,7 +52,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
-        global_on_attach(client, args.buf)
+        on_lsp_attach(client, args.buf)
     end,
 })
 
