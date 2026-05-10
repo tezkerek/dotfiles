@@ -195,7 +195,7 @@ return packer.startup(function(use)
         'neovim/nvim-lspconfig',
         event = 'BufEnter',
         config = function()
-            require('plugins/lspconfig')
+            require('plugins/lsp')
         end,
     }
     use {
