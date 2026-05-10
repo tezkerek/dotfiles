@@ -32,7 +32,7 @@ return packer.startup(function(use)
                         'filetype',
                     },
                 },
-                extensions = { 'fzf', 'fugitive', 'nerdtree' },
+                extensions = { 'fzf', 'fugitive', 'nvim-tree' },
             }
         end,
     }
@@ -95,8 +95,10 @@ return packer.startup(function(use)
     use('junegunn/vim-easy-align')
     use('tommcdo/vim-exchange')
     use('dhruvasagar/vim-table-mode')
-    use('kana/vim-textobj-user')
-    use('Julian/vim-textobj-variable-segment')
+    use {
+        'Julian/vim-textobj-variable-segment',
+        requires = 'kana/vim-textobj-user',
+    }
     use {
         'windwp/nvim-autopairs',
         after = { 'nvim-cmp' },
@@ -106,8 +108,12 @@ return packer.startup(function(use)
     }
 
     -- Files
-    use('preservim/nerdtree')
-    use('kyazdani42/nvim-tree.lua')
+    use {
+        'kyazdani42/nvim-tree.lua',
+        config = function()
+            require('plugins/nvim-tree')
+        end,
+    }
     use {
         'ibhagwan/fzf-lua',
         dependencies = { 'nvim-tree/nvim-web-devicons' },

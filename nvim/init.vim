@@ -167,7 +167,6 @@ augroup end
 " Files
 " ---------
   nnoremap <silent> <leader>fw :w<CR>
-  nnoremap <silent> <leader>ft :NERDTreeToggle<CR>
 
   nnoremap <silent> <leader>bd :Bdelete<CR>
 
