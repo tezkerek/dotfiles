@@ -189,6 +189,20 @@ return packer.startup(function(use)
             require('treesitter-context').setup { multiwindow = true }
         end,
     }
+    use {
+        'nvim-treesitter/nvim-treesitter-textobjects',
+        config = function()
+            require('nvim-treesitter-textobjects').setup {}
+            local move = require('nvim-treesitter-textobjects.move')
+
+            vim.keymap.set({ 'n', 'x', 'o' }, '[f', function()
+                move.goto_previous_start('@function.outer', 'textobjects')
+            end)
+            vim.keymap.set({ 'n', 'x', 'o' }, ']f', function()
+                move.goto_next_start('@function.outer', 'textobjects')
+            end)
+        end,
+    }
 
     -- Completion
     use {
