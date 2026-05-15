@@ -5,3 +5,4 @@ packages = ["nvim", "shell", "dev", "kanata"]
 email = "andrei.ancuta@uipath.com"
 username = "Andrei Ancuta"
 browser = "edge"
+terminal_font_size = 12
