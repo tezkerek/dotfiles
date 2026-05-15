@@ -10,6 +10,12 @@
                              spc
 )
 
+(deflocalkeys-macos
+    lalt 125
+    lmet 56
+    rmet 100
+)
+
 (defvar
     tap-hold 100
     hold-timeout 150
