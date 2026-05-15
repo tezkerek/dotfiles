@@ -1,5 +1,5 @@
 includes = []
-packages = ["nvim", "shell", "dev", "kanata"]
+packages = ["macos"]
 
 [variables]
 email = "andrei.ancuta@uipath.com"

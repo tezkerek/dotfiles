@@ -10,6 +10,13 @@ depends = ["nvim", "sway", "niri", "shell", "dev", "kanata", "apps"]
 "bin/synckdbx"    = "$XDG_BIN_HOME/synckdbx"
 
 
+[macos]
+depends = ["nvim", "shell", "dev", "kanata"]
+
+[macos.files]
+"shell/zsh/macos.zsh"   = "$XDG_CONFIG_HOME/zsh/macos.zsh"
+
+
 [programs.variables]
 terminal = "kitty"
 browser  = "firefox-developer-edition"

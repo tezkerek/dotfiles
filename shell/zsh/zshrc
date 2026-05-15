@@ -189,6 +189,8 @@ function {
     fi
 
     source $ZDOTDIR/fzf.zsh
+    [[ -e $ZDOTDIR/macos.zsh ]] && source $ZDOTDIR/macos.zsh
+
     fpath=($ZDOTDIR/completions $fpath)
     autoload -Uz compinit
     compinit
