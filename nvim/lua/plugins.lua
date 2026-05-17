@@ -116,44 +116,9 @@ return packer.startup(function(use)
     }
     use {
         'ibhagwan/fzf-lua',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        requires = { 'nvim-tree/nvim-web-devicons' },
         config = function()
-            local fzf = require('fzf-lua')
-            fzf.setup {
-                winopts = { backdrop = 80 },
-                keymap = {
-                    builtin = {
-                        ['<M-f>'] = 'toggle-fullscreen',
-                        ['<M-k>'] = 'preview-up',
-                        ['<M-j>'] = 'preview-down',
-                        ['<M-u>'] = 'preview-page-up',
-                        ['<M-d>'] = 'preview-page-down',
-                        ['<M-p>'] = 'preview-preview',
-                        ['<M-w>'] = 'preview-preview-wrap',
-                    },
-                },
-            }
-
-            vim.keymap.set('n', '<Space>fr', function()
-                fzf.oldfiles {
-                    cwd_only = true,
-                    include_current_session = true,
-                }
-            end, { desc = 'Recent files' })
-            -- stylua: ignore start
-            vim.keymap.set('n', '<C-p>',     function() fzf.global()          end, { desc = "All files" })
-            vim.keymap.set('n', '<Space>,',  function() fzf.buffers()         end, { desc = "Buffers" })
-            vim.keymap.set('n', '<Space>fa', function() fzf.builtin()         end, { desc = "FZF actions" })
-            vim.keymap.set('n', '<Space>ff', function() fzf.global()          end, { desc = "All files" })
-            vim.keymap.set('n', '<Space>fh', function() fzf.history()         end, { desc = "File history" })
-            vim.keymap.set('n', '<Space>fz', function() fzf.zoxide()          end, { desc = "Jump to dir" })
-            vim.keymap.set('n', '<Space>fg', function() fzf.grep_project()    end, { desc = "Grep project" })
-            vim.keymap.set('v', '<Space>fg', function() fzf.grep_visual()     end, { desc = "Grep selection" })
-            vim.keymap.set('n', '<Space>f/', function() fzf.blines()          end, { desc = "Buffer lines" })
-            vim.keymap.set('n', '<Space>fl', function() fzf.lines()           end, { desc = "Lines in all buffers" })
-            vim.keymap.set('n', '<Space>f.', function() fzf.resume()          end, { desc = "Repeat" })
-            vim.keymap.set('n', '<Space>cc', function() fzf.commands()        end, { desc = "Commands" })
-            vim.keymap.set('n', '<Space>ch', function() fzf.command_history() end, { desc = "Command history" })
+            require('plugins/fzf-lua')
         end,
     }
     use('tpope/vim-eunuch')
