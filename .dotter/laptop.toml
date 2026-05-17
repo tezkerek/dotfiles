@@ -1,0 +1,10 @@
+includes = []
+packages = ["linux"]
+
+[variables]
+device = "laptop"
+primary_output = "eDP-1"
+secondary_output = "HDMI-A-1"
+bar_height = 25
+bar_font_size = "14px"
+terminal_font_size = 12
