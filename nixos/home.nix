@@ -12,6 +12,21 @@
 
   programs.home-manager.enable = true;
 
+  xdg.userDirs = {
+    enable = true;
+    setSessionVariables = true;
+    desktop = "${config.home.homeDirectory}/desktop";
+    documents = "${config.home.homeDirectory}/documents";
+    download = "${config.home.homeDirectory}/download";
+    music = "${config.home.homeDirectory}/music";
+    pictures = "${config.home.homeDirectory}/pics";
+    projects = "${config.home.homeDirectory}/projects";
+    publicShare = "${config.home.homeDirectory}/public";
+    templates = "${config.home.homeDirectory}/templates";
+    videos = "${config.home.homeDirectory}/vid";
+  };
+  xdg.configFile."user-dirs.dirs".force = true;
+
   systemd.user.services.kanata = {
     Unit = {
       Description = "Kanata keyboard remapper";
