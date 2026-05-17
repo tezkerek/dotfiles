@@ -69,10 +69,8 @@ return packer.startup(function(use)
     -- Integration
     use('christoomey/vim-tmux-navigator')
     use('tpope/vim-fugitive')
-    use('nvim-lua/plenary.nvim')
     use {
         'lewis6991/gitsigns.nvim',
-        requires = 'nvim-lua/plenary.nvim',
         config = function()
             require('plugins/gitsigns')
         end,
