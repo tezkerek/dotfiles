@@ -23,5 +23,9 @@
 
 [mergetool "nvim"]
 	cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
 [push]
 	autoSetupRemote = true
+
+[credential]
+	helper = /usr/lib/git-core/git-credential-libsecret
