@@ -52,14 +52,14 @@
     )
 )
 
-(platform (macos) (
+(platform (macos)
     (defalias
       wmod lmet
     )
-))
+)
 
 (defalias
-    wmod lctl
+    ;;wmod lctl
     bw (multi @wmod bspc)
 
     caps  (tap-hold-release 100 150
