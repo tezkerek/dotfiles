@@ -8,6 +8,9 @@ local function on_lsp_attach(client, bufnr)
             desc = desc,
         })
     end
+
+    vim.lsp.codelens.enable(true, { bufnr = bufnr })
+
     map('n', 'gD', vim.lsp.buf.declaration, 'Go to declaration')
     map('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
     map({ 'n', 'i' }, '<M-k>', vim.lsp.buf.signature_help, 'Show signature')
@@ -75,6 +78,23 @@ vim.lsp.config('lua_ls', {
 })
 
 vim.lsp.config('cssls', { cmd = { 'vscode-css-languageserver', '--stdio' } })
+
+vim.lsp.config('hls', {
+    filetypes = { 'haskell', 'lhaskell' },
+    single_file_support = true,
+    settings = {
+        haskell = {
+            plugin = {
+                semanticTokens = {
+                    globalOn = true,
+                },
+                cabal = {
+                    globalOn = true,
+                },
+            },
+        },
+    },
+})
 
 local servers = {
     'pyright',
