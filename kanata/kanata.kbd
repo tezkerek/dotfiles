@@ -36,7 +36,7 @@
 
 (defvar
     tap-hold 100
-    hold-timeout 150
+    hold-timeout 300
 )
 
 (deftemplate
@@ -58,8 +58,13 @@
     )
 )
 
+(platform (linux)
+    (defalias
+        wmod lctl
+    )
+)
+
 (defalias
-    ;;wmod lctl
     bw (multi @wmod bspc)
 
     caps  (tap-hold-release 100 150
