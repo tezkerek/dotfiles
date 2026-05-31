@@ -34,7 +34,7 @@
     };
 
     Service = {
-      ExecStart = "${pkgs.kanata}/bin/kanata --cfg %h/.config/kanata/kanata.kbd";
+      ExecStart = "${pkgs.kanata}/bin/kanata --cfg %h/.config/kanata/kanata.kbd --port 7996";
       Restart = "always";
     };
 

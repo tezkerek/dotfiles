@@ -84,6 +84,7 @@
   programs.zsh.enable = true;
 
   environment.systemPackages = with pkgs; [
+    acpi
     bat
     btop
     delta
@@ -92,14 +93,17 @@
     fd
     fzf
     gitui
+    jjui
     jq
     jujutsu
     mcfly
+    nnn
     ripgrep
     tealdeer
     tmux
     usbutils
     wget
+    yazi
     zoxide
 
     bemenu
@@ -114,8 +118,10 @@
     opencode
     syncthing
 
+    haskell.compiler.ghc9103
     lua-language-server
     nixfmt
+    python3
     stylua
   ];
 
