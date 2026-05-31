@@ -123,7 +123,6 @@ return packer.startup(function(use)
 
     -- Syntax
     use('tpope/vim-sleuth')
-    use('vim-scripts/taglist.vim')
     use('AndrewRadev/splitjoin.vim')
     use('pechorin/any-jump.vim')
     use('sbdchd/neoformat')
