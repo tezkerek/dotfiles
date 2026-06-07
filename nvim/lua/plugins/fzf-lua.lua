@@ -1,3 +1,9 @@
+local winopts = {
+    preview = {
+        layout = 'vertical',
+    },
+}
+
 require('fzf-lua').setup {
     winopts = { backdrop = 80 },
     keymap = {
@@ -7,8 +13,16 @@ require('fzf-lua').setup {
             ['<M-j>'] = 'preview-down',
             ['<M-u>'] = 'preview-page-up',
             ['<M-d>'] = 'preview-page-down',
-            ['<M-p>'] = 'preview-preview',
-            ['<M-w>'] = 'preview-preview-wrap',
+            ['<M-p>'] = 'toggle-preview',
+            ['<M-w>'] = 'toggle-preview-wrap',
+            ['<M-r>'] = 'toggle-preview-cw',
+            ['<M-S-r>'] = 'toggle-preview-ccw',
+        },
+    },
+    lsp = {
+        winopts = winopts,
+        finder = {
+            winopts = winopts,
         },
     },
 }
@@ -71,3 +85,15 @@ end, { desc = 'Commands' })
 vim.keymap.set('n', '<Space>ch', function()
     require('fzf-lua').command_history()
 end, { desc = 'Command history' })
+
+vim.keymap.set('n', '<Space>cl', function()
+    require('fzf-lua').lsp_finder()
+end, { desc = 'LSP finder' })
+
+vim.keymap.set('n', '<Space>cr', function()
+    require('fzf-lua').lsp_references()
+end, { desc = 'LSP references' })
+
+vim.keymap.set('n', '<Space>ci', function()
+    require('fzf-lua').lsp_implementations()
+end, { desc = 'LSP implementations' })
