@@ -73,3 +73,25 @@ vim.keymap.set('n', 'gs', function()
     return 'g@'
 end, { expr = true, desc = "Sort" })
 vim.keymap.set('v', 'gs', ":'<,'>sort<CR>", { silent = true, desc = "Sort range" })
+
+--- Dimisses various temporary popups, in sequence
+local function sequential_dismiss()
+    local dismissed = false
+    for _, window_id in ipairs(vim.api.nvim_list_wins()) do
+        if vim.api.nvim_win_get_config(window_id).relative ~= '' then
+            vim.api.nvim_win_close(window_id, false)
+            dismissed = true
+        end
+    end
+
+    if dismissed then return end
+
+    vim.api.nvim_exec2("nohlsearch", {})
+    vim.api.nvim_exec2("cclose", {})
+end
+vim.keymap.set(
+    'n',
+    '<Esc>',
+    sequential_dismiss,
+    { desc = 'Close all floating windows', remap = false }
+)

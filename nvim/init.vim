@@ -99,9 +99,6 @@ augroup end
   " Delete word with ctrl+backspace
   inoremap <C-BS> <C-W>
 
-  " Quickly disable hlsearch
-  nnoremap <silent> <Esc> :nohlsearch<CR>:cclose<CR>
-
   " Substitute word under cursor
   nnoremap <leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
   " Substitute visual selection
@@ -111,6 +108,7 @@ augroup end
   nnoremap g= gg=G``
 
   nnoremap <silent> <leader>cf :Neoformat<CR>
+  vnoremap <silent> <leader>cf :Neoformat<CR>
 
   " Insert line under cursor
   nnoremap <silent> + :call InsertEmptyLine()<CR>
