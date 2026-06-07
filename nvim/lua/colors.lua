@@ -5,4 +5,8 @@ vim.api.nvim_set_hl(0, 'TreesitterContextBottom', {
     sp = colors.styles.moon.blue,
 })
 
+vim.api.nvim_set_hl(0, 'DiagnosticUnnecessary', {
+    link = "Underline",
+})
+
 return {}

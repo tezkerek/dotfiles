@@ -173,3 +173,5 @@ augroup end
 " ---------
 nmap <leader>a <Plug>(EasyAlign)
 xmap <leader>a <Plug>(EasyAlign)
+
+lua require('diagnostic')
