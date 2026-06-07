@@ -89,7 +89,7 @@ augroup end
 " ---------
 " Misc
 " ---------
-  cnoreabbrev h vert h
+  cnoreabbrev <expr> h (getcmdtype() ==# ':' && getcmdpos() == 2) ? 'vert h' : 'h'
 
   nnoremap j gj
   nnoremap gj j
