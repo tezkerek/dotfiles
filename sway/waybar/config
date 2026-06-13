@@ -4,7 +4,19 @@
     "height": {{bar_height}},
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window", "niri/workspaces"],
     "modules-center": ["custom/mpris"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "battery", "custom/keyboard_layout", "clock", "tray"],
+    "modules-right": [
+        "custom/niri_keyboard",
+        "custom/keyboard_layout",
+        "idle_inhibitor",
+        "pulseaudio",
+        "network",
+        "cpu",
+        "memory",
+        "temperature",
+        "battery",
+        "clock",
+        "tray"
+    ],
     "sway/window": {
         "max-length": 50
     },
@@ -103,5 +115,10 @@
     "custom/keyboard_layout": {
         "format": " {}",
         "exec": "waybar_keyboard_layout"
+    },
+    "custom/niri_keyboard": {
+        "format": "  {}",
+        "return-type": "json",
+        "exec": "waybar_niri_keyboard.py"
     }
 }

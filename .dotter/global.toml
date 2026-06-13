@@ -73,9 +73,10 @@ username = "tezkerek"
 depends = ["colors"]
 
 [waybar.files]
-"sway/waybar"                = "$XDG_CONFIG_HOME/waybar"
-"bin/waybar_mpris"           = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
-"bin/waybar_keyboard_layout" = "$XDG_BIN_HOME/waybar_keyboard_layout"
+"sway/waybar"                 = "$XDG_CONFIG_HOME/waybar"
+"bin/waybar_mpris"            = { target = "$XDG_BIN_HOME/waybar_mpris", type = "symbolic" }
+"bin/waybar_keyboard_layout"  = "$XDG_BIN_HOME/waybar_keyboard_layout"
+"bin/waybar_niri_keyboard.py" = "$XDG_BIN_HOME/waybar_niri_keyboard.py"
 
 
 [sway]
