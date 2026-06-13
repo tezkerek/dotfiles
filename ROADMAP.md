@@ -3,7 +3,7 @@
 Improvements or ideas that I want to investigate.
 
 - Kanata
-    - [ ] Investigate: toggleable `mov` layer to mimic modal editing
+    - [x] Investigate: toggleable `mov` layer to mimic modal editing
     - [ ] Mouse movement
 - Neovim
     - [ ] Preview LSP symbol definition, because hover only shows signature.

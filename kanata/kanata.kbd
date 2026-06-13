@@ -1,13 +1,31 @@
 ;; Version 1.11.0 does not have tap-hold-require-prior-idle yet. Requires building from main branch.
-(defcfg
-    process-unmapped-keys yes
+;; Just symbols
+(defalias
+    ~ S-`
+    ! S-1
+    @ S-2
+    # S-3
+    $ S-4
+    % S-5
+    ^ S-6
+    & S-7
+    * S-8
+    lpr S-9
+    rpr S-0
+    _ S--
+    + S-=
+    { S-[
+    } S-]
+    | S-\
+    : S-;
+    dbq S-'
+    < S-,
+    > S-.
+    ? S-/
 )
 
-(defsrc
-         q    w    e    r    t    y    u    i    o    p    [    ]
-    caps a    s    d    f    g    h    j    k    l    ;
-         z    x    c    v    b    n    m    ,    .    /
-                             spc
+(defcfg
+    process-unmapped-keys yes
 )
 
 (deflocalkeys-macos
@@ -34,33 +52,22 @@
     )
 )
 
+(platform (macos) (
+    (defalias
+      wmod lmet
+    )
+))
+
 (defalias
-    ~ S-`
-    ! S-1
-    @ S-2
-    # S-3
-    $ S-4
-    % S-5
-    ^ S-6
-    & S-7
-    * S-8
-    lpr S-9
-    rpr S-0
-    _ S--
-    + S-=
-    { S-[
-    } S-]
-    | S-\
-    : S-;
-    dbq S-Quote
-    < S-,
-    > S-.
-    ? S-/
+    wmod lctl
+    bw (multi @wmod bspc)
 
-    bw (multi lctl bspc)
-
-    caps (t! hrmod esc (layer-toggle mov) 150)
-    spc  (t! hrmod spc (layer-toggle sym) 50)
+    caps  (tap-hold-release 100 150
+              (tap-dance 150 (esc (layer-switch mov)))
+              (layer-while-held mov)
+          )
+    ' (t! hrmod ' (layer-toggle mov) 50)
+    spc   (t! hrmod spc (layer-toggle sym) 50)
 
     a (t! hrmod a lmet 150)
     s (t! hrmod s lalt 150)
@@ -73,30 +80,49 @@
     ; (t! hrmod ; rmet 150)
 )
 
+;; Layers
+(defsrc
+         q    w    e    r    t    y    u    i    o    p    [    ]
+    caps a    s    d    f    g    h    j    k    l    ;    '
+         z    x    c    v    b    n    m    ,    .    /
+                             spc
+)
+
 (deflayer default
           q    w    e    r    t    y    u    i    o    p    [    ]
-    @caps @a   @s   @d   @f   g    h    @j   @k   @l   @;
+    @caps @a   @s   @d   @f   g    h    @j   @k   @l   @;   @'
           z    x    c    v    b    n    m    ,    .    /
                               @spc
 )
 
 (deflayermap mov
-    u PageUp
-    d PageDown
+    esc  (layer-switch default)
+    caps (layer-switch default)
+
     h left
-    j down
-    k up
-    l right
+    j (t! hrmod down rctl 150)
+    k (t! hrmod up rsft 50)
+    l (t! hrmod right lalt 150)
+
+    w (multi @wmod right)
+    e (multi @wmod right)
+    b (multi @wmod left)
+
+    a (t! hrmod Home lmet 150)
+    f (t! hrmod End lctl 150)
+    u PageUp
+    d (t! hrmod PageDown lsft 50)
+
     rsft (caps-word-toggle 5000)
+
     p bspc
     [ @bw
-    ] del
-    bspc del
+    x del
 )
 
 (deflayer sym
          @!   @+   -    @*   @|   @&   [    @{   @}   ]    [    ]
-    _    @^   eql  @_   @$   \    /    @dbq @lpr @rpr ;
+    _    @^   eql  @_   @$   \    /    @dbq @lpr @rpr ;    '
          @~   _    @%   `    @@   @#   @:   @<   @>  @?
                              spc
 )
