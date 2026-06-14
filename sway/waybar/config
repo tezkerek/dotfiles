@@ -110,7 +110,8 @@
         "format": " {}",
         "max-length": 50,
         "return-type": "json",
-        "exec": "waybar_mpris"
+        "exec": "waybar_mpris",
+        "escape": true
     },
     "custom/keyboard_layout": {
         "format": " {}",
