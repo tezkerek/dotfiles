@@ -15,6 +15,7 @@ scriptencoding utf-8
   set updatetime=300 " For highlighting text under cursor faster
   set ignorecase smartcase inccommand=nosplit
   set splitright
+  set undofile
   set completeopt=menu,menuone,noselect
   set winborder=rounded
 
