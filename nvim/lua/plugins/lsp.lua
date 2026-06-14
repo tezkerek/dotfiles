@@ -96,8 +96,20 @@ vim.lsp.config('hls', {
     },
 })
 
+--- @param servers string[]
+--- @return string?
+local function first_available_server(servers)
+    for _, server in ipairs(servers) do
+        local config = vim.lsp.config[server]
+        if config and vim.fn.executable(config.cmd[1]) == 1 then
+            return server
+        end
+    end
+end
+
+--- @type (string|string[])[]
 local servers = {
-    'pyright',
+    { 'pyrefly', 'basedpyright', 'pyright' },
     'rust_analyzer',
     'ts_ls',
     'clangd',
@@ -105,6 +117,15 @@ local servers = {
     'lua_ls',
     'cssls',
 }
-for _, lsp in ipairs(servers) do
-    vim.lsp.enable(lsp)
+
+for _, entry in ipairs(servers) do
+    local lsp
+    if type(entry) == 'table' then
+        lsp = first_available_server(entry)
+    else
+        lsp = entry
+    end
+    if lsp then
+        vim.lsp.enable(lsp)
+    end
 end
