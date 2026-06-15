@@ -1,13 +1,33 @@
 #!/usr/bin/env python3
+from evdev import InputDevice
 import asyncio
 import json
+import time
 import sys
 from collections.abc import AsyncIterator
 from typing import Literal, TypeGuard, cast
 
-KANATA_PORT = 7996
+import evdev
+from evdev import InputEvent, ecodes
 
-CombinedQueue = asyncio.Queue[tuple[Literal["layout"] | Literal["layer"], str]]
+KANATA_PORT = 7996
+KBD_DEVICE_NAME = "kanata"
+DEBOUNCE_SEC = 0.1
+
+MODIFIER_KEYS: dict[int, str] = {
+    ecodes.KEY_LEFTCTRL: "ctrl",
+    ecodes.KEY_RIGHTCTRL: "ctrl",
+    ecodes.KEY_LEFTSHIFT: "shift",
+    ecodes.KEY_RIGHTSHIFT: "shift",
+    ecodes.KEY_LEFTALT: "alt",
+    ecodes.KEY_RIGHTALT: "alt",
+    ecodes.KEY_LEFTMETA: "super",
+    ecodes.KEY_RIGHTMETA: "super",
+}
+
+CombinedQueue = asyncio.Queue[
+    tuple[Literal["layout"] | Literal["layer"] | Literal["modifiers"], str]
+]
 
 
 def get_at_path[T](obj: object, target_type: type[T], *keys: str) -> T | None:
@@ -30,16 +50,14 @@ def get_at_path[T](obj: object, target_type: type[T], *keys: str) -> T | None:
 def is_list_of[T](obj: object, target_type: type[T]) -> TypeGuard[list[T]]:
     if not isinstance(obj, list):
         return False
-    return all(
-        isinstance(i, target_type)
-        for i in obj  # pyright: ignore[reportUnknownVariableType]
-    )
+    return all(isinstance(i, target_type) for i in obj)
 
 
 def get_list_at_path[T](obj: object, item_type: type[T], *keys: str) -> list[T] | None:
     generic_list = get_at_path(obj, object, *keys)
     if is_list_of(generic_list, item_type):
         return generic_list
+    return None
 
 
 async def read_lines(reader: asyncio.StreamReader) -> AsyncIterator[str]:
@@ -115,19 +133,97 @@ async def produce_niri_layout(q: CombinedQueue) -> None:
             await asyncio.sleep(2)
 
 
-def emit_next(layout: str, kanata_layer: str | None = None) -> None:
+def get_modifier(event: InputEvent) -> str | None:
+    return MODIFIER_KEYS.get(event.code) if event.type == ecodes.EV_KEY else None
+
+
+def find_kbd_device() -> str | None:
+    for path in evdev.list_devices():
+        try:
+            device = evdev.InputDevice(path)
+            is_target = KBD_DEVICE_NAME in device.name.lower()
+            device.close()
+            if is_target:
+                return path
+        except OSError:
+            continue
+    return None
+
+
+async def _emit_modifiers_loop(device: InputDevice[str], q: CombinedQueue) -> None:
+    held: set[str] = set()
+    mods_str = ""
+    last_event_time = 0.0
+    emit_task: asyncio.Task[None] | None = None
+
+    async def debounced_emit() -> None:
+        while True:
+            now = time.monotonic()
+            time_left = (last_event_time + DEBOUNCE_SEC) - now
+            if time_left > 0:
+                await asyncio.sleep(time_left)
+                continue
+            await q.put(("modifiers", mods_str))
+            break
+
+    event: InputEvent
+    async for event in device.async_read_loop():
+        if not (mod := get_modifier(event)):
+            continue
+        if event.value:
+            held.add(mod)
+        else:
+            held.discard(mod)
+        new_mods_str = " ".join(sorted(held))
+        if new_mods_str == mods_str:
+            continue
+        mods_str = new_mods_str
+        last_event_time = time.monotonic()
+        if emit_task is None or emit_task.done():
+            emit_task = asyncio.create_task(debounced_emit())
+
+
+async def produce_modifiers(q: CombinedQueue) -> None:
+    while True:
+        try:
+            device_path = find_kbd_device()
+            if not device_path:
+                await asyncio.sleep(2)
+                return
+
+            device = evdev.InputDevice(device_path)
+            await _emit_modifiers_loop(device, q)
+        except Exception as e:
+            print(f"[kb_layout] evdev error: {e}", file=sys.stderr)
+            await asyncio.sleep(2)
+
+
+def emit_next(
+    layout: str, kanata_layer: str | None = None, modifiers: str = ""
+) -> None:
     if not layout:
         return
+
+    classes: list[str] = []
+    layer_str = ""
     if kanata_layer and kanata_layer != "default":
-        result = {"text": f"{layout} 󰧾 {kanata_layer}", "class": "layer-active"}
-    else:
-        result = {"text": layout}
+        layer_str = f" 󰧾 {kanata_layer}"
+        classes.append("layer-active")
+    mod_str = ""
+    if modifiers:
+        mod_str = f" 󰘴 {modifiers}"
+        classes.append("modifiers-active")
+
+    result: dict[str, str | list[str]] = {"text": f"{layout}{layer_str}{mod_str}"}
+    if classes:
+        result["class"] = classes
     print(json.dumps(result), flush=True)
 
 
 async def consume(q: CombinedQueue) -> None:
     layout = ""
-    layer = None
+    layer: str | None = None
+    modifiers = ""
     while True:
         source, value = await q.get()
         match source:
@@ -135,7 +231,9 @@ async def consume(q: CombinedQueue) -> None:
                 layer = value
             case "layout":
                 layout = value
-        emit_next(layout, layer)
+            case "modifiers":
+                modifiers = value
+        emit_next(layout, layer, modifiers)
 
 
 async def main() -> None:
@@ -143,6 +241,7 @@ async def main() -> None:
     _ = await asyncio.gather(
         produce_kanata_layer(q),
         produce_niri_layout(q),
+        produce_modifiers(q),
         consume(q),
         return_exceptions=True,
     )

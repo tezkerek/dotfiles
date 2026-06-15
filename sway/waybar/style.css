@@ -60,6 +60,7 @@ widget > label {
     border-radius: 5px;
     background-color: #{{colors.green}};
     color: #{{colors.black}};
+    margin: 0 10px;
 }
 
 /* RIGHT MODULES */
@@ -103,6 +104,16 @@ widget > label {
 
 #custom-niri_keyboard.layer-active {
     background-color: #{{colors.green}};
+    color: #{{colors.black}};
+}
+
+#custom-niri_keyboard.modifiers-active {
+    background-color: #{{colors.accent}};
+    color: #{{colors.black}};
+}
+
+#custom-niri_keyboard.layer-active.modifiers-active {
+    background: linear-gradient(90deg, #{{colors.green}} 0%, #{{colors.accent}} 70%);
     color: #{{colors.black}};
 }
 
