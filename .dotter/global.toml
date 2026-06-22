@@ -29,6 +29,7 @@ bg_light   = "3b4261"
 foreground = "c0caf5"
 cursor     = "c0caf5"
 accent     = "7aa2f7"
+bg_accent  = "2B3C60"
 highlight  = "313739"
 # 16-bit colors
 black      = "15161E"
