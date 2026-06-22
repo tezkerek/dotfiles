@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+# Tmux file-path picker: open an fzf in a popup rooted at the pane's cwd, then
+# type the chosen path into whatever program runs in that pane (shell, Claude
+# Code, nvim, ...). Detects AI CLIs (claude/gemini/codex) and emits @-prefixed
+# paths; otherwise shell-escapes them.
+#
+# Navigation (relaunch loop, fzf restarts rooted at the new dir):
+#   alt-u  up a directory
+#   alt-g  go to the path currently typed in the prompt (absolute or ~-prefixed)
+#   alt-.  toggle hidden files
+#   alt-z  toggle zoxide mode (pick a dir from history; Enter re-roots there)
+#   alt-d  insert the folder instead of the file (in zoxide mode: insert the dir)
+# Plus the usual preview keybinds (alt-j/k, ctrl-alt-d/u, alt-p, alt-w).
+set -euo pipefail
+
+[[ -z "${TMUX-}" ]] && { echo "Must run inside tmux." >&2; exit 1; }
+
+pane_id=$(tmux display-message -p '#{pane_id}')
+pane_dir=$(tmux display-message -p '#{pane_current_path}')
+pane_pid=$(tmux display-message -p '#{pane_pid}')
+
+# AI CLIs take @path references; everything else gets a shell-escaped path.
+at_prefix=false
+if pgrep -P "$pane_pid" -f '.*claude.*|node.*gemini|codex' >/dev/null 2>&1; then
+    at_prefix=true
+fi
+
+bat_cmd="bat --style=numbers --color=always {}"
+command -v bat >/dev/null 2>&1 || bat_cmd="cat {}"
+eza_cmd="eza -l --no-permissions --no-user --color=always --git --icons {}"
+command -v eza >/dev/null 2>&1 || eza_cmd="ls -ap --color=always {}"
+
+# Your usual fzf preview keybinds (popups don't inherit FZF_DEFAULT_OPTS).
+usual_binds="alt-j:preview-down,alt-k:preview-up,\
+ctrl-alt-d:preview-half-page-down,ctrl-alt-u:preview-half-page-up,\
+alt-p:toggle-preview,alt-w:toggle-preview-wrap-word"
+
+root="$pane_dir"
+hidden=false
+zoxide_mode=false
+query=""
+want_dir=false
+
+short() { printf '%s' "${1/#$HOME/\~}"; }
+
+while :; do
+    if $zoxide_mode; then
+        header="↵ cd-here  ⌥d insert-dir  ⌥z back │ ZOXIDE"
+        preview="$eza_cmd"
+        source_cmd() { zoxide query -l; }
+    else
+        local_hidden=""; $hidden && local_hidden=" hidden"
+        header="↵ insert  ⌥d folder  ⌥u up  ⌥g goto  ⌥. hidden  ⌥z zoxide │ $(short "$root")$local_hidden"
+        preview="$bat_cmd"
+        fd_args=(--follow --type f --exclude .git)
+        $hidden && fd_args+=(--hidden)
+        source_cmd() { ( cd "$root" && fd "${fd_args[@]}" ); }
+    fi
+
+    set +e
+    out=$(source_cmd | fzf --multi --reverse --print-query --query="$query" \
+        --expect=alt-u,alt-g,alt-.,alt-z,alt-d \
+        --bind="$usual_binds" --preview="$preview" --preview-window=down \
+        --header="$header")
+    rc=$?
+    set -e
+    [[ $rc -eq 130 ]] && exit 0   # Esc / Ctrl-C
+
+    lines=()
+    while IFS= read -r _l; do lines+=("$_l"); done <<<"$out"
+    query="${lines[0]-}"
+    key="${lines[1]-}"
+    selections=("${lines[@]:2}")
+
+    case "$key" in
+        alt-u) $zoxide_mode || root=$(dirname "$root"); continue ;;
+        alt-.) $hidden && hidden=false || hidden=true; continue ;;
+        alt-z)
+            if command -v zoxide >/dev/null 2>&1; then
+                $zoxide_mode && zoxide_mode=false || zoxide_mode=true
+                query=""
+            fi
+            continue ;;
+        alt-g)
+            cand="${query/#\~/$HOME}"
+            if [[ "$cand" == /* && -d "$cand" ]]; then
+                root="$cand"; zoxide_mode=false; query=""
+            fi
+            continue ;;
+        alt-d) want_dir=true ;;
+        "")    want_dir=false ;;
+        *)     continue ;;
+    esac
+
+    # Enter in zoxide mode re-roots there rather than inserting.
+    if $zoxide_mode && [[ -z "$key" ]]; then
+        [[ ${#selections[@]} -gt 0 ]] && { root="${selections[0]}"; zoxide_mode=false; query=""; }
+        continue
+    fi
+
+    [[ ${#selections[@]} -eq 0 ]] && exit 0
+    break
+done
+
+out_str=""
+for sel in "${selections[@]}"; do
+    [[ -z "$sel" ]] && continue
+    if $zoxide_mode; then
+        path="$sel"                       # zoxide entries are absolute dirs
+    elif [[ "$root" == "$pane_dir" ]]; then
+        path="$sel"                       # fd gave a path relative to the pane
+    else
+        path="$root/$sel"                 # navigated elsewhere → absolute
+    fi
+    if $want_dir && ! $zoxide_mode; then
+        path=$(dirname "$path")
+        [[ "$path" == "." ]] && path="./"
+    fi
+    if $at_prefix; then
+        out_str+="@$path "
+    else
+        printf -v esc "%q" "$path"
+        out_str+="$esc "
+    fi
+done
+
+[[ -n "$out_str" ]] && tmux send-keys -t "$pane_id" -l -- "$out_str"
