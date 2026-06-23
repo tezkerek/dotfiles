@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
-# Tmux file-path picker: open an fzf in a popup rooted at the pane's cwd, then
-# type the chosen path into whatever program runs in that pane (shell, Claude
-# Code, nvim, ...). Detects AI CLIs (claude/gemini/codex) and emits @-prefixed
-# paths; otherwise shell-escapes them.
+# File-path picker: open an fzf rooted at the current pane/window's cwd, then
+# type the chosen path into whatever program runs there (shell, Claude Code,
+# nvim, ...). Detects AI CLIs (claude/gemini/codex) and emits @-prefixed paths;
+# otherwise shell-escapes them.
+#
+# Works in two environments, auto-detected at startup:
+#   tmux   - launched from a tmux popup (display-popup -E); the popup queries
+#            the active pane and types back with `tmux send-keys`.
+#   kitty  - launched from a `launch --type=overlay` mapping; the overlay reads
+#            the window beneath it (state:overlay_parent) via `kitten @` and
+#            types back with `kitten @ send-text`.
 #
 # Navigation (relaunch loop, fzf restarts rooted at the new dir):
 #   alt-u  up a directory
@@ -13,17 +20,48 @@
 # Plus the usual preview keybinds (alt-j/k, ctrl-alt-d/u, alt-p, alt-w).
 set -euo pipefail
 
-[[ -z "${TMUX-}" ]] && { echo "Must run inside tmux." >&2; exit 1; }
-
-pane_id=$(tmux display-message -p '#{pane_id}')
-pane_dir=$(tmux display-message -p '#{pane_current_path}')
-pane_pid=$(tmux display-message -p '#{pane_pid}')
-
-# AI CLIs take @path references; everything else gets a shell-escaped path.
-at_prefix=false
-if pgrep -P "$pane_pid" -f '.*claude.*|node.*gemini|codex' >/dev/null 2>&1; then
-    at_prefix=true
+# Pick a backend. Check tmux first so the tmux popup uses the tmux backend even
+# when kitty is the outer terminal.
+if [[ -n "${TMUX-}" ]]; then
+    backend=tmux
+elif [[ -n "${KITTY_WINDOW_ID-}" ]]; then
+    backend=kitty
+else
+    echo "Must run inside tmux or kitty." >&2; exit 1
 fi
+
+# get_context: sets pane_dir (fzf root) and at_prefix (AI CLI → @path refs).
+# send_out:    types the assembled string back into the target pane/window.
+if [[ "$backend" == tmux ]]; then
+    pane_id=$(tmux display-message -p '#{pane_id}')
+
+    get_context() {
+        pane_dir=$(tmux display-message -p '#{pane_current_path}')
+        local pane_pid; pane_pid=$(tmux display-message -p '#{pane_pid}')
+        at_prefix=false
+        if pgrep -P "$pane_pid" -f '.*claude.*|node.*gemini|codex' >/dev/null 2>&1; then
+            at_prefix=true
+        fi
+    }
+
+    send_out() { tmux send-keys -t "$pane_id" -l -- "$1"; }
+else
+    get_context() {
+        # --cwd=current rooted the overlay at the source window's cwd.
+        pane_dir="$PWD"
+        at_prefix=false
+        local fg
+        fg=$(kitten @ ls --match state:overlay_parent 2>/dev/null \
+             | jq -r '.[].tabs[].windows[].foreground_processes[].cmdline | join(" ")' 2>/dev/null) || fg=""
+        # `if` (not `&&`) so a non-match returns 0 — otherwise set -e exits here.
+        if [[ "$fg" =~ claude|gemini|codex ]]; then at_prefix=true; fi
+    }
+
+    # --stdin sends the text as-is (no escape interpretation), like send-keys -l.
+    send_out() { printf '%s' "$1" | kitten @ send-text --match state:overlay_parent --stdin; }
+fi
+
+get_context
 
 bat_cmd="bat --style=numbers --color=always {}"
 command -v bat >/dev/null 2>&1 || bat_cmd="cat {}"
@@ -124,4 +162,4 @@ for sel in "${selections[@]}"; do
     fi
 done
 
-[[ -n "$out_str" ]] && tmux send-keys -t "$pane_id" -l -- "$out_str"
+[[ -n "$out_str" ]] && send_out "$out_str"
