@@ -55,12 +55,14 @@
 (platform (macos)
     (defalias
       wmod lmet
+      fn (layer-while-held macosfn)
     )
 )
 
 (platform (linux)
     (defalias
         wmod lctl
+        fn fn
     )
 )
 
@@ -90,14 +92,14 @@
          q    w    e    r    t    y    u    i    o    p    [    ]
     caps a    s    d    f    g    h    j    k    l    ;    '
          z    x    c    v    b    n    m    ,    .    /
-                             spc
+    fn                       spc
 )
 
 (deflayer default
           q    w    e    r    t    y    u    i    o    p    [    ]
     @caps @a   @s   @d   @f   g    h    @j   @k   @l   @;   @'
           z    x    c    v    b    n    m    ,    .    /
-                              @spc
+    @fn                       @spc
 )
 
 (deflayermap mov
@@ -129,5 +131,16 @@
          @!   @+   -    @*   @|   @&   [    @{   @}   ]    [    ]
     _    @^   eql  @_   @$   \    /    @dbq @lpr @rpr ;    '
          @~   _    @%   `    @@   @#   @:   @<   @>  @?
-                             spc
+    _                        spc
+)
+
+(deflayermap macosfn
+    f1  brdn
+    f2  brup
+    f7  prev
+    f8  pp
+    f9  next
+    f10 mute
+    f11 vold
+    f12 volu
 )
