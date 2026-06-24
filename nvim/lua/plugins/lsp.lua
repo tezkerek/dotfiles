@@ -111,7 +111,7 @@ end
 local servers = {
     { 'pyrefly', 'basedpyright', 'pyright' },
     'rust_analyzer',
-    'ts_ls',
+    { 'vtsls', 'ts_ls' },
     'clangd',
     'hls',
     'lua_ls',
