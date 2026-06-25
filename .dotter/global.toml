@@ -46,7 +46,7 @@ gray       = "414868"
 
 
 [nvim.files]
-nvim = "$XDG_CONFIG_HOME/nvim"
+nvim = { target = "$XDG_CONFIG_HOME/nvim", type = "symbolic" }
 
 
 [shell]

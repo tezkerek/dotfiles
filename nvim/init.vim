@@ -64,6 +64,7 @@ scriptencoding utf-8
   colorscheme tokyonight
 
   lua require('colors')
+  lua require('dotfiles-editing')
 
 " ==================
 "  Autocmd

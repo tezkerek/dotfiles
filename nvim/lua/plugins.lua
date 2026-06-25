@@ -132,7 +132,12 @@ return packer.startup(function(use)
     use('AndrewRadev/splitjoin.vim')
     use('pechorin/any-jump.vim')
     use('sbdchd/neoformat')
-    use('ap/vim-css-color')
+    use {
+        'norcalli/nvim-colorizer.lua',
+        config = function()
+            require('plugins/colorizer')
+        end,
+    }
     use {
         'lervag/vimtex',
         config = function()
