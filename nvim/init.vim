@@ -137,7 +137,7 @@ augroup end
   endfunction
 
   " Better leader for window management
-  nnoremap <leader>w <C-W>
+  nmap <leader>w <C-W>
 
   " Tab navigation
   
