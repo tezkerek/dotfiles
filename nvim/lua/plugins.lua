@@ -76,6 +76,12 @@ return packer.startup(function(use)
         end,
     }
     use {
+        'NicolasGB/jj.nvim',
+        config = function()
+            require('jj').setup {}
+        end,
+    }
+    use {
         'glacambre/firenvim',
         run = function()
             vim.fn['firenvim#install'](0)
