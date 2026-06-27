@@ -109,7 +109,7 @@ binds {
     Mod+Ctrl+Q repeat=false   { spawn "swaylock"; }
     Mod+Shift+O  repeat=false { toggle-overview; }
 
-    Mod+Shift+Return { spawn "kitty"; }
+    Mod+Shift+Return { spawn-sh "kitty --single-instance"; }
     Mod+Return       { spawn "niri_scratchpad"; }
     Mod+I            { spawn-sh "wofi --show=drun"; }
     Mod+O            { spawn-sh "bemenu-run --no-overlap --monitor=all --prompt='|>'"; }
