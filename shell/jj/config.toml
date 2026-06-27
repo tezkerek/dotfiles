@@ -37,3 +37,8 @@ if(timestamp.before("this january"),
   timestamp.format("%d %b %H:%M")
 )
 '''
+
+[[--scope]]
+--when.environments = ["JJUI"]
+[--scope.ui]
+diff-formatter = "delta"
