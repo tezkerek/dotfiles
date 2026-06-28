@@ -102,6 +102,7 @@ function {
     }
     alias labs='curl --silent http://liis.ro/hosted/activitati/2013/laboratoare/labs.pdf | zathura -'
 
+    source $ZDOTDIR/functions.zsh
 
     ###############
     # Bindings
