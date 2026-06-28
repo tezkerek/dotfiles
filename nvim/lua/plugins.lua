@@ -196,6 +196,20 @@ return packer.startup(function(use)
     use('honza/vim-snippets')
     use('hrsh7th/vim-vsnip')
 
+    -- AI Completion
+    use {
+        'cursortab/cursortab.nvim',
+        run = 'cd server && go build',
+        config = function()
+            require('cursortab').setup {
+                provider = {
+                    type = 'zeta-2',
+                    url = 'http://localhost:7995',
+                },
+            }
+        end,
+    }
+
     -- Colorschemes
     use('folke/tokyonight.nvim')
 end)
