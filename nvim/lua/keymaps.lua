@@ -61,19 +61,6 @@ local function select_indent_block_wrapper(around)
         select_indent_block(around)
     end
 end
-vim.keymap.set('x', 'ig', select_indent_block_wrapper(false), { desc = "inner indent group" })
-vim.keymap.set('x', 'ag', select_indent_block_wrapper(true), { desc = "indent group" })
-vim.keymap.set('o', 'ig', ':<C-U>normal vig<CR>', { silent = true, desc = "inner indent group" })
-vim.keymap.set('o', 'ag', ':<C-U>normal vag<CR>', { silent = true, desc = "indent group" })
-
-vim.keymap.set('n', 'gs', function()
-    set_opfunc(function()
-        vim.cmd("'[,']sort")
-    end)
-    return 'g@'
-end, { expr = true, desc = "Sort" })
-vim.keymap.set('v', 'gs', ":'<,'>sort<CR>", { silent = true, desc = "Sort range" })
-
 --- Dimisses various temporary popups, in sequence
 local function sequential_dismiss()
     local dismissed = false
@@ -84,14 +71,61 @@ local function sequential_dismiss()
         end
     end
 
-    if dismissed then return end
+    if dismissed then
+        return
+    end
 
-    vim.api.nvim_exec2("nohlsearch", {})
-    vim.api.nvim_exec2("cclose", {})
+    vim.api.nvim_exec2('nohlsearch', {})
+    vim.api.nvim_exec2('cclose', {})
 end
-vim.keymap.set(
-    'n',
-    '<Esc>',
-    sequential_dismiss,
-    { desc = 'Close all floating windows', remap = false }
-)
+
+local M = {}
+
+function M.setup()
+    vim.keymap.set(
+        'x',
+        'ig',
+        select_indent_block_wrapper(false),
+        { desc = 'inner indent group' }
+    )
+    vim.keymap.set(
+        'x',
+        'ag',
+        select_indent_block_wrapper(true),
+        { desc = 'indent group' }
+    )
+    vim.keymap.set(
+        'o',
+        'ig',
+        ':<C-U>normal vig<CR>',
+        { silent = true, desc = 'inner indent group' }
+    )
+    vim.keymap.set(
+        'o',
+        'ag',
+        ':<C-U>normal vag<CR>',
+        { silent = true, desc = 'indent group' }
+    )
+
+    vim.keymap.set('n', 'gs', function()
+        set_opfunc(function()
+            vim.cmd("'[,']sort")
+        end)
+        return 'g@'
+    end, { expr = true, desc = 'Sort' })
+    vim.keymap.set(
+        'v',
+        'gs',
+        ":'<,'>sort<CR>",
+        { silent = true, desc = 'Sort range' }
+    )
+
+    vim.keymap.set(
+        'n',
+        '<Esc>',
+        sequential_dismiss,
+        { desc = 'Close all floating windows', remap = false }
+    )
+end
+
+return M

@@ -22,25 +22,31 @@ local function most_recent_tab_buffer()
     end
 end
 
-require('nvim-tree').setup {
-    on_attach = function(bufnr)
-        local api = require('nvim-tree.api')
-        api.map.on_attach.default(bufnr)
-        vim.keymap.set('n', 'go', function()
-            local target_bufnr = most_recent_tab_buffer()
-            api.tree.find_file {
-                buf = target_bufnr,
-                open = true,
-                focus = true,
-            }
-        end, {
-            desc = 'Focus current file',
-            buffer = bufnr,
-            noremap = true,
-        })
-    end,
-}
+local M = {}
 
-vim.keymap.set('n', '<Space>ft', function()
-    require('nvim-tree.api').tree.open { find_file = true }
-end, { desc = 'File tree' })
+function M.setup()
+    require('nvim-tree').setup {
+        on_attach = function(bufnr)
+            local api = require('nvim-tree.api')
+            api.map.on_attach.default(bufnr)
+            vim.keymap.set('n', 'go', function()
+                local target_bufnr = most_recent_tab_buffer()
+                api.tree.find_file {
+                    buf = target_bufnr,
+                    open = true,
+                    focus = true,
+                }
+            end, {
+                desc = 'Focus current file',
+                buffer = bufnr,
+                noremap = true,
+            })
+        end,
+    }
+
+    vim.keymap.set('n', '<Space>ft', function()
+        require('nvim-tree.api').tree.open { find_file = true }
+    end, { desc = 'File tree' })
+end
+
+return M

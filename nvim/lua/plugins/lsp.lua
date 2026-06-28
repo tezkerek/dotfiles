@@ -1,3 +1,5 @@
+local M = {}
+
 --- @param client vim.lsp.Client?
 --- @param bufnr integer
 local function on_lsp_attach(client, bufnr)
@@ -52,50 +54,6 @@ end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-vim.api.nvim_create_autocmd('LspAttach', {
-    callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        on_lsp_attach(client, args.buf)
-    end,
-})
-
-vim.lsp.config('*', { capabilities = capabilities })
-
-vim.lsp.config('lua_ls', {
-    settings = {
-        Lua = {
-            runtime = {
-                version = 'LuaJIT',
-                path = { 'lua/?.lua', 'lua/?/init.lua' },
-            },
-            diagnostics = { globals = { 'vim' } },
-            workspace = {
-                checkThirdParty = false,
-                library = { vim.env.VIMRUNTIME },
-            },
-        },
-    },
-})
-
-vim.lsp.config('cssls', { cmd = { 'vscode-css-languageserver', '--stdio' } })
-
-vim.lsp.config('hls', {
-    filetypes = { 'haskell', 'lhaskell' },
-    single_file_support = true,
-    settings = {
-        haskell = {
-            plugin = {
-                semanticTokens = {
-                    globalOn = true,
-                },
-                cabal = {
-                    globalOn = true,
-                },
-            },
-        },
-    },
-})
-
 --- @param servers string[]
 --- @return string?
 local function first_available_server(servers)
@@ -118,14 +76,65 @@ local servers = {
     'cssls',
 }
 
-for _, entry in ipairs(servers) do
-    local lsp
-    if type(entry) == 'table' then
-        lsp = first_available_server(entry)
-    else
-        lsp = entry
-    end
-    if lsp then
-        vim.lsp.enable(lsp)
+function M.setup()
+    vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            on_lsp_attach(client, args.buf)
+        end,
+    })
+
+    vim.lsp.config('*', { capabilities = capabilities })
+
+    vim.lsp.config('lua_ls', {
+        settings = {
+            Lua = {
+                runtime = {
+                    version = 'LuaJIT',
+                    path = { 'lua/?.lua', 'lua/?/init.lua' },
+                },
+                diagnostics = { globals = { 'vim' } },
+                workspace = {
+                    checkThirdParty = false,
+                    library = { vim.env.VIMRUNTIME },
+                },
+            },
+        },
+    })
+
+    vim.lsp.config(
+        'cssls',
+        { cmd = { 'vscode-css-languageserver', '--stdio' } }
+    )
+
+    vim.lsp.config('hls', {
+        filetypes = { 'haskell', 'lhaskell' },
+        single_file_support = true,
+        settings = {
+            haskell = {
+                plugin = {
+                    semanticTokens = {
+                        globalOn = true,
+                    },
+                    cabal = {
+                        globalOn = true,
+                    },
+                },
+            },
+        },
+    })
+
+    for _, entry in ipairs(servers) do
+        local lsp
+        if type(entry) == 'table' then
+            lsp = first_available_server(entry)
+        else
+            lsp = entry
+        end
+        if lsp then
+            vim.lsp.enable(lsp)
+        end
     end
 end
+
+return M

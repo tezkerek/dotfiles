@@ -72,7 +72,7 @@ return packer.startup(function(use)
     use {
         'lewis6991/gitsigns.nvim',
         config = function()
-            require('plugins/gitsigns')
+            require('plugins/gitsigns').setup()
         end,
     }
     use {
@@ -115,14 +115,14 @@ return packer.startup(function(use)
     use {
         'kyazdani42/nvim-tree.lua',
         config = function()
-            require('plugins/nvim-tree')
+            require('plugins/nvim-tree').setup()
         end,
     }
     use {
         'ibhagwan/fzf-lua',
         requires = { 'nvim-tree/nvim-web-devicons' },
         config = function()
-            require('plugins/fzf-lua')
+            require('plugins/fzf-lua').setup()
         end,
     }
     use('tpope/vim-eunuch')
@@ -135,7 +135,7 @@ return packer.startup(function(use)
     use {
         'norcalli/nvim-colorizer.lua',
         config = function()
-            require('plugins/colorizer')
+            require('plugins/colorizer').setup()
         end,
     }
     use {
@@ -156,7 +156,7 @@ return packer.startup(function(use)
         branch = 'main',
         run = ':TSUpdate',
         config = function()
-            require('plugins/treesitter')
+            require('plugins/treesitter').setup()
         end,
     }
     use { 'nvim-treesitter/nvim-treesitter-context' }
@@ -167,7 +167,7 @@ return packer.startup(function(use)
         'neovim/nvim-lspconfig',
         event = 'BufEnter',
         config = function()
-            require('plugins/lsp')
+            require('plugins/lsp').setup()
         end,
     }
     use {
@@ -180,7 +180,7 @@ return packer.startup(function(use)
         },
         after = { 'vimtex' },
         config = function()
-            require('plugins/cmp')
+            require('plugins/cmp').setup()
         end,
     }
     use {

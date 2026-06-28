@@ -63,8 +63,8 @@ scriptencoding utf-8
   let g:onedark_style = 'darker'
   colorscheme tokyonight
 
-  lua require('colors')
-  lua require('dotfiles-editing')
+  lua require('colors').setup()
+  lua require('dotfiles-editing').setup()
 
 " ==================
 "  Autocmd
@@ -161,7 +161,7 @@ augroup end
   nnoremap <M-i> <C-I>
   nnoremap <M-o> <C-O>
 
-  lua require('keymaps')
+  lua require('keymaps').setup()
 
 " ---------
 " Files
@@ -176,4 +176,4 @@ augroup end
 nmap <leader>a <Plug>(EasyAlign)
 xmap <leader>a <Plug>(EasyAlign)
 
-lua require('diagnostic')
+lua require('diagnostic').setup()
