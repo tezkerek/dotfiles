@@ -27,5 +27,7 @@
 [push]
 	autoSetupRemote = true
 
+{{#if git_credential_helper}}
 [credential]
-	helper = /usr/lib/git-core/git-credential-libsecret
+	helper = {{git_credential_helper}}
+{{/if}}
