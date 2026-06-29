@@ -4,6 +4,9 @@
 [linux]
 depends = ["nvim", "sway", "niri", "shell", "dev", "kanata", "apps"]
 
+[linux.variables]
+git_credential_helper = "/usr/lib/git-core/git-credential-libsecret"
+
 [linux.files]
 "shell/paru.conf" = "$XDG_CONFIG_HOME/paru/paru.conf"
 "fonts.conf"      = "$XDG_CONFIG_HOME/fontconfig/fonts.conf"
@@ -12,6 +15,9 @@ depends = ["nvim", "sway", "niri", "shell", "dev", "kanata", "apps"]
 
 [macos]
 depends = ["nvim", "shell", "dev", "kanata"]
+
+[macos.variables]
+git_credential_helper = "osxkeychain"
 
 [macos.files]
 "shell/zsh/macos.zsh"   = "$XDG_CONFIG_HOME/zsh/macos.zsh"
