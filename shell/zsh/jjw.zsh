@@ -179,8 +179,10 @@ function _jjw_st {
 # The leading <dir> lets the collector key results by directory regardless of
 # completion order. The NUL terminator delimits records from parallel jobs whose
 # writes to the shared pipe may interleave at line granularity but not mid-record
-# (each record is a single small write). All VCS chatter goes to stderr and is
-# discarded by the caller.
+# (each record is a single small write). VCS progress chatter is silenced at the
+# source (jj --quiet / git -q) and each command's stdout is sent to /dev/null so
+# it cannot corrupt the record stream; genuine errors still reach the terminal on
+# stderr, complementing the ✗ record.
 function _jjw_pull_repo {
     local dir=$1
     local name=${dir:t}
@@ -205,7 +207,7 @@ function _jjw_pull_repo_jj {
     trunk=$(_jjw_jj_trunk "$dir")
     cls=$(_jjw_classify "$cur")
 
-    if ! jj -R "$dir" git fetch >&2 2>&1; then
+    if ! jj -R "$dir" git fetch --quiet >/dev/null; then
         print -r -- $'failed\t'"${name}"$'\tjj git fetch failed'
         return
     fi
@@ -225,7 +227,7 @@ function _jjw_pull_repo_jj {
     fi
 
     if (( advance )); then
-        if jj -R "$dir" new "${trunk}@origin" >&2 2>&1; then
+        if jj -R "$dir" new "${trunk}@origin" --quiet >/dev/null; then
             print -r -- $'changed\t'"${name}"$'\tnew '"${trunk}@origin"
         else
             print -r -- $'failed\t'"${name}"$'\tjj new '"${trunk}@origin"$' failed'
@@ -248,7 +250,7 @@ function _jjw_pull_repo_git {
     fi
 
     if [[ $cls == trunk ]]; then
-        if git -C "$dir" pull --ff-only >&2 2>&1; then
+        if git -C "$dir" pull --ff-only -q >/dev/null; then
             print -r -- $'changed\t'"${name}"$'\tpulled '"${ref}"
         else
             print -r -- $'failed\t'"${name}"$'\tgit pull --ff-only failed'
@@ -259,7 +261,7 @@ function _jjw_pull_repo_git {
     # On a feature branch.
     if [[ -n $(git -C "$dir" status --porcelain 2>/dev/null) ]]; then
         # Dirty: fast-forward local trunk ref only, stay put.
-        if git -C "$dir" fetch origin "${trunk}:${trunk}" >&2 2>&1; then
+        if git -C "$dir" fetch origin "${trunk}:${trunk}" -q >/dev/null; then
             print -r -- $'noop\t'"${name}"$'\tdirty; fetched trunk only'
         else
             print -r -- $'failed\t'"${name}"$'\tgit fetch origin '"${trunk}"$' failed'
@@ -268,7 +270,7 @@ function _jjw_pull_repo_git {
     fi
 
     # Clean feature: switch to trunk and pull.
-    if git -C "$dir" switch "$trunk" >&2 2>&1 && git -C "$dir" pull --ff-only >&2 2>&1; then
+    if git -C "$dir" switch "$trunk" --quiet >/dev/null && git -C "$dir" pull --ff-only -q >/dev/null; then
         print -r -- $'changed\t'"${name}"$'\tswitched to '"${trunk}"$' + pulled'
     else
         print -r -- $'failed\t'"${name}"$'\tswitch/pull '"${trunk}"$' failed'
