@@ -89,3 +89,5 @@ function lsmd {
         print -r -- "${yellow}[${timestamp}]${reset} ${bold}${cyan}${file}${reset}"
     done
 }
+
+source ${0:A:h}/jjw.zsh
