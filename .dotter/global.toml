@@ -77,6 +77,7 @@ username = "tezkerek"
 "bin/tmux-claude-status"  = "$XDG_BIN_HOME/tmux-claude-status"
 "shell/gitconfig"         = "$XDG_CONFIG_HOME/git/config"
 "bin/git-picked"          = "$XDG_BIN_HOME/git-picked"
+"bin/jjw.py"              = { target = "$XDG_BIN_HOME/jjw", type = "symbolic" }
 "shell/tigconfig"         = "$XDG_CONFIG_HOME/tig/config"
 "shell/gitui"             = "$XDG_CONFIG_HOME/gitui"
 "shell/jj"                = "$XDG_CONFIG_HOME/jj"
