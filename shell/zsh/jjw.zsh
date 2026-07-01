@@ -150,7 +150,12 @@ function _jjw_st_repo {
     if [[ $type == jj ]]; then
         # The real graph, colored: the stack (trunk..@, incl. the empty @) plus
         # the trunk tip as a base anchor. Indented; ANSI passes through untouched.
-        jj -R "$dir" log --ignore-working-copy --color=always -r "${trunk}..@ | ${trunk}" \
+        # Anchor on jj's built-in trunk() alias, which resolves to the remote
+        # trunk head (e.g. main@origin) rather than a possibly-stale local
+        # bookmark, so the graph stops where plain `jj log` stops. The [[ -z
+        # $trunk ]] guard above still short-circuits the no-trunk case, sparing
+        # us trunk()'s root() fallback (which would dump the entire history).
+        jj -R "$dir" log --ignore-working-copy --color=always -r "trunk()..@ | trunk()" \
             2>/dev/null | while IFS= read -r line; do
                 print -r -- "    $line"
             done
