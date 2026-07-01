@@ -7,6 +7,11 @@ trap "rm -rf $TEST_DIR" EXIT
 
 typeset -gi FAILS=0
 
+# Strip ANSI CSI (color) escape sequences so assertions compare content, not color.
+function strip_ansi {
+    print -r -- "$1" | sed $'s/\e\\[[0-9;]*m//g'
+}
+
 # assert_eq <label> <expected> <actual>
 function assert_eq {
     local label=$1 expected=$2 actual=$3
@@ -91,7 +96,7 @@ assert_eq "git_ref feature" my-feature "$(_jjw_git_ref "$TEST_DIR/ref-check")"
 # --- st: git trunk case -----------------------------------------------------
 
 mkgit "$TEST_DIR/st-trunk" main
-out=$(_jjw_st_repo "$TEST_DIR/st-trunk")
+out=$(strip_ansi "$(_jjw_st_repo "$TEST_DIR/st-trunk")")
 assert_eq "st git trunk single line" "st-trunk  [main]" "$out"
 
 # --- st: git feature case with extra commits --------------------------------
@@ -104,7 +109,7 @@ git -C "$TEST_DIR/st-feat" commit -qm "add a"
 print b > "$TEST_DIR/st-feat/b"
 git -C "$TEST_DIR/st-feat" add -A
 git -C "$TEST_DIR/st-feat" commit -qm "add b"
-out=$(_jjw_st_repo "$TEST_DIR/st-feat")
+out=$(strip_ansi "$(_jjw_st_repo "$TEST_DIR/st-feat")")
 # First line is the header, then two commit lines (newest first from git log).
 header=${out%%$'\n'*}
 assert_eq "st git feature header" "st-feat  [my-feature]" "$header"
@@ -243,7 +248,7 @@ if command -v jj >/dev/null 2>&1; then
         assert_eq "jj classify feature" feature "$(_jjw_classify "$(_jjw_jj_ref "$JJ_WORK")")"
 
         # st on the feature: header + commit lines including the empty @.
-        out=$(_jjw_st_repo "$JJ_WORK")
+        out=$(strip_ansi "$(_jjw_st_repo "$JJ_WORK")")
         header=${out%%$'\n'*}
         assert_eq "jj st feature header" "jj-work  [my-feature]" "$header"
         if [[ $out == *"feat 1"* && $out == *"(empty)"* ]]; then
