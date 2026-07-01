@@ -135,22 +135,27 @@ function _jjw_st_repo {
     fi
 
     cls=$(_jjw_classify "$ref")
-    print -r -- "${name}  [${ref:-?}]"
+
+    # Header: bold-cyan name; ref green on trunk, yellow on a feature. Raw ANSI
+    # (not print -P) so a '%' in a repo/branch name cannot corrupt the output.
+    local bold=$'\e[1m' reset=$'\e[0m' cyan=$'\e[36m' green=$'\e[32m' yellow=$'\e[33m'
+    local rc
+    [[ $cls == trunk ]] && rc=$green || rc=$yellow
+    print -r -- "${bold}${cyan}${name}${reset}  [${rc}${ref:-?}${reset}]"
 
     # On a trunk (or unknown), nothing more to show.
     [[ $cls == trunk ]] && return
     [[ -z $trunk ]] && return
 
     if [[ $type == jj ]]; then
-        # trunk..@ including the empty @; oldest-first.
-        jj -R "$dir" log --no-graph --ignore-working-copy --reversed -r "${trunk}..@" \
-            --color=never \
-            -T 'commit_id.short(8) ++ " " ++ if(description.first_line(), description.first_line(), "(empty)") ++ "\n"' \
+        # The real graph, colored: the stack (trunk..@, incl. the empty @) plus
+        # the trunk tip as a base anchor. Indented; ANSI passes through untouched.
+        jj -R "$dir" log --ignore-working-copy --color=always -r "${trunk}..@ | ${trunk}" \
             2>/dev/null | while IFS= read -r line; do
                 print -r -- "    $line"
             done
     else
-        git -C "$dir" log --format='%h %s' "${trunk}..HEAD" 2>/dev/null \
+        git -C "$dir" log --color=always --format='%C(auto)%h%Creset %s' "${trunk}..HEAD" 2>/dev/null \
             | while IFS= read -r line; do
                 print -r -- "    $line"
             done
