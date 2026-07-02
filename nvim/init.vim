@@ -139,12 +139,6 @@ augroup end
   " Better leader for window management
   nnoremap <leader>w <C-W>
 
-  " Split navigation
-  nnoremap <C-H> <C-W>h
-  nnoremap <C-J> <C-W>j
-  nnoremap <C-K> <C-W>k
-  nnoremap <C-L> <C-W>l
-
   " Tab navigation
   
   nnoremap <M-1> 1gt
