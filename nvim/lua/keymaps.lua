@@ -137,6 +137,14 @@ function M.setup()
         sequential_dismiss,
         { desc = 'Close all floating windows', remap = false }
     )
+
+    vim.keymap.set(
+        { 'n', 'x' },
+        'Y',
+        '"+y',
+        { desc = 'Yank to system clipboard' }
+    )
+    vim.keymap.set('o', 'Y', 'y', { desc = 'Linewise Y (YY)' })
 end
 
 return M
