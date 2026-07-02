@@ -62,10 +62,21 @@ local function select_indent_block_wrapper(around)
     end
 end
 --- Dimisses various temporary popups, in sequence
+--- @param window_id integer
+local function is_dismissable_window(window_id)
+    if vim.api.nvim_win_get_config(window_id).relative == '' then
+        return false
+    end
+    return not (
+        vim.w[window_id].treesitter_context
+        or vim.w[window_id].treesitter_context_line_number
+    )
+end
+
 local function sequential_dismiss()
     local dismissed = false
     for _, window_id in ipairs(vim.api.nvim_list_wins()) do
-        if vim.api.nvim_win_get_config(window_id).relative ~= '' then
+        if is_dismissable_window(window_id) then
             vim.api.nvim_win_close(window_id, false)
             dismissed = true
         end
