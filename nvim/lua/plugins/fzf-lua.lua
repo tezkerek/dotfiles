@@ -1,5 +1,12 @@
 local M = {}
 
+local function toggle_cwd_only(_, opts)
+    local o =
+        vim.tbl_deep_extend('keep', { resume = true }, opts.__call_opts or {})
+    o.cwd_only = not opts.cwd_only
+    opts.__call_fn(o)
+end
+
 function M.setup()
     local fzf_lua = require('fzf-lua')
     fzf_lua.setup {
@@ -90,7 +97,16 @@ function M.setup()
     end, { desc = 'Command history' })
 
     vim.keymap.set('n', '<Space>cs', function()
-        require('fzf-lua').lsp_live_workspace_symbols()
+        require('fzf-lua').lsp_live_workspace_symbols {
+            cwd_only = true,
+            actions = {
+                ['alt-c'] = {
+                    fn = toggle_cwd_only,
+                    reuse = true,
+                    header = 'Toggle cwd',
+                },
+            },
+        }
     end, { desc = 'Workspace symbols' })
 
     vim.keymap.set('n', '<Space>cr', function()
