@@ -1,14 +1,15 @@
-local winopts = {
-    preview = {
-        layout = 'vertical',
-    },
-}
-
 local M = {}
 
 function M.setup()
-    require('fzf-lua').setup {
-        winopts = { backdrop = 80 },
+    local fzf_lua = require('fzf-lua')
+    fzf_lua.setup {
+        winopts = {
+            backdrop = 80,
+            preview = {
+                layout = 'vertical',
+                delay = 200,
+            },
+        },
         keymap = {
             builtin = {
                 ['<M-f>'] = 'toggle-fullscreen',
@@ -22,13 +23,12 @@ function M.setup()
                 ['<M-S-r>'] = 'toggle-preview-ccw',
             },
         },
-        lsp = {
-            winopts = winopts,
-            finder = {
-                winopts = winopts,
-            },
+        grep = {
+            multiline = 1,
         },
     }
+
+    fzf_lua.register_ui_select()
 
     vim.keymap.set('n', '<Space>fr', function()
         require('fzf-lua').oldfiles {
@@ -89,13 +89,17 @@ function M.setup()
         require('fzf-lua').command_history()
     end, { desc = 'Command history' })
 
-    vim.keymap.set('n', '<Space>cl', function()
-        require('fzf-lua').lsp_finder()
-    end, { desc = 'LSP finder' })
+    vim.keymap.set('n', '<Space>cs', function()
+        require('fzf-lua').lsp_live_workspace_symbols()
+    end, { desc = 'Workspace symbols' })
 
     vim.keymap.set('n', '<Space>cr', function()
         require('fzf-lua').lsp_references()
     end, { desc = 'LSP references' })
+
+    vim.keymap.set('n', '<Space>cR', function()
+        require('fzf-lua').lsp_finder()
+    end, { desc = 'LSP finder' })
 
     vim.keymap.set('n', '<Space>ci', function()
         require('fzf-lua').lsp_implementations()
