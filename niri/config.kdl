@@ -100,7 +100,6 @@ window-rule {
 workspace "scratch"
 window-rule {
     match app-id="terminal_scratchpad"
-    open-on-workspace "scratch"
     open-floating true
 }
 
