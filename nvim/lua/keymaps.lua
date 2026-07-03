@@ -90,9 +90,42 @@ local function sequential_dismiss()
     vim.api.nvim_exec2('cclose', {})
 end
 
+local function help_word()
+    vim.cmd('vert help ' .. vim.fn.expand('<cword>'))
+end
+
+local function help_selection()
+    local region = vim.fn.getregion(
+        vim.fn.getpos("'<"),
+        vim.fn.getpos("'>"),
+        { type = vim.fn.visualmode() }
+    )
+    local text = table.concat(region, ' ')
+    if text and #text > 0 then
+        vim.cmd('vert help ' .. text)
+    end
+end
+
 local M = {}
 
 function M.setup()
+    local help_group =
+        vim.api.nvim_create_augroup('HelpUnderCursor', { clear = true })
+    vim.api.nvim_create_autocmd('FileType', {
+        pattern = { 'vim', 'lua' },
+        group = help_group,
+        callback = function()
+            vim.keymap.set('n', 'gh', help_word, {
+                buffer = true,
+                desc = 'Help under cursor',
+            })
+            vim.keymap.set('x', 'gh', help_selection, {
+                buffer = true,
+                desc = 'Help for selection',
+            })
+        end,
+    })
+
     vim.keymap.set(
         'x',
         'ig',
