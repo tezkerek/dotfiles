@@ -27,6 +27,14 @@ return packer.startup(function(use)
             require('lualine').setup {
                 options = { theme = 'auto', icons_enabled = true },
                 sections = {
+                    lualine_b = {
+                        'filename',
+                    },
+                    lualine_c = {
+                        'branch',
+                        'diff',
+                        'diagnostics',
+                    },
                     lualine_x = {
                         'lsp_status',
                         'encoding',
