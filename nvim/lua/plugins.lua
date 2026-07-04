@@ -19,11 +19,13 @@ return packer.startup(function(use)
 
     -- QOL
     use {
-        'hoob3rt/lualine.nvim',
+        'nvim-lualine/lualine.nvim',
         requires = 'kyazdani42/nvim-web-devicons',
         config = function()
+            vim.opt.fillchars:append { stl = '─', stlnc = '─' }
+
             require('lualine').setup {
-                options = { theme = 'tokyonight', icons_enabled = true },
+                options = { theme = 'auto', icons_enabled = true },
                 sections = {
                     lualine_x = {
                         'lsp_status',
