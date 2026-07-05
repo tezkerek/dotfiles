@@ -81,6 +81,7 @@ return packer.startup(function(use)
     use('tpope/vim-fugitive')
     use {
         'lewis6991/gitsigns.nvim',
+        disable = true,
         config = function()
             require('plugins/gitsigns').setup()
         end,
@@ -89,6 +90,13 @@ return packer.startup(function(use)
         'NicolasGB/jj.nvim',
         config = function()
             require('jj').setup {}
+        end,
+    }
+    use {
+        'algmyr/vcsigns.nvim',
+        requires = { 'algmyr/vclib.nvim', 'lewis6991/async.nvim' },
+        config = function()
+            require('plugins/vcsigns').setup()
         end,
     }
     use {
