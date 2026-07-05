@@ -171,6 +171,10 @@ return packer.startup(function(use)
     }
     use { 'nvim-treesitter/nvim-treesitter-context' }
     use { 'nvim-treesitter/nvim-treesitter-textobjects' }
+    use {
+        'ThePrimeagen/refactoring.nvim',
+        requires = { 'lewis6991/async.nvim' },
+    }
 
     -- Completion
     use {
