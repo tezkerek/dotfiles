@@ -148,7 +148,18 @@ return packer.startup(function(use)
     -- Syntax
     use('tpope/vim-sleuth')
     use('AndrewRadev/splitjoin.vim')
-    use('pechorin/any-jump.vim')
+    use {
+        'hedyhli/outline.nvim',
+        config = function()
+            require('outline').setup()
+            vim.keymap.set(
+                'n',
+                '<Space>co',
+                ':Outline<CR>',
+                { desc = 'Toggle outline' }
+            )
+        end,
+    }
     use('sbdchd/neoformat')
     use {
         'norcalli/nvim-colorizer.lua',
