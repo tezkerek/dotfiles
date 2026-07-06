@@ -1,227 +1,222 @@
-local install_path = vim.fn.stdpath('data')
-    .. '/site/pack/packer/start/packer.nvim'
-
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    vim.api.nvim_command(
-        '!git clone https://github.com/wbthomason/packer.nvim ' .. install_path
-    )
-    vim.api.nvim_command('packadd packer.nvim')
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.uv.fs_stat(lazypath) then
+    vim.fn.system {
+        'git',
+        'clone',
+        '--filter=blob:none',
+        'https://github.com/folke/lazy.nvim.git',
+        '--branch=stable',
+        lazypath,
+    }
 end
+vim.opt.rtp:prepend(lazypath)
 
-vim.cmd([[packadd packer.nvim]])
-
-local packer = require('packer')
-
-packer.init { max_jobs = 16 }
-
-return packer.startup(function(use)
-    use('wbthomason/packer.nvim')
-
-    -- QOL
-    use {
-        'nvim-lualine/lualine.nvim',
-        requires = 'kyazdani42/nvim-web-devicons',
-        config = function()
-            require('plugins/lualine').setup()
-        end,
-    }
-    use('mhinz/vim-startify')
-    use('moll/vim-bbye')
-    use('embear/vim-localvimrc')
-    use {
-        'folke/which-key.nvim',
-        config = function()
-            local wk = require('which-key')
-            wk.add {
-                { '<Space>f', group = 'files' },
-                { '<Space>b', group = 'buffers', icon = '' },
-                { '<Space>c', group = 'code_commands' },
-                { '<Space>l', group = 'lsp', icon = '' },
-                { '<Space>w', group = 'window', proxy = '<C-w>' },
-                { '<Space>h', group = 'hunk', icon = '' },
-                { '<Space>t', group = 'table' },
-            }
-            vim.keymap.set('n', '<Space>?', function()
-                require('which-key').show { global = true }
-            end, { desc = 'Help' })
-        end,
-    }
-    use {
-        'lukas-reineke/indent-blankline.nvim',
-        config = function()
-            require('ibl').setup {
-                exclude = { filetypes = { 'NvimTree', 'help', 'startify' } },
-            }
-        end,
-    }
-
-    -- Integration
-    use('christoomey/vim-tmux-navigator')
-    use('tpope/vim-fugitive')
-    use {
-        'lewis6991/gitsigns.nvim',
-        disable = true,
-        config = function()
-            require('plugins/gitsigns').setup()
-        end,
-    }
-    use {
-        'NicolasGB/jj.nvim',
-        config = function()
-            require('jj').setup {}
-        end,
-    }
-    use {
-        'algmyr/vcsigns.nvim',
-        requires = { 'algmyr/vclib.nvim', 'lewis6991/async.nvim' },
-        config = function()
-            require('plugins/vcsigns').setup()
-        end,
-    }
-    use {
-        'glacambre/firenvim',
-        run = function()
-            vim.fn['firenvim#install'](0)
-        end,
-    }
-
-    -- Text editing
-    use('justinmk/vim-sneak')
-    use('tpope/vim-surround')
-    use('wellle/targets.vim')
-    use('tpope/vim-characterize')
-    use('tpope/vim-repeat')
-    use('tpope/vim-commentary')
-    use('luochen1990/rainbow')
-    use('junegunn/vim-easy-align')
-    use('tommcdo/vim-exchange')
-    use('dhruvasagar/vim-table-mode')
-    use {
-        'Julian/vim-textobj-variable-segment',
-        requires = 'kana/vim-textobj-user',
-    }
-    use {
-        'windwp/nvim-autopairs',
-        after = { 'nvim-cmp' },
-        config = function()
-            require('nvim-autopairs').setup()
-        end,
-    }
-
-    -- Files
-    use {
-        'kyazdani42/nvim-tree.lua',
-        config = function()
-            require('plugins/nvim-tree').setup()
-        end,
-    }
-    use {
-        'ibhagwan/fzf-lua',
-        requires = { 'nvim-tree/nvim-web-devicons' },
-        config = function()
-            require('plugins/fzf-lua').setup()
-        end,
-    }
-    use('tpope/vim-eunuch')
-
-    -- Syntax
-    use('tpope/vim-sleuth')
-    use('AndrewRadev/splitjoin.vim')
-    use {
-        'hedyhli/outline.nvim',
-        config = function()
-            require('outline').setup()
-            vim.keymap.set(
-                'n',
-                '<Space>co',
-                ':Outline<CR>',
-                { desc = 'Toggle outline' }
-            )
-        end,
-    }
-    use('sbdchd/neoformat')
-    use {
-        'norcalli/nvim-colorizer.lua',
-        config = function()
-            require('plugins/colorizer').setup()
-        end,
-    }
-    use {
-        'lervag/vimtex',
-        config = function()
-            vim.g.tex_flavor = 'lualatex'
-            vim.g.vimtex_compiler_method = 'latexrun'
-            vim.g.vimtex_compiler_latexrun = {
-                build_dir = 'latex.out',
-                options = { '--verbose-cmds', '--latex-args="-synctex=1"' },
-            }
-        end,
-    }
-    use('vim-pandoc/vim-pandoc')
-    use('vim-pandoc/vim-pandoc-syntax')
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        branch = 'main',
-        run = ':TSUpdate',
-        config = function()
-            require('plugins/treesitter').setup()
-        end,
-    }
-    use { 'nvim-treesitter/nvim-treesitter-context' }
-    use { 'nvim-treesitter/nvim-treesitter-textobjects' }
-    use {
-        'ThePrimeagen/refactoring.nvim',
-        requires = { 'lewis6991/async.nvim' },
-    }
-
-    -- Completion
-    use {
-        'neovim/nvim-lspconfig',
-        event = 'BufEnter',
-        config = function()
-            require('plugins/lsp').setup()
-        end,
-    }
-    use {
-        'hrsh7th/nvim-cmp',
-        requires = {
-            'hrsh7th/cmp-vsnip',
-            'hrsh7th/cmp-nvim-lsp',
-            'hrsh7th/cmp-omni',
-            'hrsh7th/cmp-buffer',
+require('lazy').setup {
+    concurrency = 16,
+    spec = {
+        -- QOL
+        {
+            'nvim-lualine/lualine.nvim',
+            dependencies = 'kyazdani42/nvim-web-devicons',
+            config = function()
+                require('plugins/lualine').setup()
+            end,
         },
-        after = { 'vimtex' },
-        config = function()
-            require('plugins/cmp').setup()
-        end,
-    }
-    use {
-        'ray-x/lsp_signature.nvim',
-        config = function()
-            require('lsp_signature').setup {
-                bind = true,
-                handler_opts = { border = 'rounded' },
-                toggle_key = '<M-p>',
-            }
-        end,
-    }
-    use('honza/vim-snippets')
-    use('hrsh7th/vim-vsnip')
+        'mhinz/vim-startify',
+        'moll/vim-bbye',
+        {
+            'folke/which-key.nvim',
+            config = function()
+                local wk = require('which-key')
+                wk.add {
+                    { '<Space>f', group = 'files' },
+                    { '<Space>b', group = 'buffers', icon = '' },
+                    { '<Space>c', group = 'code_commands' },
+                    { '<Space>l', group = 'lsp', icon = '' },
+                    { '<Space>w', group = 'window', proxy = '<C-w>' },
+                    { '<Space>h', group = 'hunk', icon = '' },
+                    { '<Space>t', group = 'table' },
+                }
+                vim.keymap.set('n', '<Space>?', function()
+                    require('which-key').show { global = true }
+                end, { desc = 'Help' })
+            end,
+        },
+        {
+            'lukas-reineke/indent-blankline.nvim',
+            config = function()
+                require('ibl').setup {
+                    exclude = { filetypes = { 'NvimTree', 'help', 'startify' } },
+                }
+            end,
+        },
 
-    -- AI Completion
-    use {
-        'cursortab/cursortab.nvim',
-        run = 'cd server && go build',
-        config = function()
-            require('cursortab').setup {
-                provider = {
-                    type = 'zeta-2',
-                    url = 'http://localhost:7995',
-                },
-            }
-        end,
-    }
+        -- Integration
+        'christoomey/vim-tmux-navigator',
+        'tpope/vim-fugitive',
+        {
+            'lewis6991/gitsigns.nvim',
+            enabled = false,
+            config = function()
+                require('plugins/gitsigns').setup()
+            end,
+        },
+        {
+            'NicolasGB/jj.nvim',
+            config = function()
+                require('jj').setup {}
+            end,
+        },
+        {
+            'algmyr/vcsigns.nvim',
+            dependencies = { 'algmyr/vclib.nvim', 'lewis6991/async.nvim' },
+            config = function()
+                require('plugins/vcsigns').setup()
+            end,
+        },
+        {
+            'glacambre/firenvim',
+            build = function()
+                vim.fn['firenvim#install'](0)
+            end,
+        },
 
-    -- Colorschemes
-    use('folke/tokyonight.nvim')
-end)
+        -- Text editing
+        'justinmk/vim-sneak',
+        'tpope/vim-surround',
+        'wellle/targets.vim',
+        'tpope/vim-characterize',
+        'tpope/vim-repeat',
+        'tpope/vim-commentary',
+        'luochen1990/rainbow',
+        'junegunn/vim-easy-align',
+        'tommcdo/vim-exchange',
+        'dhruvasagar/vim-table-mode',
+        {
+            'Julian/vim-textobj-variable-segment',
+            dependencies = 'kana/vim-textobj-user',
+        },
+        {
+            'windwp/nvim-autopairs',
+            config = function()
+                require('nvim-autopairs').setup()
+            end,
+        },
+
+        -- Files
+        {
+            'kyazdani42/nvim-tree.lua',
+            config = function()
+                require('plugins/nvim-tree').setup()
+            end,
+        },
+        {
+            'ibhagwan/fzf-lua',
+            dependencies = { 'nvim-tree/nvim-web-devicons' },
+            config = function()
+                require('plugins/fzf-lua').setup()
+            end,
+        },
+        'tpope/vim-eunuch',
+
+        -- Syntax
+        'tpope/vim-sleuth',
+        'AndrewRadev/splitjoin.vim',
+        {
+            'hedyhli/outline.nvim',
+            config = function()
+                require('outline').setup()
+                vim.keymap.set(
+                    'n',
+                    '<Space>co',
+                    ':Outline<CR>',
+                    { desc = 'Toggle outline' }
+                )
+            end,
+        },
+        'sbdchd/neoformat',
+        {
+            'norcalli/nvim-colorizer.lua',
+            config = function()
+                require('plugins/colorizer').setup()
+            end,
+        },
+        {
+            'lervag/vimtex',
+            config = function()
+                vim.g.tex_flavor = 'lualatex'
+                vim.g.vimtex_compiler_method = 'latexrun'
+                vim.g.vimtex_compiler_latexrun = {
+                    build_dir = 'latex.out',
+                    options = { '--verbose-cmds', '--latex-args="-synctex=1"' },
+                }
+            end,
+        },
+        'vim-pandoc/vim-pandoc',
+        'vim-pandoc/vim-pandoc-syntax',
+        {
+            'nvim-treesitter/nvim-treesitter',
+            branch = 'main',
+            build = ':TSUpdate',
+            config = function()
+                require('plugins/treesitter').setup()
+            end,
+        },
+        { 'nvim-treesitter/nvim-treesitter-context' },
+        { 'nvim-treesitter/nvim-treesitter-textobjects' },
+        {
+            'ThePrimeagen/refactoring.nvim',
+            dependencies = { 'lewis6991/async.nvim' },
+        },
+
+        -- Completion
+        {
+            'neovim/nvim-lspconfig',
+            event = 'BufEnter',
+            config = function()
+                require('plugins/lsp').setup()
+            end,
+        },
+        {
+            'hrsh7th/nvim-cmp',
+            dependencies = {
+                'hrsh7th/cmp-vsnip',
+                'hrsh7th/cmp-nvim-lsp',
+                'hrsh7th/cmp-omni',
+                'hrsh7th/cmp-buffer',
+            },
+            config = function()
+                require('plugins/cmp').setup()
+            end,
+        },
+        {
+            'ray-x/lsp_signature.nvim',
+            config = function()
+                require('lsp_signature').setup {
+                    bind = true,
+                    handler_opts = { border = 'rounded' },
+                    toggle_key = '<M-p>',
+                }
+            end,
+        },
+        'honza/vim-snippets',
+        'hrsh7th/vim-vsnip',
+
+        -- AI Completion
+        {
+            'cursortab/cursortab.nvim',
+            build = 'cd server && go build',
+            config = function()
+                require('cursortab').setup {
+                    provider = {
+                        type = 'zeta-2',
+                        url = 'http://localhost:7995',
+                    },
+                }
+            end,
+        },
+
+        -- Colorschemes
+        'folke/tokyonight.nvim',
+    },
+}

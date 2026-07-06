@@ -78,6 +78,8 @@ end
 local M = {}
 
 function M.setup()
+    vim.cmd("colorscheme tokyonight")
+
     hl('TreesitterContextBottom', {
         underline = true,
         sp = colors.styles.moon.blue,

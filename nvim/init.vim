@@ -18,12 +18,12 @@ scriptencoding utf-8
   set undofile
   set completeopt=menu,menuone,noselect
   set winborder=rounded
+  set termguicolors
 
   set guifont=monospace:h11
 
   let g:tex_fast = "bMmpr" " Better performance in tex
   let g:python_host_prog = '/usr/bin/python2' | let g:python3_host_prog = '/usr/bin/python3'
-
 
 " ==================
 "  Plugins
@@ -54,14 +54,6 @@ scriptencoding utf-8
   let g:haskell_enable_typeroles = 1        "  highlighting of type roles
   let g:haskell_enable_static_pointers = 1  "  highlighting of `static`
   let g:haskell_backpack = 1                "  highlighting of backpack keywords
-
-" ==================
-"  Colors
-" ==================
-  set termguicolors
-  let g:gruvbox_material_background='hard'
-  let g:onedark_style = 'darker'
-  colorscheme tokyonight
 
   lua require('colors').setup()
   lua require('dotfiles-editing').setup()
