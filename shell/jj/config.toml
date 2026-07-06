@@ -7,6 +7,10 @@ email = "{{email}}"
 [ui]
 default-command = "log"
 
+[colors]
+"bookmarks" = { fg = "black", bg = "magenta", bold = true }
+"working_copy bookmarks" = { fg = "black", bg = "bright magenta" }
+
 [revset-aliases]
 'closest_bookmark(to)' = 'latest(::to & bookmarks())'
 'closest_pushable(to)' = 'latest(::to & ~description(exact:"") & (~empty() | merges()))'
