@@ -156,6 +156,7 @@ augroup end
   nnoremap <M-o> <C-O>
 
   lua require('keymaps').setup()
+  lua require('motions').setup()
 
 " ---------
 " Files

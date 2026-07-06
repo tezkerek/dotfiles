@@ -1,3 +1,5 @@
+local motion = require('motions')
+
 local M = {}
 
 --- @param client vim.lsp.Client?
@@ -19,13 +21,12 @@ local function on_lsp_attach(client, bufnr)
     map('n', '<M-CR>', vim.lsp.buf.code_action, 'Code action')
     map('n', '<F2>', vim.lsp.buf.rename, 'Rename')
 
-    map('n', '<space>e', vim.diagnostic.open_float, 'Show diagnostic')
-    map('n', '[d', function()
-        vim.diagnostic.jump { count = -1 }
-    end, 'Prev diagnostic')
-    map('n', ']d', function()
+    motion.map_motion(']d', '[d', function()
         vim.diagnostic.jump { count = 1 }
-    end, 'Next diagnostic')
+    end, function()
+        vim.diagnostic.jump { count = -1 }
+    end, 'diagnostic', { buffer = bufnr })
+    map('n', '<space>e', vim.diagnostic.open_float, 'Show diagnostic')
     map('n', '<space>lq', vim.diagnostic.setloclist, 'Diagnostics in qf')
 
     map('n', '<Space>lwa', vim.lsp.buf.add_workspace_folder, 'Add workspace')
