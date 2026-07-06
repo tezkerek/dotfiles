@@ -22,28 +22,7 @@ return packer.startup(function(use)
         'nvim-lualine/lualine.nvim',
         requires = 'kyazdani42/nvim-web-devicons',
         config = function()
-            vim.opt.fillchars:append { stl = '─', stlnc = '─' }
-
-            require('lualine').setup {
-                options = { theme = 'auto', icons_enabled = true },
-                sections = {
-                    lualine_b = {
-                        'filename',
-                    },
-                    lualine_c = {
-                        'branch',
-                        'diff',
-                        'diagnostics',
-                    },
-                    lualine_x = {
-                        'lsp_status',
-                        'encoding',
-                        'fileformat',
-                        'filetype',
-                    },
-                },
-                extensions = { 'fzf', 'fugitive', 'nvim-tree' },
-            }
+            require('plugins/lualine').setup()
         end,
     }
     use('mhinz/vim-startify')
