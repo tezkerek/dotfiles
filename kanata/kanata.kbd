@@ -125,6 +125,8 @@
     p bspc
     [ @bw
     x del
+
+    f12 (layer-switch passthrough)
 )
 
 (deflayer sym
@@ -143,4 +145,8 @@
     f10 mute
     f11 vold
     f12 volu
+)
+
+(deflayermap passthrough
+    f12 (fork f12 (layer-switch default) (caps))
 )
