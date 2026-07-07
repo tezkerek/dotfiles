@@ -1,6 +1,29 @@
+local jj_utils = require('jj-utils')
 local motion = require('motions')
 
 local M = {}
+
+function M.toggle_base()
+    local actions = require('vcsigns.actions')
+    local state_m = require('vcsigns.state')
+    local bufnr = vim.api.nvim_get_current_buf()
+    local repo_root = state_m.get(bufnr).vcs.vcs.root
+    local rs = state_m.repo_get(repo_root)
+
+    if rs.revset == 'prevb()' then
+        rs.revset = nil
+        rs.offset = 1
+        require('vcsigns.updates').deep_update(bufnr, true)
+        vim.notify('Diffing from HEAD~1', vim.log.levels.INFO)
+    else
+        actions.target_revset(0, 'prevb()')
+        local desc, count = jj_utils.prevb_info()
+        vim.notify(
+            string.format('Diffing from %s (%d commits)', desc, count),
+            vim.log.levels.INFO
+        )
+    end
+end
 
 function M.setup()
     require('vcsigns').setup {
@@ -51,9 +74,15 @@ function M.setup()
     map('n', '<Space>hp', function()
         require('vcsigns.actions').toggle_hunk_diff(0)
     end, 'Show hunk diffs inline in the current buffer')
-    map('n', '<Space>hd', function()
+    map('n', '<Space>hD', function()
         require('vcsigns.actions').diffview(0)
     end, 'Open native side-by-side diff view')
+    map(
+        'n',
+        '<Space>hb',
+        M.toggle_base,
+        'Toggle diff target between prevb() and HEAD~1'
+    )
     map('n', '<Space>hf', function()
         require('vcsigns.actions').toggle_fold(0)
     end, 'Fold outside hunks')

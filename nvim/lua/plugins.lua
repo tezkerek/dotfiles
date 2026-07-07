@@ -85,6 +85,26 @@ require('lazy').setup {
                 require('difftastic-nvim').setup {
                     snacks_picker = { enabled = true },
                 }
+                local map = function(lhs, rhs, desc)
+                    vim.keymap.set(
+                        'n',
+                        lhs,
+                        rhs,
+                        { noremap = true, silent = true, desc = desc }
+                    )
+                end
+                map('<Space>hd', function()
+                    require('difftastic-nvim').open('prevb()..@')
+                    local desc, count = require('jj-utils').prevb_info()
+                    vim.notify(
+                        string.format(
+                            'Diffing from %s (%d commits)',
+                            desc,
+                            count
+                        ),
+                        vim.log.levels.INFO
+                    )
+                end, 'Diff from prevb() to @')
             end,
         },
         {
