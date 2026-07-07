@@ -69,6 +69,7 @@ username = "tezkerek"
 "shell/tigconfig"         = "$XDG_CONFIG_HOME/tig/config"
 "shell/gitui"             = "$XDG_CONFIG_HOME/gitui"
 "shell/jj"                = "$XDG_CONFIG_HOME/jj"
+"shell/jjui/config.toml"  = "$XDG_CONFIG_HOME/jjui/config.toml"
 
 
 [waybar]

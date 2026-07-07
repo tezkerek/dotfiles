@@ -1,2 +1,42 @@
 [suggest.exec]
 mode = "fuzzy"
+
+[[actions]]
+name = "revisions.half_page_up"
+lua = "revisions.navigate({ by = -15 })"
+
+[[actions]]
+name = "revisions.half_page_down"
+lua = "revisions.navigate({ by = 15 })"
+
+[[actions]]
+name = "revisions.move_top"
+lua = "revisions.navigate({ by = -999999 })"
+
+[[actions]]
+name = "revisions.move_bottom"
+lua = "revisions.navigate({ by = 999999, allowStream = false })"
+
+[[bindings]]
+action = "revisions.half_page_up"
+key = "pgup"
+scope = "revisions"
+desc = "half page up"
+
+[[bindings]]
+action = "revisions.half_page_down"
+key = "pgdown"
+scope = "revisions"
+desc = "half page down"
+
+[[bindings]]
+action = "revisions.move_top"
+key = "home"
+scope = "revisions"
+desc = "go to top"
+
+[[bindings]]
+action = "revisions.move_bottom"
+key = "end"
+scope = "revisions"
+desc = "go to bottom"
