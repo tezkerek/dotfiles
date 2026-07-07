@@ -50,6 +50,7 @@ require('lazy').setup {
                 }
             end,
         },
+        { 'folke/snacks.nvim' },
 
         -- Integration
         'christoomey/vim-tmux-navigator',
@@ -72,6 +73,18 @@ require('lazy').setup {
             dependencies = { 'algmyr/vclib.nvim', 'lewis6991/async.nvim' },
             config = function()
                 require('plugins/vcsigns').setup()
+            end,
+        },
+        {
+            'clabby/difftastic.nvim',
+            dependencies = {
+                'MunifTanjim/nui.nvim',
+                'folke/snacks.nvim',
+            },
+            config = function()
+                require('difftastic-nvim').setup {
+                    snacks_picker = { enabled = true },
+                }
             end,
         },
         {
