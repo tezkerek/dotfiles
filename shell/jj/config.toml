@@ -15,7 +15,7 @@ default-command = "log"
 [revset-aliases]
 'closest_bookmark(to)' = 'latest(::to & bookmarks())'
 'closest_pushable(to)' = 'latest(::to & ~description(exact:"") & (~empty() | merges()))'
-'prevb()' = 'closest_bookmark(closest_bookmark(@)-)'
+'prevb()' = 'latest(closest_bookmark(closest_bookmark(@)-) | trunk())'
 
 [aliases]
 difft = ["diff", "--tool", "difft"]
