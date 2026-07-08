@@ -178,6 +178,9 @@ function M.setup()
         { desc = 'Yank to system clipboard' }
     )
     vim.keymap.set('o', 'Y', 'y', { desc = 'Linewise Y (YY)' })
+
+    vim.keymap.set('n', '[t', 'gT', { desc = 'Prev tab', remap = false })
+    vim.keymap.set('n', ']t', 'gt', { desc = 'Next tab', remap = false })
 end
 
 return M
