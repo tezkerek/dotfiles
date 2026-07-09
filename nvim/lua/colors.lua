@@ -78,7 +78,7 @@ end
 local M = {}
 
 function M.setup()
-    vim.cmd("colorscheme tokyonight")
+    vim.cmd('colorscheme tokyonight')
 
     hl('TreesitterContextBottom', {
         underline = true,
@@ -87,6 +87,11 @@ function M.setup()
 
     hl('DiagnosticUnnecessary', {
         link = 'Underline',
+    })
+
+    hl('TabLine', {
+        fg = colors.styles.moon.comment,
+        bg = vim.api.nvim_get_hl(0, { name = 'TabLine' }).bg,
     })
 
     setup_active_window_indicators()
