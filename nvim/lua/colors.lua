@@ -14,6 +14,24 @@ local function hl(name, val)
     return vim.api.nvim_set_hl(0, name, val)
 end
 
+local function hex2rgb(h)
+    h = h:gsub('#', '')
+    return tonumber(h:sub(1, 2), 16),
+        tonumber(h:sub(3, 4), 16),
+        tonumber(h:sub(5, 6), 16)
+end
+
+local function blend(fg, bg, alpha)
+    local fr, fg_, fb = hex2rgb(fg)
+    local br, bg_, bb = hex2rgb(bg)
+    return string.format(
+        '#%02x%02x%02x',
+        math.floor(fr * alpha + br * (1 - alpha)),
+        math.floor(fg_ * alpha + bg_ * (1 - alpha)),
+        math.floor(fb * alpha + bb * (1 - alpha))
+    )
+end
+
 local function create_window_hl_groups()
     local editor_bg = vim.api.nvim_get_hl(0, { name = 'Normal' }).bg
     local gray_fg = colors.styles.moon.comment
@@ -93,6 +111,16 @@ function M.setup()
         fg = colors.styles.moon.comment,
         bg = vim.api.nvim_get_hl(0, { name = 'TabLine' }).bg,
     })
+
+    local subtle = 0.1
+    hl(
+        'DifftAdded',
+        { bg = blend(colors.styles.moon.green, colors.styles.moon.bg, subtle) }
+    )
+    hl(
+        'DifftRemoved',
+        { bg = blend(colors.styles.moon.red, colors.styles.moon.bg, subtle) }
+    )
 
     setup_active_window_indicators()
 end
