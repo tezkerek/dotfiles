@@ -13,6 +13,9 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup {
     concurrency = 16,
+    dev = {
+        path = '~/devel/neovim-plugins/',
+    },
     spec = {
         -- QOL
         {
@@ -76,11 +79,12 @@ require('lazy').setup {
             end,
         },
         {
-            'clabby/difftastic.nvim',
+            'tezkerek/difftastic.nvim',
             dependencies = {
                 'MunifTanjim/nui.nvim',
                 'folke/snacks.nvim',
             },
+            dev = true,
             config = function()
                 require('difftastic-nvim').setup {
                     snacks_picker = { enabled = true },
