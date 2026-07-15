@@ -9,9 +9,14 @@
 	pager = delta
 	autocrlf = input
 
+[diff]
+    colorMoved = dimmed-zebra
+
 [delta]
 	syntax-theme = gruvbox
 	features = woolly-mammoth
+    map-styles = bold purple => syntax magenta, bold cyan => syntax blue
+
 
 [alias]
 	s = status
