@@ -10,6 +10,7 @@ default-command = "log"
 [colors]
 "bookmarks" = { fg = "black", bg = "magenta", bold = true }
 "working_copy bookmarks" = { fg = "black", bg = "bright magenta" }
+"mine author name" = { fg = "green" }
 
 [revset-aliases]
 'closest_bookmark(to)' = 'latest(::to & bookmarks())'
@@ -34,7 +35,10 @@ lgdiv = ["util", "exec", "--", "zsh", "-c", """
 
 [template-aliases]
 'format_short_signature(signature)' = '''
-coalesce(signature.name(), signature.email(), email_placeholder)
+label(
+  if(signature.email() == config("user.email").as_string(), "mine", ""),
+  coalesce(signature.name(), signature.email(), email_placeholder)
+)
 '''
 'format_timestamp(timestamp)' = '''
 if(timestamp.before("this january"),
