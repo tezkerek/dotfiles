@@ -13,9 +13,13 @@
     colorMoved = dimmed-zebra
 
 [delta]
-	syntax-theme = gruvbox
+	syntax-theme = gruvbox-dark
 	features = woolly-mammoth
-    map-styles = bold purple => syntax magenta, bold cyan => syntax blue
+	map-styles = bold purple => syntax magenta, bold cyan => syntax blue
+	plus-style = syntax "#243d32"
+	plus-non-emph-style = syntax "#243d32"
+	plus-emph-style = syntax "#356b4a"
+	plus-empty-line-marker-style = normal "#243d32"
 
 
 [alias]
