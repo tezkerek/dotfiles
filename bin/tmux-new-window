@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ -n "$(tmux display-message -p '#{?automatic-rename,1,}')" ]; then
+  exec tmux new-window
+fi
+
+name=$(tmux display-message -p '#{window_name}')
+if [[ $name =~ ^(.*)-([0-9]+)$ ]]; then
+  name="${BASH_REMATCH[1]}-$((BASH_REMATCH[2] + 1))"
+else
+  name="$name-2"
+fi
+exec tmux new-window -n "$name"
