@@ -23,7 +23,6 @@ scriptencoding utf-8
   set guifont=monospace:h11
 
   let g:tex_fast = "bMmpr" " Better performance in tex
-  let g:python_host_prog = '/usr/bin/python2' | let g:python3_host_prog = '/usr/bin/python3'
 
 " ==================
 "  Plugins
