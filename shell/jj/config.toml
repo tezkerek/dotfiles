@@ -16,10 +16,13 @@ default-command = "log"
 'closest_bookmark(to)' = 'latest(::to & bookmarks())'
 'closest_pushable(to)' = 'latest(::to & ~description(exact:"") & (~empty() | merges()))'
 'prevb()' = 'latest(closest_bookmark(closest_bookmark(@)-) | trunk())'
+'orphaned()' = 'mutable() & ~ancestors(bookmarks() | remote_bookmarks() | @ | working_copies()) & ~mine()'
 
 [aliases]
 difft = ["diff", "--tool", "difft"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+orphans = ["log", "-r", "orphaned()"]
+cleanup = ["abandon", "-r", "orphaned()"]
 lgdiv = ["util", "exec", "--", "zsh", "-c", """
     local input="${1:-$( \
         jj log --no-graph -n1 -r 'closest_bookmark(@)' \
@@ -46,6 +49,12 @@ if(timestamp.before("this january"),
   timestamp.format("%d %b %H:%M")
 )
 '''
+
+[working-copy]
+eol-conversion = "none"
+
+[visualjj]
+snapshot-interval = 30
 
 [[--scope]]
 --when.environments = ["JJUI"]
