@@ -56,6 +56,14 @@ eol-conversion = "none"
 [visualjj]
 snapshot-interval = 30
 
+[merge-tools.delta]
+diff-expected-exit-codes = [0, 1]
+
+[merge-tools.delta-full]
+program = "delta"
+diff-args = ["--diff-args=-U100000", "$left", "$right"]
+diff-expected-exit-codes = [0, 1]
+
 [[--scope]]
 --when.environments = ["JJUI"]
 [--scope.ui]
