@@ -40,3 +40,68 @@ action = "revisions.move_bottom"
 key = "end"
 scope = "revisions"
 desc = "go to bottom"
+
+[[actions]]
+name = "diff_full"
+lua = """
+local full_diff_banner = string.char(27) .. "[1;7m FULL CONTEXT " .. string.char(27) .. "[0m  D: normal diff\\n\\n"
+local file = context.file()
+local args = { "diff", "-r", context.change_id(), "--color", "always", "--ignore-working-copy", "--tool", "delta-full" }
+if file then table.insert(args, file) end
+local out, err = jj(args)
+if err then
+  flash({ text = err, error = true })
+  return
+end
+full_diff_key = context.change_id() .. "|" .. (file or "")
+diff.show(full_diff_banner .. out)
+"""
+
+[[actions]]
+name = "diff_full_toggle"
+lua = """
+local full_diff_banner = string.char(27) .. "[1;7m FULL CONTEXT " .. string.char(27) .. "[0m  D: normal diff\\n\\n"
+local file = context.file()
+local key = context.change_id() .. "|" .. (file or "")
+local full = full_diff_key ~= key
+local args = { "diff", "-r", context.change_id(), "--color", "always", "--ignore-working-copy" }
+if full then
+  table.insert(args, "--tool")
+  table.insert(args, "delta-full")
+end
+if file then table.insert(args, file) end
+local out, err = jj(args)
+if err then
+  flash({ text = err, error = true })
+  return
+end
+full_diff_key = full and key or nil
+if full then out = full_diff_banner .. out end
+diff.show(out)
+"""
+
+[[actions]]
+name = "revisions.details.diff"
+lua = """
+full_diff_key = nil
+jjui.builtin.revisions.details.diff()
+"""
+
+[[actions]]
+name = "revisions.diff"
+lua = """
+full_diff_key = nil
+jjui.builtin.revisions.diff()
+"""
+
+[[bindings]]
+action = "diff_full"
+key = "D"
+scope = "revisions.details"
+desc = "diff with full context"
+
+[[bindings]]
+action = "diff_full_toggle"
+key = "D"
+scope = "diff"
+desc = "toggle full context"
