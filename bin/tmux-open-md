@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${1-}" == "--pick" ]]; then
+    shift
+    if command -v bat >/dev/null 2>&1; then
+        preview="bat --style=numbers --color=always -- {}"
+    else
+        preview="cat -- {}"
+    fi
+    set +e
+    selection=$(fzf --reverse --preview="$preview" --preview-window=down,70% \
+        --header="↵ open in VS Code │ $PWD" < <(printf '%s\n' "$@"))
+    set -e
+    [[ -n "$selection" ]] && code "$selection"
+    exit 0
+fi
+
+pane_id="$1"
+pane_dir="$2"
+
+files=()
+missing=()
+while IFS= read -r match; do
+    path="$match"
+    [[ "$path" == "~/"* ]] && path="$HOME/${path#"~/"}"
+    [[ "$path" != /* ]] && path="$pane_dir/$path"
+    if [[ ! -f "$path" ]]; then
+        for m in "${missing[@]+"${missing[@]}"}"; do
+            [[ "$m" == "$match" ]] && continue 2
+        done
+        missing+=("$match")
+        continue
+    fi
+    resolved=$(realpath "$path")
+    for f in "${files[@]+"${files[@]}"}"; do
+        [[ "$f" == "$resolved" ]] && continue 2
+    done
+    files+=("$resolved")
+done < <(
+    tmux capture-pane -p -J -S - -t "$pane_id" \
+        | awk '{ lines[NR] = $0 } END { for (i = NR; i > 0; i--) print lines[i] }' \
+        | grep -oE "[^][:space:]'\"\`()<>|:,*[]+\.md" || true
+)
+
+if [[ ${#files[@]} -eq 0 ]]; then
+    if [[ ${#missing[@]} -eq 0 ]]; then
+        tmux display-message "No markdown files found in pane"
+    else
+        printf -v names '%s, ' "${missing[@]}"
+        tmux display-message -l "No markdown files found (${#missing[@]} not found: ${names%, })"
+    fi
+    exit 0
+fi
+
+if [[ ${#files[@]} -eq 1 ]]; then
+    code "${files[0]}"
+    exit 0
+fi
+
+pane_prefix="$(realpath "$pane_dir")/"
+args=""
+for f in "${files[@]}"; do
+    printf -v escaped '%q' "${f#"$pane_prefix"}"
+    args+=" $escaped"
+done
+
+tmux display-popup -E -w 80% -h 80% -d "$pane_dir" "tmux-open-md --pick$args"
