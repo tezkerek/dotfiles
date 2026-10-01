@@ -1,3 +1,6 @@
+[revisions]
+revset = "builtin_log() | bookmarks()"
+
 [suggest.exec]
 mode = "fuzzy"
 
