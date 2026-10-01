@@ -56,6 +56,8 @@
     (defalias
       wmod lmet
       fn (layer-while-held macosfn)
+      sol (multi lalt left)
+      eol (multi lalt right)
     )
 )
 
@@ -63,6 +65,8 @@
     (defalias
         wmod lctl
         fn fn
+        sol Home
+        eol End
     )
 )
 
@@ -115,8 +119,8 @@
     e (multi @wmod right)
     b (multi @wmod left)
 
-    a (t! hrmod Home lmet 150)
-    f (t! hrmod End lctl 150)
+    a (t! hrmod @sol lmet 150)
+    f (t! hrmod @eol lctl 150)
     u PageUp
     d (t! hrmod PageDown lsft 50)
 
