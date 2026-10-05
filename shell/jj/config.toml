@@ -10,6 +10,8 @@ default-command = "log"
 [colors]
 "bookmarks" = { fg = "black", bg = "magenta", bold = true }
 "working_copy bookmarks" = { fg = "black", bg = "bright magenta" }
+"bookmarks untracked" = { fg = "black", bg = "blue" }
+"working_copy bookmarks untracked" = { fg = "black", bg = "bright blue" }
 "mine author name" = { fg = "green" }
 
 [revset-aliases]
@@ -37,6 +39,31 @@ lgdiv = ["util", "exec", "--", "zsh", "-c", """
 """, ""]
 
 [template-aliases]
+'format_bookmarks(commit)' = '''
+commit.bookmarks().map(|b| label(
+  if(
+    (b.remote() && !b.tracked())
+      || (!b.remote() && b.synced() && !commit.contained_in("tracked_remote_bookmarks()")),
+    "untracked",
+  ),
+  b,
+))
+'''
+'format_short_commit_header(commit)' = '''
+separate(" ",
+  format_short_change_id_with_change_offset(commit),
+  format_short_signature(commit.author()),
+  format_timestamp(commit_timestamp(commit)),
+  format_bookmarks(commit),
+  commit.tags(),
+  commit.working_copies(),
+  format_short_commit_id(commit.commit_id()),
+  format_commit_labels(commit),
+  if(config("ui.show-cryptographic-signatures").as_boolean(),
+    format_short_cryptographic_signature(commit.signature())
+  ),
+)
+'''
 'format_short_signature(signature)' = '''
 label(
   if(signature.email() == config("user.email").as_string(), "mine", ""),
