@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+[ -n "${TMUX:-}" ] || exit 0
+
+case "$1" in
+  seen)
+    tmux list-panes -t "$2" -F '#{pane_id} #{@claude}' |
+      while read -r pane state; do
+        if [ "$state" = done ]; then
+          tmux set -pu -t "$pane" @claude
+        fi
+      done
+    ;;
+  clear)
+    tmux set -pu -t "$TMUX_PANE" @claude
+    ;;
+  done)
+    if [ "$(tmux display -p -t "$TMUX_PANE" '#{&&:#{window_active},#{session_attached}}')" = 1 ]; then
+      tmux set -pu -t "$TMUX_PANE" @claude
+    else
+      tmux set -p -t "$TMUX_PANE" @claude done
+    fi
+    ;;
+  *)
+    tmux set -p -t "$TMUX_PANE" @claude "$1"
+    ;;
+esac
