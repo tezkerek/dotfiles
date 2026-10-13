@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat <<EOF
+Usage: git picked [options] [<commit>]
+
+Show the release branches that contain a change from the main branch,
+natively or as a cherry-pick. Without <commit>, select one with fzf.
+
+Options:
+  -r, --remote <name>    Remote to read branches from (default: origin)
+  -b, --base <branch>    Main branch (default: <remote>/HEAD)
+  -m, --mine             In fzf, show only commits by user.email
+  -t, --target <branch>  In fzf, show only commits not yet picked to <branch>
+  -p, --prefix <prefix>  Release branch prefix (default: release/)
+  -f, --fetch            Fetch the remote first
+  -g, --gh               Also list release PRs on GitHub that mention the PR
+  -h, --help             Show this help
+EOF
+}
+
+remote=origin
+main=
+prefix=release/
+fetch=false
+mine=false
+use_gh=false
+commit=
+target=
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -r|--remote) remote=$2; shift 2 ;;
+        -b|--base) main=$2; shift 2 ;;
+        -m|--mine) mine=true; shift ;;
+        -t|--target) target=$2; shift 2 ;;
+        -p|--prefix) prefix=$2; shift 2 ;;
+        -f|--fetch) fetch=true; shift ;;
+        -g|--gh) use_gh=true; shift ;;
+        -h|--help) usage; exit 0 ;;
+        -*) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+        *) commit=$1; shift ;;
+    esac
+done
+
+$fetch && git fetch --prune --quiet "$remote"
+
+if [[ -z "$main" ]]; then
+    main=$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || true)
+    if [[ -z "$main" ]]; then
+        for candidate in main master develop; do
+            if git rev-parse --verify --quiet "$remote/$candidate" >/dev/null; then
+                main=$remote/$candidate
+                break
+            fi
+        done
+    fi
+    [[ -z "$main" ]] && { echo "Cannot detect the main branch. Use --base." >&2; exit 1; }
+fi
+
+git rev-parse --verify --quiet "$main^{commit}" >/dev/null || { echo "Unknown base branch: $main" >&2; exit 1; }
+
+if [[ -n "$target" ]] && ! git rev-parse --verify --quiet "$target^{commit}" >/dev/null; then
+    git rev-parse --verify --quiet "$remote/$target^{commit}" >/dev/null || { echo "Unknown target branch: $target" >&2; exit 1; }
+    target=$remote/$target
+fi
+
+picked_to_target() {
+    local base=$1
+    git log --format=%B "$base..$target" | sed -nE 's/.*cherry picked from commit ([0-9a-f]{40}).*/\1/p'
+    git log --format=%B "$base..$target" | grep -oE '#[0-9]+' || true
+    {
+        git log -p --no-merges --no-color --no-ext-diff "$base..$target" | git patch-id --stable | awk '{ print "t", $1 }'
+        git log -p --first-parent --no-color --no-ext-diff "$base..$main" | git patch-id --stable | awk '{ print "m", $1, $2 }'
+    } | awk '$1 == "t" { ids[$2] = 1; next } $2 in ids { print $3 }'
+}
+
+if [[ -z "$commit" ]]; then
+    log_args=(--first-parent)
+    $mine && log_args+=(--author="$(git config user.email)")
+    range=$main
+    header=$main
+    skip=/dev/null
+    if [[ -n "$target" ]]; then
+        base=$(git merge-base "$main" "$target")
+        range=$base..$main
+        header="$main, not picked to $target"
+        skip=$(mktemp)
+        trap 'rm -f "$skip"' EXIT
+        picked_to_target "$base" >"$skip"
+    fi
+    set +e
+    commit=$(git log "${log_args[@]}" --format='%H %h %ad %<(16,trunc)%an %s' --date=short "$range" \
+        | awk -v skip="$skip" '
+            BEGIN { while ((getline line < skip) > 0) seen[line] = 1 }
+            $1 in seen { next }
+            {
+                s = $0; pr = ""
+                while (match(s, /\(#[0-9]+\)/)) { pr = substr(s, RSTART + 1, RLENGTH - 2); s = substr(s, RSTART + RLENGTH) }
+                if (pr != "" && pr in seen) next
+                print
+            }' \
+        | fzf --reverse --no-sort --with-nth=2.. --header="$header" \
+            --preview='git show --stat --format=fuller --color=always {1}' --preview-window=down)
+    status=$?
+    set -e
+    [[ $status -eq 1 || $status -eq 130 ]] && exit 0
+    [[ $status -ne 0 ]] && exit "$status"
+    commit=${commit%% *}
+fi
+
+sha=$(git rev-parse --verify --quiet "$commit^{commit}") || { echo "Unknown commit: $commit" >&2; exit 1; }
+commit_time=$(git show -s --format=%ct "$sha")
+subject=$(git show -s --format=%s "$sha")
+pr=$(grep -oE '\(#[0-9]+\)' <<<"$subject" | tail -n1 | tr -dc '0-9' || true)
+patch_id=$(git show --no-color --no-ext-diff "$sha" | git patch-id --stable | cut -d' ' -f1)
+
+if [[ -t 1 ]]; then
+    c_green=$'\e[32m' c_yellow=$'\e[33m' c_blue=$'\e[34m' c_dim=$'\e[2m' c_reset=$'\e[0m'
+else
+    c_green= c_yellow= c_blue= c_dim= c_reset=
+fi
+
+width=0
+
+row() {
+    printf "%-${width}s  %s%-9s%s  %-10s  %s\n" "$1" "$2" "$3" "$c_reset" "$4" "$5"
+}
+
+find_pick() {
+    local range=$1 match
+
+    match=$(git log -n1 --format=%h --abbrev=10 -F --grep="cherry picked from commit $sha" "$range")
+    [[ -n "$match" ]] && { echo "picked $match -x"; return; }
+
+    if [[ -n "$patch_id" ]]; then
+        match=$(git log -p --no-merges --no-color --no-ext-diff "$range" \
+            | git patch-id --stable \
+            | awk -v id="$patch_id" '$1 == id && !found { print substr($2, 1, 10); found = 1 }')
+        [[ -n "$match" ]] && { echo "picked $match patch-id"; return; }
+    fi
+
+    if [[ -n "$pr" ]]; then
+        match=$(git log -n1 --format=%h --abbrev=10 -E --grep="#$pr([^0-9]|\$)" "$range")
+        [[ -n "$match" ]] && { echo "maybe $match #$pr"; return; }
+    fi
+    return 0
+}
+
+echo "${c_blue}$(git show -s --format='%h %s' "$sha")${c_reset}"
+if [[ -n "$pr" ]]; then
+    repo_url=$(git remote get-url "$remote" \
+        | sed -E 's#^(ssh://)?git@([^:/]+)[:/]#https://\2/#; s#^https://[^@/]+@#https://#; s#\.git$##')
+    echo "$repo_url/pull/$pr"
+fi
+echo
+
+skipped=0
+candidates=()
+
+while IFS=$'\t' read -r ref tip_time; do
+    if (( tip_time < commit_time )); then
+        skipped=$((skipped + 1))
+        continue
+    fi
+    branch=${ref#"$remote/"}
+    (( ${#branch} > width )) && width=${#branch}
+    base=$(git merge-base "$main" "$ref")
+    candidates+=("$(git show -s --format=%ct "$base")"$'\t'"$ref"$'\t'"$base")
+done < <(git for-each-ref --format='%(refname:short)%09%(committerdate:unix)' "refs/remotes/$remote/$prefix")
+
+oldest_contained=
+
+while IFS=$'\t' read -r _ ref base; do
+    [[ -z "$ref" ]] && continue
+    branch=${ref#"$remote/"}
+
+    if git merge-base --is-ancestor "$sha" "$ref"; then
+        oldest_contained=$branch
+        continue
+    fi
+
+    if [[ -n "$oldest_contained" ]]; then
+        row "$oldest_contained" "$c_green" contained "" "${c_dim}cut after merge, with all newer branches${c_reset}"
+        oldest_contained=
+    fi
+
+    result=$(find_pick "$base..$ref")
+    if [[ -z "$result" ]]; then
+        row "$branch" "$c_dim" missing "" ""
+        continue
+    fi
+
+    read -r state match signal <<<"$result"
+    [[ $state == picked ]] && color=$c_green || color=$c_yellow
+    row "$branch" "$color" "$state" "$match" "${c_dim}[$signal]${c_reset} $(git show -s --format=%s "$match")"
+done < <(printf '%s\n' ${candidates[@]+"${candidates[@]}"} | sort -t$'\t' -k1,1 -rn)
+
+if [[ -n "$oldest_contained" ]]; then
+    row "$oldest_contained" "$c_green" contained "" "${c_dim}cut after merge, with all newer branches${c_reset}"
+fi
+
+if (( skipped > 0 )); then
+    echo "${c_dim}$skipped older branches have no commits after the change${c_reset}"
+fi
+
+if $use_gh; then
+    [[ -z "$pr" ]] && { echo "No PR number in the subject. Skipping GitHub search." >&2; exit 0; }
+    echo
+    echo "${c_blue}PRs to $prefix* that mention #$pr${c_reset}"
+    gh pr list --state all --limit 100 --search "$pr in:title,body" \
+        --json number,title,body,baseRefName,state,url \
+        | jq -r --arg prefix "$prefix" --arg re "#$pr\\b" '
+            .[]
+            | select(.baseRefName | startswith($prefix))
+            | select((.title + "\n" + (.body // "")) | test($re))
+            | [.baseRefName, .state, "#\(.number)", .title, .url]
+            | @tsv' \
+        | column -t -s$'\t'
+fi
