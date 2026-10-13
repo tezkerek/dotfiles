@@ -87,6 +87,19 @@ git -C "$TEST_DIR/up-pref" branch --set-upstream-to=origin/master master
 # Even though main has higher precedence, upstream says master -> master.
 assert_eq "git_trunk upstream preference" master "$(_jjw_git_trunk "$TEST_DIR/up-pref")"
 
+# --- git trunk detection: origin/HEAD preference ----------------------------
+
+# A stale master exists, but origin's default branch is develop.
+git init -q --bare "$TEST_DIR/head-pref.git"
+mkgit "$TEST_DIR/head-pref-seed" master
+git -C "$TEST_DIR/head-pref-seed" branch develop
+git -C "$TEST_DIR/head-pref-seed" remote add origin "$TEST_DIR/head-pref.git"
+git -C "$TEST_DIR/head-pref-seed" push -q origin master develop
+git -C "$TEST_DIR/head-pref.git" symbolic-ref HEAD refs/heads/develop
+git clone -q "$TEST_DIR/head-pref.git" "$TEST_DIR/head-pref"
+git -C "$TEST_DIR/head-pref" branch -q master origin/master
+assert_eq "git_trunk origin/HEAD preference" develop "$(_jjw_git_trunk "$TEST_DIR/head-pref")"
+
 # --- git ref detection ------------------------------------------------------
 
 mkgit "$TEST_DIR/ref-check" main
@@ -275,6 +288,128 @@ if command -v jj >/dev/null 2>&1; then
     fi
 else
     print "SKIP: jj not installed — jj-path tests skipped"
+fi
+
+# ============================================================================
+# wip
+# ============================================================================
+
+# assert_has <label> <needle> <actual>
+function assert_has {
+    if [[ $3 == *"$2"* ]]; then
+        print "PASS: $1"
+    else
+        print "FAIL: $1"
+        print "    missing: [$2]"
+        print "    actual:  [$3]"
+        (( FAILS++ ))
+    fi
+}
+
+# assert_lacks <label> <needle> <actual>
+function assert_lacks {
+    if [[ $3 != *"$2"* ]]; then
+        print "PASS: $1"
+    else
+        print "FAIL: $1"
+        print "    unexpected: [$2]"
+        print "    actual:     [$3]"
+        (( FAILS++ ))
+    fi
+}
+
+# Commit lines under the branch/bookmark header line that starts with $1.
+function wip_block {
+    print -r -- "$2" | awk -v name="$1" 'index($0, "    " name) == 1 { f = 1; next } f && /^    [^ ]/ { f = 0 } f'
+}
+
+function _jjw_wip_slug { print o/r }
+function _jjw_wip_prs {
+    print -r -- $'feat-pushed\t7\tOPEN\tfalse\tAPPROVED\tpass'
+    print -r -- $'feat-base\t3\tMERGED\tfalse\t\t'
+    print -r -- $'g-pushed\t9\tOPEN\ttrue\t\tfail'
+}
+
+# --- wip: git ---------------------------------------------------------------
+
+WIPGIT="$TEST_DIR/wip-git"
+mkgit_origin "$WIPGIT" "$TEST_DIR/wip-git.git"
+function gcommit { print $1 > "$WIPGIT/${1// /-}"; git -C "$WIPGIT" add -A; git -C "$WIPGIT" commit -qm "$1" }
+git -C "$WIPGIT" branch -q g-merged
+git -C "$WIPGIT" switch -qc g-pushed
+gcommit "pushed one"
+git -C "$WIPGIT" push -q -u origin g-pushed 2>/dev/null
+gcommit "pushed two"
+git -C "$WIPGIT" switch -q main
+git -C "$WIPGIT" switch -qc g-local
+gcommit "local one"
+git -C "$WIPGIT" switch -qc g-stack
+gcommit "stack one"
+
+out=$(strip_ansi "$(cd "$WIPGIT" && jjw wip)")
+assert_has   "wip git: no-PR branch not pushed"  "g-local  ↑ not pushed" "$out"
+assert_has   "wip git: stacked branch parent"    "g-stack (HEAD)  ↑ not pushed  on g-local" "$out"
+assert_has   "wip git: open PR labels"           "g-pushed  #9  draft  ✗ ci  ↑1" "$out"
+assert_lacks "wip git: merged branch hidden"     "g-merged" "$out"
+assert_has   "wip git: No PR before Open PRs"    "No PR" "${out%%Open PRs*}"
+stack_block=$(wip_block g-stack "$out")
+assert_has   "wip git: stack lists own commit"     "stack one" "$stack_block"
+assert_lacks "wip git: stack omits parent commits" "local one" "$stack_block"
+
+# --- wip: jj ----------------------------------------------------------------
+
+if command -v jj >/dev/null 2>&1; then
+    : > "$TEST_DIR/jj-config.toml"
+    export JJ_CONFIG="$TEST_DIR/jj-config.toml" JJ_USER=test JJ_EMAIL=test@example.com
+
+    WIPJJ_WS="$TEST_DIR/wip-jj-ws"
+    WIPJJ="$WIPJJ_WS/repo"
+    mkgit_origin "$TEST_DIR/wip-jj-seed" "$TEST_DIR/wip-jj.git"
+    mkdir -p "$WIPJJ_WS"
+    jj git clone "$TEST_DIR/wip-jj.git" "$WIPJJ" >/dev/null 2>&1
+    {
+        jj -R "$WIPJJ" new main@origin -m "pushed one"
+        print p1 > "$WIPJJ/p1"
+        jj -R "$WIPJJ" bookmark create feat-pushed -r @
+        jj -R "$WIPJJ" bookmark track feat-pushed --remote origin
+        jj -R "$WIPJJ" git push -b feat-pushed
+        jj -R "$WIPJJ" new -m "pushed two"
+        print p2 > "$WIPJJ/p2"
+        jj -R "$WIPJJ" bookmark set feat-pushed -r @
+        jj -R "$WIPJJ" new -m "above pushed"
+        print p3 > "$WIPJJ/p3"
+        jj -R "$WIPJJ" new main@origin -m "base one"
+        print b1 > "$WIPJJ/b1"
+        jj -R "$WIPJJ" bookmark create feat-base -r @
+        jj -R "$WIPJJ" new -m "top one"
+        print t1 > "$WIPJJ/t1"
+        jj -R "$WIPJJ" bookmark create feat-top -r @
+        jj -R "$WIPJJ" new main@origin -m "loose one"
+        print l1 > "$WIPJJ/l1"
+        jj -R "$WIPJJ" new
+        jj -R "$WIPJJ" workspace add --name second "$WIPJJ_WS/second"
+    } >/dev/null 2>&1
+
+    out=$(strip_ansi "$(cd "$WIPJJ" && jjw wip)")
+    assert_has   "wip jj: open PR labels and push state" "feat-pushed  #7  approved  ✓ ci  ↑1" "$out"
+    assert_has   "wip jj: unbookmarked commit above bookmark" "+ " "$out"
+    assert_has   "wip jj: above commit listed" "above pushed" "$out"
+    assert_has   "wip jj: merged PR and not pushed" "feat-base  #3 merged  ↑ not pushed" "$out"
+    assert_has   "wip jj: stacked bookmark parent" "feat-top  ↑ not pushed  on feat-base" "$out"
+    assert_lacks "wip jj: stacked commits not repeated" "base one" "$(wip_block feat-top "$out")"
+    assert_has   "wip jj: loose commit" "loose one" "${out#*Without bookmark}"
+    assert_lacks "wip jj: empty undescribed commit hidden" "(no description)" "$out"
+    assert_has   "wip jj: No PR before Open PRs" "No PR" "${out%%Open PRs*}"
+    assert_has   "wip jj: Open PRs before Without bookmark" "Open PRs" "${out%%Without bookmark*}"
+
+    out=$(strip_ansi "$(cd "$WIPJJ" && jjw wip --no-gh)")
+    assert_lacks "wip jj --no-gh: no PR data" "#7" "$out"
+    assert_lacks "wip jj --no-gh: no Open PRs section" "Open PRs" "$out"
+
+    out=$(cd "$WIPJJ_WS" && _jjw_wip_dedupe repo second)
+    assert_eq "wip: workspaces of one repo shown once" repo "$out"
+else
+    print "SKIP: jj not installed — wip jj tests skipped"
 fi
 
 # ============================================================================

@@ -1,9 +1,10 @@
 # jjw — workspace-wide VCS sweeps over sibling repos.
 #
-#   jjw [st|pull] [dir ...]
+#   jjw [st|pull|wip] [dir ...]
 #
 # With no subcommand, defaults to `st` (read-only status, sequential, no network).
 # `pull` updates each repo in parallel (see the design note above `_jjw_pull`).
+# `wip` summarizes local work in progress (see jjw_wip.zsh).
 # Optional dir args are only accepted when a subcommand is given explicitly;
 # otherwise every immediate child directory of PWD that is a repo is used.
 # Non-repo children are silently skipped.
@@ -34,7 +35,7 @@ function _jjw_classify {
 function _jjw_repo_type {
     local dir=$1
     [[ -d $dir/.jj ]] && { print jj; return }
-    [[ -d $dir/.git ]] && { print git; return }
+    [[ -e $dir/.git ]] && { print git; return }
     return 1
 }
 
@@ -45,12 +46,18 @@ function _jjw_git_ref {
     git -C "$1" branch --show-current 2>/dev/null
 }
 
-# Trunk branch for a git repo dir. If the current branch's upstream tracks a
-# trunk, use that trunk; otherwise the first existing local branch in precedence
-# order. Prints nothing if none found.
+# Trunk branch for a git repo dir: the default branch of origin (origin/HEAD) if
+# it is known. Else, if the current branch's upstream tracks a trunk, use that
+# trunk; otherwise the first existing local branch in precedence order. Prints
+# nothing if none found.
 function _jjw_git_trunk {
     local dir=$1
-    local upstream t
+    local upstream t head
+    head=$(git -C "$dir" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)
+    if [[ -n $head ]]; then
+        print -r -- ${head#origin/}
+        return
+    fi
     # Upstream of the current branch, e.g. "origin/main" -> "main".
     upstream=$(git -C "$dir" rev-parse --abbrev-ref '@{upstream}' 2>/dev/null)
     upstream=${upstream#*/}
@@ -339,6 +346,8 @@ function _jjw_pull {
     }
 }
 
+source ${0:A:h}/jjw_wip.zsh
+
 # --- entry point ------------------------------------------------------------
 
 function jjw {
@@ -349,13 +358,18 @@ function jjw {
     local -a dirs
     if (( $# )); then
         case $1 in
+            wip)
+                shift
+                _jjw_wip_main "$@"
+                return
+                ;;
             st|pull)
                 sub=$1
                 shift
                 dirs=("$@")
                 ;;
             *)
-                print -u2 "jjw: unknown subcommand '$1' (expected st|pull)"
+                print -u2 "jjw: unknown subcommand '$1' (expected st|pull|wip)"
                 return 2
                 ;;
         esac
