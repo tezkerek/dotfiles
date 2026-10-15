@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sessions_dir="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/sessions"
+
+usage() {
+  echo "usage: $(basename "$0") save [name] | load" >&2
+  exit 2
+}
+
+save() {
+  [[ -n "${KITTY_LISTEN_ON-}" ]] || {
+    echo "save needs kitty remote control: run it from the kitty keybinding" >&2
+    exit 1
+  }
+  local name="${1-}"
+  if [[ -z "$name" ]]; then
+    read -rp "Session name [$(date +%F)]: " name
+    name="${name:-$(date +%F)}"
+  fi
+  local file="$sessions_dir/$name.kitty-session"
+
+  if [[ -e "$file" ]]; then
+    read -rp "$file exists. Overwrite? [y/N] " answer
+    [[ "$answer" == [yY] ]] || exit 1
+  fi
+
+  local clients paths
+  clients=$(tmux list-clients -F '#{client_pid} #{session_name}' 2>/dev/null |
+    jq -Rn '[inputs | capture("^(?<pid>[0-9]+) (?<name>.*)$") | {(.pid): .name}] | add // {}')
+  paths=$(tmux list-sessions -F '#{session_name} #{session_path}' 2>/dev/null |
+    jq -Rn '[inputs | capture("^(?<name>[^ ]+) (?<path>.*)$") | {(.name): .path}] | add // {}')
+
+  mkdir -p "$sessions_dir"
+  kitten @ ls | jq -r \
+    --argjson self "${KITTY_WINDOW_ID:?not running inside kitty}" \
+    --argjson clients "$clients" \
+    --argjson paths "$paths" '
+    .[] | select(any(.tabs[].windows[]; .id == $self)) | .tabs
+    | (map(.is_active) | index(true)) as $active
+    | (.[] | (.windows | map(select(.id != $self))) as $windows
+      | select($windows | length > 0)
+      | ($windows | map(select(.is_active)) | first // $windows[0]) as $main
+      | ([$windows[].foreground_processes[] | $clients[.pid | tostring] // empty] | first) as $session
+      | "new_tab \(if .title != $main.title then .title else "" end)",
+        "cd \(if $session then $paths[$session] // $main.cwd else $main.cwd end)",
+        (if $session then "launch tmux new-session -A -s \($session | @sh)" else "launch" end),
+        ""),
+      "focus_tab \($active // 0)"
+    ' >"$file"
+
+  echo "Saved $file"
+}
+
+load() {
+  local file
+  file=$(find "$sessions_dir" -name '*.kitty-session' -print0 |
+    xargs -0 ls -t |
+    fzf --reverse --delimiter / --with-nth -1 \
+      --preview 'bat --style=plain --color=always -- {}' --preview-window=down) || exit 0
+
+  if [[ -n "${KITTY_LISTEN_ON-}" ]]; then
+    kitten @ action goto_session "$file"
+  else
+    kitty --detach --session "$file"
+  fi
+}
+
+case "${1-}" in
+  save) shift; save "$@" ;;
+  load) load ;;
+  *) usage ;;
+esac

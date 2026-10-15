@@ -125,9 +125,10 @@ depends = ["colors", "waybar"]
 depends = ["colors"]
 
 [dev.files]
-"apps/alacritty.yml" = "$XDG_CONFIG_HOME/alacritty/alacritty.yml"
-"apps/ideavimrc"     = "$HOME/.ideavimrc"
-"apps/kitty.conf"    = "$XDG_CONFIG_HOME/kitty/kitty.conf"
+"apps/alacritty.yml"     = "$XDG_CONFIG_HOME/alacritty/alacritty.yml"
+"apps/ideavimrc"         = "$HOME/.ideavimrc"
+"apps/kitty.conf"        = "$XDG_CONFIG_HOME/kitty/kitty.conf"
+"bin/kitty-tmux-session" = "$XDG_BIN_HOME/kitty-tmux-session"
 
 
 [kanata.files]
