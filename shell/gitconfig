@@ -24,8 +24,12 @@
 
 [alias]
 	s = status
+	c = commit --message
 	diffc = diff --cached
-	lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+	amend = commit --amend --no-edit
+	unadd = restore --staged
+	lg = log --date-order --graph --all --date=short --pretty=format:'%x09%C(auto)%h  %C(cyan)%ad  %C(green)%<(12,trunc)%aN    %C(reset)%<(80,trunc)%s    %C(auto)%d'
+	cleanup = "!f() { trunk=${1:-$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)}; trunk=${trunk#origin/}; trunk=${trunk:-main}; git checkout -q \"$trunk\" && git for-each-ref refs/heads/ \"--format=%(refname:short)\" | while read branch; do mergeBase=$(git merge-base \"$trunk\" $branch) && [[ $(git cherry \"$trunk\" $(git commit-tree $(git rev-parse \"$branch^{tree}\") -p $mergeBase -m _)) == \"-\"* ]]  && git branch -D $branch; done; }; f"
 
 [merge]
 	tool = "nvim"
