@@ -5,4 +5,4 @@ packages = ["macos"]
 email = "andrei.ancuta@uipath.com"
 username = "Andrei Ancuta"
 browser = "edge"
-terminal_font_size = 12
+terminal_font_size = 14
