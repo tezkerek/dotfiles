@@ -123,6 +123,7 @@
     f (t! hrmod @eol lctl 150)
     u PageUp
     d (t! hrmod PageDown lsft 50)
+    g (fork Home (unshift End) (lsft rsft))
 
     rsft (caps-word-toggle 5000)
 
