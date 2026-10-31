@@ -15,6 +15,7 @@ require('lazy').setup {
     concurrency = 16,
     dev = {
         path = '~/devel/neovim-plugins/',
+        fallback = true,
     },
     spec = {
         -- QOL
@@ -242,7 +243,19 @@ require('lazy').setup {
         -- AI Completion
         {
             'cursortab/cursortab.nvim',
-            build = 'cd server && go build',
+            build = function(plugin)
+                -- only needs go at install/update time
+                if vim.fn.executable('go') == 1 then
+                    vim.system(
+                        { 'go', 'build' },
+                        { cwd = plugin.dir .. '/server' }
+                    )
+                        :wait()
+                end
+            end,
+            cond = function(plugin)
+                return vim.fn.executable('go') == 1
+            end,
             config = function()
                 require('cursortab').setup {
                     provider = {

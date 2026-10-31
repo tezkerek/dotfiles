@@ -60,6 +60,10 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local function first_available_server(servers)
     for _, server in ipairs(servers) do
         local config = vim.lsp.config[server]
+        if type(config.cmd) == 'function' then
+            -- No idea how to inspect a function cmd
+            return server
+        end
         if config and vim.fn.executable(config.cmd[1]) == 1 then
             return server
         end
