@@ -13,10 +13,11 @@ function M.toggle_base()
     if rs.revset == 'prevb()' then
         rs.revset = nil
         rs.offset = 1
-        require('vcsigns.updates').deep_update(bufnr, true)
+        state_m.mark_vcs_dirty(bufnr)
+        require('vcsigns.updates').deep_update(bufnr)
         vim.notify('Diffing from HEAD~1', vim.log.levels.INFO)
     else
-        actions.target_revset(0, 'prevb()')
+        actions.target_revset { revset = 'prevb()' }
         local desc, count = jj_utils.prevb_info()
         vim.notify(
             string.format('Diffing from %s (%d commits)', desc, count),
@@ -49,33 +50,33 @@ function M.setup()
     end
 
     motion.map_motion(']c', '[c', function()
-        require('vcsigns.actions').hunk_next(0, vim.v.count1)
+        require('vcsigns.actions').hunk_next { count = vim.v.count1 }
     end, function()
-        require('vcsigns.actions').hunk_prev(0, vim.v.count1)
+        require('vcsigns.actions').hunk_prev { count = vim.v.count1 }
     end, 'hunk')
     motion.map_motion(']C', '[C', function()
-        require('vcsigns.actions').hunk_next(0, 9999)
+        require('vcsigns.actions').hunk_next { count = 9999 }
     end, function()
-        require('vcsigns.actions').hunk_prev(0, 9999)
+        require('vcsigns.actions').hunk_prev { count = 9999 }
     end, 'hunk extreme')
 
     map('n', '[r', function()
-        require('vcsigns.actions').target_older_commit(0, vim.v.count1)
+        require('vcsigns.actions').target_older_commit { steps = vim.v.count1 }
     end, 'Move diff target back')
     map('n', ']r', function()
-        require('vcsigns.actions').target_newer_commit(0, vim.v.count1)
+        require('vcsigns.actions').target_newer_commit { steps = vim.v.count1 }
     end, 'Move diff target forward')
     map('n', '<Space>hr', function()
-        require('vcsigns.actions').hunk_undo(0)
+        require('vcsigns.actions').hunk_undo()
     end, 'Undo hunks under cursor')
     map('v', '<Space>hr', function()
-        require('vcsigns.actions').hunk_undo(0)
+        require('vcsigns.actions').hunk_undo()
     end, 'Undo hunks in range')
     map('n', '<Space>hp', function()
-        require('vcsigns.actions').toggle_hunk_diff(0)
+        require('vcsigns.actions').toggle_hunk_diff()
     end, 'Show hunk diffs inline in the current buffer')
     map('n', '<Space>hD', function()
-        require('vcsigns.actions').diffview(0)
+        require('vcsigns.actions').diffview()
     end, 'Open native side-by-side diff view')
     map(
         'n',
@@ -84,7 +85,7 @@ function M.setup()
         'Toggle diff target between prevb() and HEAD~1'
     )
     map('n', '<Space>hf', function()
-        require('vcsigns.actions').toggle_fold(0)
+        require('vcsigns.actions').toggle_fold()
     end, 'Fold outside hunks')
 end
 
