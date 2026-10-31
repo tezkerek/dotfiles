@@ -61,20 +61,6 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      kanata = prev.kanata.overrideAttrs (oldAttrs: {
-        src = kanata-src;
-        doCheck = false;
-        doInstallCheck = false;
-        cargoDeps = final.rustPlatform.importCargoLock {
-          lockFile = "${kanata-src}/Cargo.lock";
-        };
-        cargoHash = "sha256-YGa18kZ9ttOKEP3pdCXXuh4zIcQLAaG7L2r2vPpcnDQ=";
-      });
-    })
-  ];
-
   programs.chromium.enable = true;
   programs.firefox.enable = true;
   programs.git.enable = true;
@@ -88,7 +74,10 @@
     bat
     btop
     delta
+    difftastic
     dotter
+    dua
+    duf
     eza
     fd
     fzf
@@ -118,11 +107,16 @@
     opencode
     syncthing
 
+    cargo
+    gcc
     haskell.compiler.ghc9103
     lua-language-server
     nixfmt
     python3
+    rustc
     stylua
+
+    tree-sitter
   ];
 
   fonts.packages = with pkgs; [
